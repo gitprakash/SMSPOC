@@ -28,7 +28,7 @@ namespace Repositorylibrary
         }
         public async Task<ICollection<TObject>> GetPagedResult(int skip, int take, string ordercolumn,bool desc)
         {
-            return await _context.Set<TObject>().OrderByCoumn(ordercolumn, desc, false).Skip(skip).Take(take).AsNoTracking().ToListAsync();
+            return await _context.Set<TObject>().OrderByAscDsc(ordercolumn, desc).Skip(skip).Take(take).AsNoTracking().ToListAsync();
         }
 
         public TObject Get(int id)

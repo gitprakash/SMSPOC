@@ -7,18 +7,20 @@
         contentType: "application/json; charset-utf-8",
         mtype: 'GET',
         sortname:"Name",
-        colNames: ['Id', 'Name', "Description"],
+        colNames: ['Id', 'Name', "Description","Created By","Created Date"],
         colModel: [
-              { name: 'Id', index: 'Id', width: 150, key: true, hidden: true },
-              { name: 'Name', index: 'Name', width: 150, key: false, editable: true },
-              { name: 'Description', index: 'Description', width: 150, key: false, editable: true }
+              { name: 'Id', index: 'Id',  key: true,hidden:true},
+              { name: 'Name', index: 'Name', width: 80, key: false, editable: true },
+              { name: 'Description', index: 'Description', width: 80, key: false, editable: true },
+              { name: 'CreatedBy', index: 'CreatedBy', width: 80, key: false, editable: false },
+               { name: 'CreatedDate', index: 'CreatedDate', formatter: 'date', width: 80, key: false, editable: false }
         ],
         rowNum: 10,
         rowList: [10, 20, 30],
         viewrecords: true,
         pager: jQuery("#pager"),
         autowidth: true,
-        height: '100%'
+        height: '100%',
     });
 
     jQuery("#list").jqGrid('navGrid', '#pager', { edit: true, add: true, del: true, refresh: true },

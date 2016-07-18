@@ -57,22 +57,17 @@ namespace SMSPOCWeb.Controllers
         /// <param name="Role"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<JsonResult> Create(Role Role)
+        public async Task<string> Create(Role Role)
         {
             try
             {
                 Role.CreatedBy = "prakash";
                 Role.CreatedDate = DateTime.Now;
                 Role dbrole= await mroleService.Add(Role);
-                var jsonData = new
-                {
-                    Name=dbrole.Name
-                };
-                return Json(jsonData, JsonRequestBehavior.AllowGet);
+                return dbrole.Name;
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
         }
