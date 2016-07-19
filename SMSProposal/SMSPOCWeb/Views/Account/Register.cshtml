@@ -1,17 +1,17 @@
-﻿@model DataModelLibrary.Subscriber
+﻿@model DataModelLibrary.SubscriberModel
 
 @{
     ViewBag.Title = "Register";
 }
 <h2>Register</h2>
-@using (Html.BeginForm()) 
+@using (Html.BeginForm("Register", "Account", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
         
         <hr />
-        @Html.ValidationSummary(true)
+       @* @Html.ValidationSummary(true)*@
 
         <div class="form-group">
             @Html.LabelFor(model => model.Username, new { @class = "control-label col-md-2" })
@@ -46,42 +46,39 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.EmailID, new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Email, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.EmailID)
-                @Html.ValidationMessageFor(model => model.EmailID)
+                @Html.EditorFor(model => model.Email)
+                @Html.ValidationMessageFor(model => model.Email)
             </div>
         </div>
-        <div class="form-group">
-            @Html.LabelFor(model => model.GenderTypeID, "Gender", new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownListFor(model => model.GenderTypeID, new SelectList(ViewBag.GenderTypeID, "ID", "Name"), "--- Select ---")
-                @Html.ValidationMessageFor(model => model.GenderTypeID)
-            </div>
+        @*<div class="form-group">
+        @Html.LabelFor(model => model.GenderTypeId, "Gender", new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(model => model.GenderTypeId, new SelectList(ViewBag.GenderTypeId, "ID", "Name"), "--- Select ---")
+            @Html.ValidationMessageFor(model => model.GenderTypeId)
         </div>
-        <div class="form-group">
-            @Html.LabelFor(model => model.Mobile, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Mobile)
-                @Html.ValidationMessageFor(model => model.Mobile)
-            </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Mobile, new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Mobile)
+            @Html.ValidationMessageFor(model => model.Mobile)
         </div>
+    </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.AccountTypeID, "AccountTypeID", new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
+    <div class="form-group">
+        @Html.LabelFor(model => model.AccountTypeId, "AccountTypeId", new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
 
-                @Html.DropDownListFor(model => model.AccountTypeID, new SelectList(ViewBag.AccountTypeID, "ID", "Name"), "--- Select ---")
-                @Html.ValidationMessageFor(model => model.AccountTypeID)
-                
-            </div>
+            @Html.DropDownListFor(model => model.AccountTypeId, new SelectList(ViewBag.AccountTypeId, "ID", "Name"), "--- Select ---")
+            @Html.ValidationMessageFor(model => model.AccountTypeId)
+
         </div>
-
-        
-
+    </div>*@
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Create" name="submit" class="btn btn-default" />
             </div>
         </div>
     </div>

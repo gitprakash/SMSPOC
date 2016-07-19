@@ -12,5 +12,8 @@ namespace DataServiceLibrary
           Task<IEnumerable<AccountType>> Accounttypes();
           Task<IEnumerable<GenderType>> Gendertypes();
           Task<Subscriber> Add(Subscriber role);
+          Task<bool> IsUserNameExists(string username);
+          Task<bool> IsUserEmailExists(string email);
+
     }
 }

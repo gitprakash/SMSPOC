@@ -124,5 +124,10 @@ namespace Repositorylibrary
         {
             return await _context.Set<TObject>().CountAsync();
         }
+
+        public async Task<bool> AnyAsync(Expression<Func<TObject, bool>> match)
+        {
+          return await  _context.Set<TObject>().AnyAsync(match);
+        }
     }
 }

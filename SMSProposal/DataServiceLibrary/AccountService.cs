@@ -35,5 +35,17 @@ namespace DataServiceLibrary
         {
             return await msubscriberrepository.AddAsync(subscriber);
         }
+
+
+        public async Task<bool> IsUserNameExists(string username)
+        {
+            return await msubscriberrepository.AnyAsync(s => s.Username == username);
+        }
+        public async Task<bool> IsUserEmailExists(string email)
+        {
+            return await msubscriberrepository.AnyAsync(s => s.Email == email);
+
+        }
+
     }
 }

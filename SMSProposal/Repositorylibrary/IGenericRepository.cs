@@ -12,6 +12,7 @@ namespace Repositorylibrary
         Task<ICollection<TObject>> GetAllAsync();
         TObject Get(int id);
         Task<TObject> GetAsync(int id);
+        Task<bool> AnyAsync(Expression<Func<TObject, bool>> match);
         TObject Find(Expression<Func<TObject, bool>> match);
         Task<TObject> FindAsync(Expression<Func<TObject, bool>> match);
         ICollection<TObject> FindAll(Expression<Func<TObject, bool>> match);
