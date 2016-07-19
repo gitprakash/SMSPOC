@@ -14,7 +14,7 @@ namespace DataModelLibrary
             IList<GenderType> GenderTypes = new List<GenderType>
             {
                 new GenderType{ Name="Male"},
-                new GenderType{ Name="Femaile"}
+                new GenderType{ Name="Female"}
             };
             IList<AccountType> AccountTypes = new List<AccountType>
             {
@@ -28,9 +28,24 @@ namespace DataModelLibrary
                 new Role{ Name="User",Description="user under subscriber", CreatedBy="prakash",CreatedDate=DateTime.Now},
 
             };
+            IList<Subscriber> lstsubscribers = new List<Subscriber>
+            {
+                new Subscriber{ Username="prakash", FirstName="prakash", Password="password", AccountTypeId=2, GenderTypeId=1, Active=true, Email="prakashr@hcl.com",
+                                LastName="rajendran", Mobile=9940499650}
+
+            };
+
+            IList<SubscriberRoles> subscriberroles = new List<SubscriberRoles>
+            {
+                new SubscriberRoles{ RoleId=1,SubscriberId=1},
+                new SubscriberRoles{ RoleId=2,SubscriberId=1}
+            };
+
             context.Roles.AddRange(Roles);
             context.GenderTypes.AddRange(GenderTypes);
             context.AccountTypes.AddRange(AccountTypes);
+            context.Subscribers.AddRange(lstsubscribers);
+            context.SubscriberRoles.AddRange(subscriberroles);
             base.Seed(context);
         }
     }

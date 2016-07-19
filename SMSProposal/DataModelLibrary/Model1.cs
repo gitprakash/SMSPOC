@@ -16,6 +16,6 @@ namespace DataModelLibrary
         public virtual DbSet<AccountType> AccountTypes { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<Subscriber> Subscribers { get; set; }
-         
+        public virtual DbSet<SubscriberRoles> SubscriberRoles { get; set; }
     }
 }

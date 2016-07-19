@@ -1,14 +1,3 @@
-C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\DataServiceLibrary.dll
-C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\DataServiceLibrary.pdb
-C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\DataModelLibrary.dll
-C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\Repositorylibrary.dll
-C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\EntityFramework.dll
-C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\DataModelLibrary.pdb
-C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\Repositorylibrary.pdb
-C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\EntityFramework.xml
-C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\DataServiceLibrary\obj\Debug\DataServiceLibrary.csprojResolveAssemblyReference.cache
-C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\DataServiceLibrary\obj\Debug\DataServiceLibrary.dll
-C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\DataServiceLibrary\obj\Debug\DataServiceLibrary.pdb
 E:\Github\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\DataServiceLibrary.dll
 E:\Github\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\DataServiceLibrary.pdb
 E:\Github\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\DataModelLibrary.dll
@@ -20,3 +9,14 @@ E:\Github\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\EntityFramework.xml
 E:\Github\SMSPOC\SMSProposal\DataServiceLibrary\obj\Debug\DataServiceLibrary.csprojResolveAssemblyReference.cache
 E:\Github\SMSPOC\SMSProposal\DataServiceLibrary\obj\Debug\DataServiceLibrary.dll
 E:\Github\SMSPOC\SMSProposal\DataServiceLibrary\obj\Debug\DataServiceLibrary.pdb
+C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\DataServiceLibrary.dll
+C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\DataServiceLibrary.pdb
+C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\DataModelLibrary.dll
+C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\Repositorylibrary.dll
+C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\EntityFramework.dll
+C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\DataModelLibrary.pdb
+C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\Repositorylibrary.pdb
+C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\EntityFramework.xml
+C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\DataServiceLibrary\obj\Debug\DataServiceLibrary.csprojResolveAssemblyReference.cache
+C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\DataServiceLibrary\obj\Debug\DataServiceLibrary.dll
+C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\DataServiceLibrary\obj\Debug\DataServiceLibrary.pdb

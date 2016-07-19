@@ -14,6 +14,7 @@ namespace DataServiceLibrary
           Task<Subscriber> Add(Subscriber role);
           Task<bool> IsUserNameExists(string username);
           Task<bool> IsUserEmailExists(string email);
-
+          Task<bool> IsUniqueMobile(long mobileno);
+          Task<Tuple<bool, bool>> CheckLogin(string username, string password);
     }
 }

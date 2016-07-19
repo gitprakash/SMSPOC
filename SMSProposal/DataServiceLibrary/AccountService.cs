@@ -46,6 +46,19 @@ namespace DataServiceLibrary
             return await msubscriberrepository.AnyAsync(s => s.Email == email);
 
         }
+        public async Task<bool> IsUniqueMobile(long mobileno)
+        {
+            return await msubscriberrepository.AnyAsync(s => s.Mobile == mobileno);
+        }
+        public async Task<Tuple<bool, bool>> CheckLogin(string username, string password)
+        {
+            Tuple<bool, bool> logintuple = new Tuple<bool, bool>(
+                    await msubscriberrepository.AnyAsync(s => s.Username == username),
+                    await msubscriberrepository.AnyAsync(s => s.Username == username && s.Password == password)
+                );
+             return logintuple;
+        }
+
 
     }
 }

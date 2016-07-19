@@ -1,4 +1,4 @@
-﻿@model DataModelLibrary.SubscriberModel
+﻿@model SMSPOCWeb.Models.SubscriberViewModel
 
 @{
     ViewBag.Title = "Register";
@@ -11,13 +11,13 @@
     <div class="form-horizontal">
         
         <hr />
-       @* @Html.ValidationSummary(true)*@
+        @Html.ValidationSummary(true)
 
         <div class="form-group">
             @Html.LabelFor(model => model.Username, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Username)
-                @Html.ValidationMessageFor(model => model.Username)
+                @Html.ValidationMessageFor(model => model.Username, "",new { @class = "text-danger" })
             </div>
         </div>
 
@@ -25,15 +25,21 @@
             @Html.LabelFor(model => model.Password, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Password)
-                @Html.ValidationMessageFor(model => model.Password)
+                @Html.ValidationMessageFor(model => model.Password, "",new { @class = "text-danger" })
             </div>
         </div>
-
+        <div class="form-group">
+            @Html.LabelFor(model => model.ConfirmPassword, new { @class = "control-label col-md-2 " })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ConfirmPassword)
+                @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
+            </div>
+        </div>
         <div class="form-group">
             @Html.LabelFor(model => model.FirstName, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.FirstName)
-                @Html.ValidationMessageFor(model => model.FirstName)
+                @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -41,7 +47,7 @@
             @Html.LabelFor(model => model.LastName, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.LastName)
-                @Html.ValidationMessageFor(model => model.LastName)
+                @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -49,33 +55,33 @@
             @Html.LabelFor(model => model.Email, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Email)
-                @Html.ValidationMessageFor(model => model.Email)
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
             </div>
         </div>
-        @*<div class="form-group">
+        <div class="form-group">
         @Html.LabelFor(model => model.GenderTypeId, "Gender", new { @class = "control-label col-md-2" })
         <div class="col-md-10">
             @Html.DropDownListFor(model => model.GenderTypeId, new SelectList(ViewBag.GenderTypeId, "ID", "Name"), "--- Select ---")
-            @Html.ValidationMessageFor(model => model.GenderTypeId)
+            @Html.ValidationMessageFor(model => model.GenderTypeId, "", new { @class = "text-danger" })
         </div>
     </div>
     <div class="form-group">
         @Html.LabelFor(model => model.Mobile, new { @class = "control-label col-md-2" })
         <div class="col-md-10">
             @Html.EditorFor(model => model.Mobile)
-            @Html.ValidationMessageFor(model => model.Mobile)
+            @Html.ValidationMessageFor(model => model.Mobile, "", new { @class = "text-danger" })
         </div>
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.AccountTypeId, "AccountTypeId", new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.AccountTypeId, "Account Type", new { @class = "control-label col-md-2" })
         <div class="col-md-10">
 
             @Html.DropDownListFor(model => model.AccountTypeId, new SelectList(ViewBag.AccountTypeId, "ID", "Name"), "--- Select ---")
-            @Html.ValidationMessageFor(model => model.AccountTypeId)
+            @Html.ValidationMessageFor(model => model.AccountTypeId, "", new { @class = "text-danger" })
 
         </div>
-    </div>*@
+    </div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Create" name="submit" class="btn btn-default" />
