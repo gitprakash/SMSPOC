@@ -12,7 +12,7 @@ namespace SMSPOCWeb.Controllers
         {
             return View();
         }
-        [Authorize]
+        [Authorize(Roles="Admin")]
         public ActionResult Start()
         {
             return View();

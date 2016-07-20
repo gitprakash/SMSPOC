@@ -22,6 +22,31 @@ namespace SMSPOCWeb.Controllers
         {
             return View();
         }
+
+        public ActionResult GetUserRolesView()
+        {
+            return View("UserRoles");
+        }
+        [Authorize(Roles ="Admin")]
+        public async Task<JsonResult> UserRoles(string sidx, string sort, int page, int rows)
+        {
+            sort = sort ?? "asc";
+            int pageIndex = Convert.ToInt32(page) - 1;
+            int pageSize = rows;
+           // var Rolelist =
+                //await maccountService..Select(sr => sr.role.Name).ToArrayAsync();
+           // int totalRecords = await mroleService.TotalRoles();
+            //var totalPages = (int)Math.Ceiling((float)totalRecords / (float)rows);
+            //var jsonData = new
+            //{
+            //    total = totalPages,
+            //    page,
+            //    records = totalRecords,
+            //    rows = Rolelist
+            //};
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
         public async Task<ActionResult> Register()
         {
             ViewBag.AccountTypeID = await maccountService.Accounttypes();
@@ -66,6 +91,9 @@ namespace SMSPOCWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginViewModel l, string ReturnUrl = "")
         {
+            try
+            {
+
             Tuple<bool,bool> tupleuser = await maccountService.CheckLogin(l.Username, l.Password);
 
             if (tupleuser.Item2)
@@ -90,6 +118,13 @@ namespace SMSPOCWeb.Controllers
             }
             ModelState.Remove("Password");
             return View(l);
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
         [Authorize]
         public ActionResult LogOff()

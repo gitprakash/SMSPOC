@@ -13,12 +13,15 @@ namespace DataServiceLibrary
         IGenericRepository<Subscriber> msubscriberrepository;
         IGenericRepository<AccountType> maccountyprepository;
         IGenericRepository<GenderType> mgendertyprepository;
+        IGenericRepository<SubscriberRoles> msubscriberrolesrepository;
         public AccountService(IGenericRepository<AccountType> accountyprepository,
             IGenericRepository<GenderType> gendertyprepository,
-            IGenericRepository<Subscriber> subscriberrepository)
+            IGenericRepository<Subscriber> subscriberrepository,
+            IGenericRepository<SubscriberRoles> subscriberrolesrepository)
         {
             mgendertyprepository = gendertyprepository;
             maccountyprepository = accountyprepository;
+            msubscriberrepository = subscriberrepository;
             msubscriberrepository = subscriberrepository;
         } 
         public async Task<IEnumerable<AccountType>> Accounttypes()
@@ -58,7 +61,23 @@ namespace DataServiceLibrary
                 );
              return logintuple;
         }
+        public  Subscriber Finduser(string username)
+        {
+            return   msubscriberrepository.Find(s => s.Username.Equals((username)));
+        }
+
+        public dynamic  GetUserRole()
+        {
+            //var tuple=Tuple.Create()
+         return    msubscriberrolesrepository.ToArrayAsync(sr => new { Id = sr.Id, sr.Subscriber.Username, RoleNmae = sr.role.Name});
+               // .Select(sr => new { Id = sr.Id, sr.Subscriber.Username, RoleNmae = sr.role.Name }).ToArrayAsync();
+
+        }
 
 
+        public Task<Tuple<int, string, string[]>> GetUserRoles()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -26,9 +26,10 @@
                         if (Request.IsAuthenticated)
                         {
                             <li>@Html.ActionLink("User", "List", "User")</li>
-                            <li>@Html.ActionLink("Role", "GetRoleView", "Role")</li>
+                            <li>@Html.ActionLink("Manage Role", "GetRoleView", "Role")</li>
+                            <li>@Html.ActionLink("Manage UserRole", "GetUserRolesView", "Subscriber")</li>
                         }
-                    }
+}
 
                     <li>@Html.ActionLink("About", "About", "Home")</li>
                 </ul>

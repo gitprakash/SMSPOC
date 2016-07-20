@@ -22,6 +22,9 @@ namespace SMSPOCWeb
             bundles.Add(new ScriptBundle("~/bundles/Role").Include(
                      "~/Scripts/Role.js")
                      );
+            bundles.Add(new ScriptBundle("~/bundles/Role").Include(
+                    "~/Scripts/SubscriberRole.js")
+                    );
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at http://modernizr.com to pick only the tests you need.

@@ -31,14 +31,16 @@ namespace DataModelLibrary
             IList<Subscriber> lstsubscribers = new List<Subscriber>
             {
                 new Subscriber{ Username="prakash", FirstName="prakash", Password="password", AccountTypeId=2, GenderTypeId=1, Active=true, Email="prakashr@hcl.com",
-                                LastName="rajendran", Mobile=9940499650}
-
+                                LastName="rajendran", Mobile=9940499650},
+                new Subscriber{ Username="testuser", FirstName="test", Password="password", AccountTypeId=2, GenderTypeId=1, Active=true, Email="test@hcl.com",
+                                LastName="rajendran", Mobile=9940499651}
             };
 
             IList<SubscriberRoles> subscriberroles = new List<SubscriberRoles>
             {
                 new SubscriberRoles{ RoleId=1,SubscriberId=1},
-                new SubscriberRoles{ RoleId=2,SubscriberId=1}
+                new SubscriberRoles{ RoleId=2,SubscriberId=1},
+                new SubscriberRoles{ RoleId=2,SubscriberId=2}
             };
 
             context.Roles.AddRange(Roles);

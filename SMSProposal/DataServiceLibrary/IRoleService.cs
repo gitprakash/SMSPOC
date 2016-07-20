@@ -15,5 +15,6 @@ namespace DataServiceLibrary
         Task<Role> FindRole(string name);
         Task<IEnumerable<Role>> GetRoles(int skip, int pagesize, string ordercolumn,bool desc);
         Task<int> TotalRoles();
+
     }
 }

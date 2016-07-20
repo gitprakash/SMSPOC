@@ -129,5 +129,9 @@ namespace Repositorylibrary
         {
           return await  _context.Set<TObject>().AnyAsync(match);
         }
+        public async Task<TResult[]> ToArrayAsync<TResult>(Expression<Func<TObject, TResult>> select)
+        {
+            return await _context.Set<TObject>().Select(select).ToArrayAsync();
+        }
     }
 }

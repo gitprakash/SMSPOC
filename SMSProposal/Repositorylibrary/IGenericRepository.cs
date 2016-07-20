@@ -26,6 +26,7 @@ namespace Repositorylibrary
         Task<int> DeleteAsync(TObject t);
         int Count();
         Task<int> CountAsync();
+        Task<TResult[]> ToArrayAsync<TResult>(Expression<Func<TObject, TResult>> select);
 
     }
 }
