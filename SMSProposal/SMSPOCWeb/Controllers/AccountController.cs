@@ -27,25 +27,7 @@ namespace SMSPOCWeb.Controllers
         {
             return View("UserRoles");
         }
-        [Authorize(Roles ="Admin")]
-        public async Task<JsonResult> UserRoles(string sidx, string sort, int page, int rows)
-        {
-            sort = sort ?? "asc";
-            int pageIndex = Convert.ToInt32(page) - 1;
-            int pageSize = rows;
-           // var Rolelist =
-                //await maccountService..Select(sr => sr.role.Name).ToArrayAsync();
-           // int totalRecords = await mroleService.TotalRoles();
-            //var totalPages = (int)Math.Ceiling((float)totalRecords / (float)rows);
-            //var jsonData = new
-            //{
-            //    total = totalPages,
-            //    page,
-            //    records = totalRecords,
-            //    rows = Rolelist
-            //};
-            return Json("", JsonRequestBehavior.AllowGet);
-        }
+       
 
         public async Task<ActionResult> Register()
         {
@@ -174,6 +156,12 @@ namespace SMSPOCWeb.Controllers
             {
                 return Json(true, JsonRequestBehavior.AllowGet);
             }
+        }
+        [Authorize(Roles="Admin")]
+        public async Task<JsonResult> GetAllUsers()
+        {
+            var users=  await maccountService.GetAllUsers();
+            return Json(users, JsonRequestBehavior.AllowGet);
         }
     }
 }

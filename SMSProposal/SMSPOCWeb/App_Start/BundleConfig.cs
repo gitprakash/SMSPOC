@@ -22,7 +22,7 @@ namespace SMSPOCWeb
             bundles.Add(new ScriptBundle("~/bundles/Role").Include(
                      "~/Scripts/Role.js")
                      );
-            bundles.Add(new ScriptBundle("~/bundles/Role").Include(
+            bundles.Add(new ScriptBundle("~/bundles/SubscriberRole").Include(
                     "~/Scripts/SubscriberRole.js")
                     );
 

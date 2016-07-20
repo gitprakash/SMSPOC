@@ -39,5 +39,15 @@ namespace DataServiceLibrary
        {
            return await mrole.CountAsync();
        }
+
+       public async Task<string[]> GetAllRoles()
+       {
+           return await mrole.ToArrayAsync(r=>r.Name);
+       }
+       public async Task<bool> IsRoleExists(string name)
+       {
+           return await mrole.AnyAsync(r => r.Name.Equals(name));
+       }
+
     }
 }

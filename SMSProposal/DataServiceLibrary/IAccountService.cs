@@ -17,6 +17,10 @@ namespace DataServiceLibrary
           Task<bool> IsUniqueMobile(long mobileno);
           Task<Tuple<bool, bool>> CheckLogin(string username, string password);
           Subscriber Finduser(string username);
-        Task<Tuple<int, string, string[]>> GetUserRoles();
+          Task<Subscriber> FinduserAsync(string username);
+          Task<IEnumerable<Tuple<int, string, string>>> GetUserRole();
+          Task<int> TotalUserRoles();
+          Task<string[]> GetAllUsers();
+          
     }
 }

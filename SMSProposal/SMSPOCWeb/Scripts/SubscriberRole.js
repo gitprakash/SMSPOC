@@ -1,62 +1,101 @@
 ﻿$(document).ready(function myfunction() {
 
+    var allusers = $.ajax({
+        url: '/Account/GetAllUsers', async: false,
+        success: function (data, result) {
+            if (!result)
+                alert('Failure to User list');
+        }
+    }).responseText;
+    var allroles = $.ajax({
+        url: '/Role/GetAllRoles', async: false,
+        success: function (data, result) {
+            if (!result)
+                alert('Failure to User list');
+        }
+    }).responseText;
+
     $('#list').jqGrid({
-        caption: "Role Details",
-        url: '/Subscriber/UserRoles/',
+        caption: "Users Role Details",
+        url: '/ManageUserRoles/UserRoles/',
         datatype: "json",
         contentType: "application/json; charset-utf-8",
         mtype: 'GET',
         sortname: "Role",
-        colNames: ['User', 'Role '],
+        colNames: ['Id', 'User', 'Role'],
         colModel: [
               { name: 'Id', index: 'Id', key: true, hidden: true },
-              { name: 'User', index: 'User', width: 80, key: false, editable: true },
-              { name: 'Role', index: 'Role', width: 80, key: false, editable: true }
+              { name: 'User', index: 'User', width: 80, key: false, editable: true, edittype: "select", editrules: { required: true }},
+              { name: 'Role', index: 'Role', width: 80, key: false, editable: true, edittype: "select", editrules: { required: true } }
         ],
         rowNum: 10,
         rowList: [10, 20, 30],
         viewrecords: true,
         pager: jQuery("#pager"),
-        autowidth: true,
+        width: '600%',
         height: '100%',
+        loadComplete: function () {
+            $('#list').setColProp('User', { editoptions: { value: JSON.parse(allusers) } });
+            $('#list').setColProp('Role', { editoptions: { value: JSON.parse(allroles) } });
+        }
     });
 
-    jQuery("#list").jqGrid('navGrid', '#pager', { edit: true, add: true, del: true, refresh: true },
+    jQuery("#list").jqGrid('navGrid', '#pager', { edit: true, add: true, del: true, refresh: false },
         {
             zIndex: 100,
             url: '/Role/Edit',
             closeOnEscape: true,
             closeAfterEdit: true,
             recreateForm: true,
-            afterComplete: function (response) {
-                if (response.responseText) {
-                    alert(response.responseText);
+            afterSubmit: function (response) {
+              
+                var result = jQuery.parseJSON(response.responseText);
+                if (result.Status == "success") {
+                    alert('Successfully added user roles details');
+                    $(this).jqGrid('setGridParam',
+                      { datatype: 'json' }).trigger('reloadGrid');
+                    return [true, '']
+                }
+                else {
+                    //error
+                    return [false, result.error]
                 }
             }
         },
-        {
-            zIndex: 100,
-            url: "/Role/Create",
-            closeOnEscape: true,
-            closeAfterAdd: true,
-            recreateForm: true,
-            afterComplete: function (response) {
-                if (response.responseText) {
-                    alert(response.responseText);
-                }
-            }
-        },
-        {
-            zIndex: 100,
-            url: "/Role/Delete",
-            closeOnEscape: true,
-            closeAfterDelete: true,
-            recreateForm: true,
-            msg: "Are you sure you want to delete Role... ? ",
-            afterComplete: function (response) {
-                if (response.responseText) {
-                    alert(response.responseText);
-                }
-            }
-        });
+       {
+           zIndex: 100,
+           url: "/ManageUserRoles/Add",
+           closeOnEscape: true,
+           closeAfterAdd: true,
+           drag: true,
+           editData: {
+               User: function () {
+                   var id = $("#User").val();
+                   return $("#User option[value='" + id + "']").text();
+               },
+               Role: function () {
+                   var id = $("#Role").val();
+                   return $("#Role option[value='" + id + "']").text();
+               }
+           },
+
+           afterSubmit: function (response) {
+
+               var result = jQuery.parseJSON(response.responseText);
+               if (result.Status == "success") {
+                   alert('Successfully added user roles details');
+                   $(this).jqGrid('setGridParam',
+                     { datatype: 'json' }).trigger('reloadGrid');
+                   return [true, '']
+               }
+               else {
+                   //error
+                   debugger;
+                   return [false, result.error]
+               }
+           }
+
+       }
+
+        );
 });

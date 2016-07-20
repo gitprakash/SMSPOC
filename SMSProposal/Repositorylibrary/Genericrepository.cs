@@ -19,16 +19,16 @@ namespace Repositorylibrary
 
         public ICollection<TObject> GetAll()
         {
-            return _context.Set<TObject>().ToList();
+            return _context.Set<TObject>().AsNoTracking().ToList();
         }
 
         public async Task<ICollection<TObject>> GetAllAsync()
         {
-            return await _context.Set<TObject>().ToListAsync();
+            return await _context.Set<TObject>().AsNoTracking().ToListAsync();
         }
         public async Task<ICollection<TObject>> GetPagedResult(int skip, int take, string ordercolumn,bool desc)
         {
-            return await _context.Set<TObject>().OrderByAscDsc(ordercolumn, desc).Skip(skip).Take(take).AsNoTracking().ToListAsync();
+            return await _context.Set<TObject>().AsNoTracking().OrderByAscDsc(ordercolumn, desc).Skip(skip).Take(take).AsNoTracking().ToListAsync();
         }
 
         public TObject Get(int id)
@@ -127,11 +127,11 @@ namespace Repositorylibrary
 
         public async Task<bool> AnyAsync(Expression<Func<TObject, bool>> match)
         {
-          return await  _context.Set<TObject>().AnyAsync(match);
+            return await _context.Set<TObject>().AsNoTracking().AnyAsync(match);
         }
         public async Task<TResult[]> ToArrayAsync<TResult>(Expression<Func<TObject, TResult>> select)
         {
-            return await _context.Set<TObject>().Select(select).ToArrayAsync();
+            return await _context.Set<TObject>().AsNoTracking().Select(select).ToArrayAsync();
         }
     }
 }

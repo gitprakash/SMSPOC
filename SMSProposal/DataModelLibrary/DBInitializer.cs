@@ -38,9 +38,9 @@ namespace DataModelLibrary
 
             IList<SubscriberRoles> subscriberroles = new List<SubscriberRoles>
             {
-                new SubscriberRoles{ RoleId=1,SubscriberId=1},
-                new SubscriberRoles{ RoleId=2,SubscriberId=1},
-                new SubscriberRoles{ RoleId=2,SubscriberId=2}
+                new SubscriberRoles{ RoleId=1,SubscriberId=1,Active=true},
+                new SubscriberRoles{ RoleId=2,SubscriberId=1,Active=true},
+                new SubscriberRoles{ RoleId=2,SubscriberId=2,Active=true}
             };
 
             context.Roles.AddRange(Roles);

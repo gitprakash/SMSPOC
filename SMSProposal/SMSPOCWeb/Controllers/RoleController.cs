@@ -67,7 +67,12 @@ namespace SMSPOCWeb.Controllers
                 throw ex;
             }
         }
-        
 
+        [Authorize(Roles = "Admin")]
+        public async Task<JsonResult> GetAllRoles()
+        {
+            var roles = await mroleService.GetAllRoles();
+            return Json(roles, JsonRequestBehavior.AllowGet);
+        }
     }
 }

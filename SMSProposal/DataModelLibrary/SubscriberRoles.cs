@@ -19,5 +19,10 @@ namespace DataModelLibrary
         public int RoleId { get; set; }
         public virtual Subscriber Subscriber { get; set; }
         public virtual Role role { get; set; }
+        public bool Active { get; set; }
+        [Column(TypeName = "date")]
+        public DateTime ModifiedDate { get; set; }
+        [StringLength(50)]
+        public string ModifiedBy { get; set; }
     }
 }

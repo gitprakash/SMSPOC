@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataServiceLibrary
 {
-    public class AccountService:IAccountService
+    public class AccountService : IAccountService
     {
         IGenericRepository<Subscriber> msubscriberrepository;
         IGenericRepository<AccountType> maccountyprepository;
@@ -22,11 +22,11 @@ namespace DataServiceLibrary
             mgendertyprepository = gendertyprepository;
             maccountyprepository = accountyprepository;
             msubscriberrepository = subscriberrepository;
-            msubscriberrepository = subscriberrepository;
-        } 
+            msubscriberrolesrepository = subscriberrolesrepository;
+        }
         public async Task<IEnumerable<AccountType>> Accounttypes()
         {
-          return await  maccountyprepository.GetAllAsync();
+            return await maccountyprepository.GetAllAsync();
         }
 
         public async Task<IEnumerable<GenderType>> Gendertypes()
@@ -59,25 +59,30 @@ namespace DataServiceLibrary
                     await msubscriberrepository.AnyAsync(s => s.Username == username),
                     await msubscriberrepository.AnyAsync(s => s.Username == username && s.Password == password)
                 );
-             return logintuple;
+            return logintuple;
         }
-        public  Subscriber Finduser(string username)
+        public Subscriber Finduser(string username)
         {
-            return   msubscriberrepository.Find(s => s.Username.Equals((username)));
+            return msubscriberrepository.Find(s => s.Username.Equals((username)));
         }
-
-        public dynamic  GetUserRole()
+        public  async Task<Subscriber> FinduserAsync(string username)
         {
-            //var tuple=Tuple.Create()
-         return    msubscriberrolesrepository.ToArrayAsync(sr => new { Id = sr.Id, sr.Subscriber.Username, RoleNmae = sr.role.Name});
-               // .Select(sr => new { Id = sr.Id, sr.Subscriber.Username, RoleNmae = sr.role.Name }).ToArrayAsync();
-
+            return await msubscriberrepository.FindAsync(s => s.Username.Equals((username)));
         }
 
-
-        public Task<Tuple<int, string, string[]>> GetUserRoles()
+        public async Task<IEnumerable<Tuple<int, string, string>>> GetUserRole()
         {
-            throw new NotImplementedException();
+            var result = await msubscriberrolesrepository.ToArrayAsync(sr => new { Id = sr.Id, sr.Subscriber.Username, RoleNmae = sr.role.Name });
+            return result.Select(s => Tuple.Create(s.Id, s.Username, s.RoleNmae));
         }
+        public async Task<int> TotalUserRoles()
+        {
+          return await msubscriberrolesrepository.CountAsync();
+        }
+        public async Task<string[]> GetAllUsers()
+        {
+            return await msubscriberrepository.ToArrayAsync(s => s.Username);
+        }
+         
     }
 }
