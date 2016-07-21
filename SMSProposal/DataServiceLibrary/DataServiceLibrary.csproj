@@ -40,8 +40,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountService.cs" />
+    <Compile Include="ContactService.cs" />
     <Compile Include="IAccountService.cs" />
     <Compile Include="IRoleService.cs" />
+    <Compile Include="IContactService.cs" />
     <Compile Include="IUserRoleService.cs" />
     <Compile Include="RoleService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

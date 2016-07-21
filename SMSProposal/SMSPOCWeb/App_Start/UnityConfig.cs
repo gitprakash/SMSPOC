@@ -46,9 +46,11 @@ namespace SMSPOCWeb.App_Start
             container.RegisterType<IGenericRepository<SubscriberRoles>, Genericrepository<SubscriberRoles>>();
             container.RegisterType<IGenericRepository<AccountType>, Genericrepository<AccountType>>();
             container.RegisterType<IGenericRepository<GenderType>, Genericrepository<GenderType>>();
+            container.RegisterType<IGenericRepository<Contact>, Genericrepository<Contact>>();
             container.RegisterType<IRoleService, RoleService>();
             container.RegisterType<IAccountService, AccountService>();
             container.RegisterType<IUserRoleService, UserRoleService>();
+            container.RegisterType<IContactService, ContactService>();
 
 
         }

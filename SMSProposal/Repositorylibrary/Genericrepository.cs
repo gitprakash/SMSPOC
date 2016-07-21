@@ -26,9 +26,13 @@ namespace Repositorylibrary
         {
             return await _context.Set<TObject>().AsNoTracking().ToListAsync();
         }
-        public async Task<ICollection<TObject>> GetPagedResult(int skip, int take, string ordercolumn,bool desc)
+        public async Task<ICollection<TObject>> GetPagedResult(int skip, int take, string ordercolumn, bool desc, Expression<Func<TObject, bool>> match = null)
         {
-            return await _context.Set<TObject>().AsNoTracking().OrderByAscDsc(ordercolumn, desc).Skip(skip).Take(take).AsNoTracking().ToListAsync();
+            if (match == null)
+            {
+                return await _context.Set<TObject>().AsNoTracking().OrderByAscDsc(ordercolumn, desc).Skip(skip).Take(take).AsNoTracking().ToListAsync();
+            }
+            return await _context.Set<TObject>().AsNoTracking().Where(match).OrderByAscDsc(ordercolumn, desc).Skip(skip).Take(take).AsNoTracking().ToListAsync();
         }
 
         public TObject Get(int id)
@@ -120,9 +124,13 @@ namespace Repositorylibrary
             return _context.Set<TObject>().Count();
         }
 
-        public async Task<int> CountAsync()
+        public async Task<int> CountAsync(Expression<Func<TObject, bool>> match = null)
         {
-            return await _context.Set<TObject>().CountAsync();
+            if (match != null)
+                return await _context.Set<TObject>().CountAsync();
+            else
+                return await _context.Set<TObject>().CountAsync(match);
+
         }
 
         public async Task<bool> AnyAsync(Expression<Func<TObject, bool>> match)

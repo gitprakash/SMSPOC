@@ -17,7 +17,7 @@ namespace Repositorylibrary
         Task<TObject> FindAsync(Expression<Func<TObject, bool>> match);
         ICollection<TObject> FindAll(Expression<Func<TObject, bool>> match);
         Task<ICollection<TObject>> FindAllAsync(Expression<Func<TObject, bool>> match);
-        Task<ICollection<TObject>> GetPagedResult(int skip, int take, string sortcolumn, bool desc);
+        Task<ICollection<TObject>> GetPagedResult(int skip, int take, string sortcolumn, bool desc, Expression<Func<TObject, bool>> match = null);
         TObject Add(TObject t);
         Task<TObject> AddAsync(TObject t);
         TObject Update(TObject updated, int key);
@@ -25,7 +25,7 @@ namespace Repositorylibrary
         void Delete(TObject t);
         Task<int> DeleteAsync(TObject t);
         int Count();
-        Task<int> CountAsync();
+        Task<int> CountAsync(Expression<Func<TObject, bool>> match = null);
         Task<TResult[]> ToArrayAsync<TResult>(Expression<Func<TObject, TResult>> select);
 
     }

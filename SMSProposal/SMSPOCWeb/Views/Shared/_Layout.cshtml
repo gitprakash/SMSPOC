@@ -26,8 +26,12 @@
                         if (Request.IsAuthenticated)
                         {
                             <li>@Html.ActionLink("User", "List", "User")</li>
+                            if(User.IsInRole("Subscriber"))
+                            { 
+                            <li>@Html.ActionLink("Contact","Index","Contact")</li>
+                             }   
                             <li>@Html.ActionLink("Manage Role", "GetRoleView", "Role")</li>
-                            <li>@Html.ActionLink("Manage UserRole", "GetUserRolesView", "Account")</li>
+                            <li>@Html.ActionLink("Manage UserRole", "GetUserRolesView", "ManageUserRoles")</li>
                         }
 }
 

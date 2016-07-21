@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using DataModelLibrary;
 using SMSPOCWeb.Models;
 using System.Web.Security;
+using System.Web.Script.Serialization;
 
 namespace SMSPOCWeb.Controllers
 {
@@ -23,10 +24,7 @@ namespace SMSPOCWeb.Controllers
             return View();
         }
 
-        public ActionResult GetUserRolesView()
-        {
-            return View("UserRoles");
-        }
+      
        
 
         public async Task<ActionResult> Register()
@@ -80,7 +78,16 @@ namespace SMSPOCWeb.Controllers
 
             if (tupleuser.Item2)
             {
-                FormsAuthentication.SetAuthCookie(l.Username, l.RememberMe);
+                Subscriber user = await maccountService.FinduserAsync(l.Username);
+                if (user != null)
+                {
+                    JavaScriptSerializer js = new JavaScriptSerializer();
+                    string data = js.Serialize(user);
+                    FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(1, user.Username, DateTime.Now, DateTime.Now.AddMinutes(20), l.RememberMe, data);
+                    string encToken = FormsAuthentication.Encrypt(ticket);
+                    HttpCookie authoCookies = new HttpCookie(FormsAuthentication.FormsCookieName, encToken);
+                    Response.Cookies.Add(authoCookies);
+                }
                 if (Url.IsLocalUrl(ReturnUrl))
                 {
                     return Redirect(ReturnUrl);

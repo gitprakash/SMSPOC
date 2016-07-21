@@ -23,7 +23,11 @@ namespace SMSPOCWeb.Controllers
             mroleService = roleService;
             maccountService = accountService;
         }
-       
+        public ActionResult GetUserRolesView()
+        {
+            return View("UserRoles");
+        }
+
         public async Task<JsonResult> UserRoles(string sidx, string sort, int page, int rows)
         {
             sort = sort ?? "asc";

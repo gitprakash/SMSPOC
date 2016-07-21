@@ -58,5 +58,7 @@ namespace DataModelLibrary
         public virtual GenderType GenderType { get; set; }
 
         public virtual ICollection<SubscriberRoles> Roles { get; set; }
+
+        public virtual ICollection<Contact> Contacts { get; set; }
     }
 }
