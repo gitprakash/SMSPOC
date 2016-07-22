@@ -121,6 +121,39 @@ namespace SMSPOCWeb.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task<JsonResult> Delete(int Id)
+        {
+            try
+            {
+                Contact contact;
+                int saved = 0;
+                if (ModelState.IsValid)
+                {
+                    contact = await mcontactService.FindContact(Id);
+                    if (contact == null)
+                    {
+                        throw new Exception("Unable to find student details");
+                    }
+                    contact.Active = false;
+                    saved = await mcontactService.SaveAsync();
+                }
+                else
+                {
+                    string messages = GetModelStateError();
+                    throw new Exception(messages);
+                }
+                var resultstatus = new { Status = "success", Id = saved };
+                return Json(resultstatus, JsonRequestBehavior.AllowGet);
+
+            }
+            catch (Exception ex)
+            {
+                var result = new { Status = "error", error = ex.Message };
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         private string GetModelStateError()
         {
             string messages = string.Join("; ", ModelState.Values
