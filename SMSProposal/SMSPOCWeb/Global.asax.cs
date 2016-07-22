@@ -28,7 +28,7 @@ namespace SMSPOCWeb
             {
                 FormsAuthenticationTicket ticket = FormsAuthentication.Decrypt(authoCookies.Value);
                 JavaScriptSerializer js = new JavaScriptSerializer();
-                Subscriber user = js.Deserialize<Subscriber>(ticket.UserData);
+                var user = js.Deserialize<SubscriberViewModel>(ticket.UserData);
                 CustomIdentity myIdentity = new CustomIdentity(user);
                 CustomPrincipal myPrincipal = new CustomPrincipal(myIdentity);
                 HttpContext.Current.User = myPrincipal;

@@ -21,7 +21,11 @@ namespace Repositorylibrary
         {
             return _context.Set<TObject>().AsNoTracking().ToList();
         }
-
+        public virtual IQueryable<TObject> GetAllLazyLoad(Expression<Func<TObject, bool>> filter, params Expression<Func<TObject, object>>[] children)
+        {
+            children.ToList().ForEach(x => _context.Set<TObject>().Include(x).Load());
+            return _context.Set<TObject>();
+        }
         public async Task<ICollection<TObject>> GetAllAsync()
         {
             return await _context.Set<TObject>().AsNoTracking().ToListAsync();
@@ -40,7 +44,7 @@ namespace Repositorylibrary
             return _context.Set<TObject>().Find(id);
         }
 
-        public async Task<TObject> GetAsync(int id)
+        public async Task<TObject> GetAsync(long id)
         {
             return await _context.Set<TObject>().FindAsync(id);
         }
@@ -93,7 +97,7 @@ namespace Repositorylibrary
             return existing;
         }
 
-        public async Task<TObject> UpdateAsync(TObject updated, int key)
+        public async Task<TObject> UpdateAsync(TObject updated, long key)
         {
             if (updated == null)
                 return null;
@@ -140,6 +144,11 @@ namespace Repositorylibrary
         public async Task<TResult[]> ToArrayAsync<TResult>(Expression<Func<TObject, TResult>> select)
         {
             return await _context.Set<TObject>().AsNoTracking().Select(select).ToArrayAsync();
+        }
+
+        public async Task<int> SaveAsync()
+        {
+            return await _context.SaveChangesAsync();
         }
     }
 }

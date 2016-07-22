@@ -15,6 +15,7 @@ namespace DataServiceLibrary
         public ContactService(IGenericRepository<Contact> contactRepository)
         {
             mcontactRepository = contactRepository;
+            
         }
         public async Task<IEnumerable<Contact>> Contacts(int subcriberId,int skip, int pagesize, string ordercolumn, bool desc)
         {
@@ -26,6 +27,27 @@ namespace DataServiceLibrary
             Expression<Func<Contact, bool>> where = c => c.SubscriberId == subcriberId;
             return await mcontactRepository.CountAsync(where);
         }
+        public async Task<Contact> AddContact(Contact contact)
+        {
+            return await mcontactRepository.AddAsync(contact);
+        }
+        public async Task<bool> IsUniqueMobile(long mobileno)
+        {
+            return await mcontactRepository.AnyAsync(s => s.Mobile == mobileno);
+        }
 
+        public async Task<Contact> EditContact(Contact contact)
+        {
+            return await mcontactRepository.UpdateAsync(contact,contact.Id);
+        }
+
+        public async Task<Contact> FindContact(long Id)
+        {
+            return await mcontactRepository.GetAsync(Id);
+        }
+        public async Task<int> SaveAsync()
+        {
+            return await mcontactRepository.SaveAsync();
+        }
     }
 }

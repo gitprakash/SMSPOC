@@ -73,6 +73,7 @@ namespace SMSPOCWeb.Models
             }
             string[] roles = new string[]{};
             var user=   mAccountService.Finduser(username);
+           
             if (user != null)
             {
                 roles=user.Roles.Select(r => r.role.Name).ToArray();

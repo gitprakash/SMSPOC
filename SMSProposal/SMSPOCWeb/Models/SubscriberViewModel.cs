@@ -7,7 +7,7 @@
 
     public  class SubscriberViewModel
     {
-        
+        public int Id { get; set; }
         [Required(AllowEmptyStrings = false)]
         [StringLength(50)]
         [System.Web.Mvc.Remote("IsUserNameExists", "Account", HttpMethod="Post")]

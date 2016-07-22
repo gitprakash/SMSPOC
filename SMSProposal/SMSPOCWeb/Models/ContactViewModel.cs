@@ -8,21 +8,27 @@
     public class ContactViewModel
     {
         
+        public long Id { get; set; }
+
         [Required(AllowEmptyStrings = false)]
-        [StringLength(50)]
-        [System.Web.Mvc.Remote("IsUserNameExists", "Contact", HttpMethod="Post")]
+        [StringLength(200)]
         public string Name { get; set; }
 
         [StringLength(200)]
         [EmailAddress]
-        [System.Web.Mvc.Remote("IsUserEmailExists", "Contact", HttpMethod = "Post")]
         public string Email { get; set; }
 
         [Required(AllowEmptyStrings = false)]
         [RegularExpression(@"^((\+91-?)|0)?[0-9]{10}$", ErrorMessage = "Please enter 10 digit Mobile Number")]
-        [System.Web.Mvc.Remote("IsUniqueMobile", "Contact", HttpMethod = "Post")]
         public long Mobile { get; set; }
 
+        [Required(AllowEmptyStrings = false)] 
+        [StringLength(20, MinimumLength = 1)]
+        public string Class { get; set; }
+
+        [Required(AllowEmptyStrings = false)]
+        [StringLength(20, MinimumLength = 1)]
+        public string Section { get; set; }
 
     }
 }

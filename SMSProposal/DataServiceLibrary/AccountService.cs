@@ -3,6 +3,7 @@ using Repositorylibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -63,6 +64,18 @@ namespace DataServiceLibrary
         }
         public Subscriber Finduser(string username)
         {
+            return msubscriberrepository.Find(s => s.Username.Equals((username)));
+        }
+        public Subscriber Finduser(string username,bool includechild)
+        {
+            //if (includechild)
+            //{
+            //    Expression<Func<Subscriber, bool>> where = s => s.Username == username;
+            //    var lstexrpess = new Expression<Func<Subscriber, object>>[1];
+                
+            //    Expression<Func<Subscriber, object>> childlist = s => s.Roles;
+            //    return msubscriberrepository.GetAllLazyLoad(where, lstexrpess);
+            //}
             return msubscriberrepository.Find(s => s.Username.Equals((username)));
         }
         public  async Task<Subscriber> FinduserAsync(string username)

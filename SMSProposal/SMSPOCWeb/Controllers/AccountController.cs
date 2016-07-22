@@ -78,12 +78,13 @@ namespace SMSPOCWeb.Controllers
 
             if (tupleuser.Item2)
             {
-                Subscriber user = await maccountService.FinduserAsync(l.Username);
-                if (user != null)
+                Subscriber suser = await maccountService.FinduserAsync(l.Username);
+                SubscriberViewModel dbuser = new SubscriberViewModel { Id = suser.ID, Username = suser.Username, Email = suser.Email };
+                if (suser != null)
                 {
                     JavaScriptSerializer js = new JavaScriptSerializer();
-                    string data = js.Serialize(user);
-                    FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(1, user.Username, DateTime.Now, DateTime.Now.AddMinutes(20), l.RememberMe, data);
+                    string data = js.Serialize(dbuser);
+                    FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(1, suser.Username, DateTime.Now, DateTime.Now.AddMinutes(20), l.RememberMe, data);
                     string encToken = FormsAuthentication.Encrypt(ticket);
                     HttpCookie authoCookies = new HttpCookie(FormsAuthentication.FormsCookieName, encToken);
                     Response.Cookies.Add(authoCookies);

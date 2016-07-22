@@ -11,7 +11,7 @@ namespace Repositorylibrary
         ICollection<TObject> GetAll();
         Task<ICollection<TObject>> GetAllAsync();
         TObject Get(int id);
-        Task<TObject> GetAsync(int id);
+        Task<TObject> GetAsync(long id);
         Task<bool> AnyAsync(Expression<Func<TObject, bool>> match);
         TObject Find(Expression<Func<TObject, bool>> match);
         Task<TObject> FindAsync(Expression<Func<TObject, bool>> match);
@@ -21,12 +21,15 @@ namespace Repositorylibrary
         TObject Add(TObject t);
         Task<TObject> AddAsync(TObject t);
         TObject Update(TObject updated, int key);
-        Task<TObject> UpdateAsync(TObject updated, int key);
+        Task<TObject> UpdateAsync(TObject updated, long key);
         void Delete(TObject t);
         Task<int> DeleteAsync(TObject t);
         int Count();
         Task<int> CountAsync(Expression<Func<TObject, bool>> match = null);
         Task<TResult[]> ToArrayAsync<TResult>(Expression<Func<TObject, TResult>> select);
+        IQueryable<TObject> GetAllLazyLoad(Expression<Func<TObject, bool>> filter, params Expression<Func<TObject, object>>[] children);
+        Task<int> SaveAsync();
+
 
     }
 }

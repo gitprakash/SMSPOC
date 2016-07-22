@@ -11,9 +11,9 @@ namespace SMSPOCWeb.Models
   public class CustomIdentity : IIdentity
         {
             public IIdentity Identity { get; set; }
-            public Subscriber User { get; set; }
+            public SubscriberViewModel User { get; set; }
 
-            public CustomIdentity(Subscriber user)
+            public CustomIdentity(SubscriberViewModel user)
             {
                 Identity = new GenericIdentity(user.Username);
                 User = user;
