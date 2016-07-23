@@ -14,6 +14,9 @@ namespace SMSPOCWeb
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));
 
+            bundles.Add(new ScriptBundle("~/bundles/jqueryui").Include(
+                       "~/Scripts/jquery-ui.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/jqgrid").Include(
                       "~/Scripts/free-jqGrid/jquery.jqgrid.min.js",
                       "~/Scripts/free-jqGrid/i18n/grid.locale-en.js")
@@ -28,6 +31,9 @@ namespace SMSPOCWeb
 
             bundles.Add(new ScriptBundle("~/bundles/Contact").Include(
                 "~/Scripts/Contact.js")
+                );
+            bundles.Add(new ScriptBundle("~/bundles/Sendsms").Include(
+                "~/Scripts/Sendsms.js")
                 );
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're

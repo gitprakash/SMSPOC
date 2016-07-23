@@ -1,0 +1,28 @@
+﻿@{
+    ViewBag.Title = "SendSMS";
+}
+<h2>SendSMS</h2>
+ @Scripts.Render("~/bundles/jqgrid")
+@Scripts.Render("~/bundles/Sendsms")
+<style type="text/css">
+    .clnik {
+        margin: 0px 0px 0px 10px;
+    }
+</style>
+<div class="input-group col-lg-12">
+    <textarea class="form-control " rows="10" style="min-width: 100%" id="ContactList" name="ContactList"></textarea><br />
+    <span class="btn btn-primary" id="LoadContact">LoadContacts</span>
+    <br />
+</div>
+<br />
+
+<div class="input-group col-lg-12">
+    <textarea class="form-control text ui-widget-content ui-corner-all" rows="3" style="min-width:50%" id="txtsms" name="txtsms"></textarea><br />
+    <span class="btn btn-primary" id="submitMyForm">Send</span>
+</div>
+<div id="dialog-div">
+    <table id="list"></table>
+    <div id="pager" style="text-align: center;"> </div>
+</div>
+
+

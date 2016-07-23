@@ -35,7 +35,7 @@
                                 <li>@Html.ActionLink("Manage Contact", "GetContactView", "Contact")</li>
                                 <li>@Html.ActionLink("Manage Standard", "Index", "Standards")</li>
                                 <li>@Html.ActionLink("Manage Sections", "Index", "Sections")</li>
-                                <li>@Html.ActionLink("Send SMS", "SendSMS", "Contact")</li>
+                                <li>@Html.ActionLink("Send SMS", "Sendsms", "Notify")</li>
                                 
                             }
                         }
@@ -46,15 +46,17 @@
             </div>
         </div>
     </div>
-    <div class="container body-content">
-        @Scripts.Render("~/bundles/jquery")
-        @Scripts.Render("~/bundles/bootstrap")
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - Test POC Application</p>
-        </footer>
-    </div>
+<div class="container body-content">
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/jqueryui")
+
+    @RenderBody()
+    <hr/>
+    <footer>
+        <p>&copy; @DateTime.Now.Year - Test POC Application</p>
+    </footer>
+</div>
 
     @RenderSection("scripts", required: false)
 </body>
