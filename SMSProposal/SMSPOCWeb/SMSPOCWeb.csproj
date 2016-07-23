@@ -178,6 +178,8 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
+    <Compile Include="Controllers\SectionsController.cs" />
+    <Compile Include="Controllers\StandardsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -193,9 +195,9 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\POCDBconnection.mdf" />
-    <Content Include="App_Data\POCDBconnection_log.ldf">
-      <DependentUpon>POCDBconnection.mdf</DependentUpon>
+    <Content Include="App_Data\POCDB.mdf" />
+    <Content Include="App_Data\POCDB_log.ldf">
+      <DependentUpon>POCDB.mdf</DependentUpon>
     </Content>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
@@ -494,6 +496,16 @@
     <Content Include="Views\Home\Start.cshtml" />
     <Content Include="Views\ManageUserRoles\UserRoles.cshtml" />
     <Content Include="Views\Contact\GetContactView.cshtml" />
+    <Content Include="Views\Standards\Create.cshtml" />
+    <Content Include="Views\Standards\Delete.cshtml" />
+    <Content Include="Views\Standards\Details.cshtml" />
+    <Content Include="Views\Standards\Edit.cshtml" />
+    <Content Include="Views\Standards\Index.cshtml" />
+    <Content Include="Views\Sections\Create.cshtml" />
+    <Content Include="Views\Sections\Delete.cshtml" />
+    <Content Include="Views\Sections\Details.cshtml" />
+    <Content Include="Views\Sections\Edit.cshtml" />
+    <Content Include="Views\Sections\Index.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

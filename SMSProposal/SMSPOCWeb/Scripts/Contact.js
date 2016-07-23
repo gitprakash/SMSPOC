@@ -13,21 +13,23 @@ $(document).ready(function myfunction() {
         contentType: "application/json; charset-utf-8",
         mtype: 'GET',
         sortname: "Name",
-        colNames: ['Id', 'Name','Class','Section','Mobile'],
+        colNames: ['Id','RollNo', 'Name', 'Class', 'Section', 'Mobile', 'BloodGroup'],
         colModel: [
               { name: 'Id', index: 'Id', key: true, hidden: true },
-              { name: 'Name', index: 'Name', width: 120, key: false, editable: true,align: 'center', editrules: { required: true }, editoptions: { size: 100, minlength: 2 } },
-              { name: 'Class', index: 'Class', width: 80, key: false, editable: true, align: 'center', edittype: "select", editoptions: { value: "1:1;2:2;3:3;4:4;5:5;6:6;7:7;8:8;9:9;10:10" } },
-              { name: 'Section', index: 'Class', width: 80, key: false, editable: true,align: 'center', editrules: { required: true } },
-              { name: 'Mobile', index: 'Mobile', width: 80, key: false, editable: true,align: 'center', editrules: { required: true, custom: true, custom_func: mobilenovalidation } },
+              { name: 'RollNo', index: 'RollNo', width: 40, key: false, editable: true, align: 'center', editrules: { required: true } },
+              { name: 'Name', index: 'Name', width: 70, key: false, editable: true, align: 'center', editrules: { required: true }, editoptions: { size: 100, minlength: 2 } },
+              { name: 'Class', index: 'Class', width: 30, key: false, editable: true, align: 'center', edittype: "select", editoptions: { value: "1:1;2:2;3:3;4:4;5:5;6:6;7:7;8:8;9:9;10:10" } },
+              { name: 'Section', index: 'Section', width: 30, key: false, editable: true, align: 'center', editrules: { required: true } },
+              { name: 'Mobile', index: 'Mobile', width: 70, key: false, editable: true,align: 'center', editrules: { required: true, custom: true, custom_func: mobilenovalidation } },
+              { name: 'BloodGroup', index: 'BloodGroup', width: 30, key: false, editable: true, align: 'center' }
 
         ],
         rowNum: 10,
         rowList: [10, 20, 30],
         viewrecords: true,
         pager: jQuery("#pager"),
-        width: '600%',
-        height: '100%' 
+        height: '100%',
+        autowidth:true
     });
 
     jQuery("#list").jqGrid('navGrid', '#pager', { edit: true, edittitle: 'Edit Student',add: true,addtitle: 'Add Student', del: true,deltitle: 'Delete Student', refresh: false },
@@ -40,13 +42,13 @@ $(document).ready(function myfunction() {
             recreateForm: true, 
             afterSubmit: function (response) {
                 var result = jQuery.parseJSON(response.responseText);
-                if (result.Status == "success") {
+                if (result.Status === "success") {
                     alert('Successfully Update Student details');
                     $(this).jqGrid('setGridParam', { datatype: 'json' }).trigger('reloadGrid');
-                    return [true, '']
+                    return [true, ''];
                 }
                 else {
-                    return [false, result.error]
+                    return [false, result.error];
                 }
             }
         },
@@ -63,14 +65,14 @@ $(document).ready(function myfunction() {
            afterSubmit: function (response) {
 
                var result = jQuery.parseJSON(response.responseText);
-               if (result.Status == "success") {
+               if (result.Status === "success") {
                    alert('Successfully added Student details');
                    $(this).jqGrid('setGridParam',
                      { datatype: 'json' }).trigger('reloadGrid');
-                   return [true, '']
+                   return [true, ''];
                }
                else {
-                   return [false, result.error]
+                   return [false, result.error];
                }
            }
 
@@ -87,10 +89,10 @@ $(document).ready(function myfunction() {
                    alert('Successfully Deleted Student details');
                    $(this).jqGrid('setGridParam',
                      { datatype: 'json' }).trigger('reloadGrid');
-                   return [true, '']
+                   return [true, ''];
                }
                else {
-                   return [false, result.error]
+                   return [false, result.error];
                }
            }
 

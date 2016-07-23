@@ -17,6 +17,14 @@ namespace DataModelLibrary
         [StringLength(200)]
         public string Name { get; set; }
         [Required]
+        public string RollNo { get; set; }
+
+        public string BloodGroup { get; set; }
+
+        [DataType(DataType.DateTime)]
+        public DateTime CreatedDate { get; set; }
+
+        [Required]
         public long Mobile { get; set; }
         [Required]
         public bool Active { get; set; }
@@ -26,7 +34,9 @@ namespace DataModelLibrary
         [Required]
         [StringLength(20, MinimumLength = 1)]
         public string Section { get; set; }
+        [Required]
         public int SubscriberId { get; set; }
-        public virtual Subscriber subscriber { get; set; }
+        public virtual Subscriber Subscriber { get; set; }
+        
     }
 }

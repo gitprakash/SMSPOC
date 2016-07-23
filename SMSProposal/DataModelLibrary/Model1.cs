@@ -19,19 +19,9 @@ namespace DataModelLibrary
         public virtual DbSet<Subscriber> Subscribers { get; set; }
         public virtual DbSet<SubscriberRoles> SubscriberRoles { get; set; }
         public virtual DbSet<Contact> Contacts { get; set; }
+        public virtual DbSet<Standard> Standards { get; set; }
+        public virtual DbSet<Section> Sections { get; set; }
 
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Subscriber>()
-            .HasMany(f => f.Roles)
-            .WithRequired()
-            .HasForeignKey(fl => fl.SubscriberId ).WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<SubscriberRoles>()
-             .HasRequired(fl => fl.Subscriber)
-             .WithMany()
-             .HasForeignKey(fl => fl.RoleId).WillCascadeOnDelete(false);
-        }
-        
+         
     }
 }

@@ -38,6 +38,8 @@ namespace SMSPOCWeb.Controllers
                     Mobile = cv.Mobile,
                     Class = cv.Class,
                     Section = cv.Section,
+                    RollNo = cv.RollNo,
+                    BloodGroup=cv.BloodGroup
                 });
                 int totalRecords = await mcontactService.TotalContacts(identity.User.Id);
                 var totalPages = (int)Math.Ceiling((float)totalRecords / (float)rows);
@@ -69,6 +71,7 @@ namespace SMSPOCWeb.Controllers
                     var identity = (CustomIdentity)User.Identity;
                     contact.Active = true;
                     contact.SubscriberId = identity.User.Id;
+                    contact.CreatedDate = DateTime.Now;
                     contact = await mcontactService.AddContact(contact);
                 }
                 else
@@ -167,6 +170,8 @@ namespace SMSPOCWeb.Controllers
             contact.Mobile = cv.Mobile;
             contact.Class = cv.Class;
             contact.Section = cv.Section;
+            contact.RollNo = cv.RollNo;
+            contact.BloodGroup = cv.BloodGroup;
             return contact;
         }
         

@@ -79,7 +79,7 @@ namespace SMSPOCWeb.Controllers
             if (tupleuser.Item2)
             {
                 Subscriber suser = await maccountService.FinduserAsync(l.Username);
-                SubscriberViewModel dbuser = new SubscriberViewModel { Id = suser.ID, Username = suser.Username, Email = suser.Email };
+                SubscriberViewModel dbuser = new SubscriberViewModel { Id = suser.Id, Username = suser.Username, Email = suser.Email };
                 if (suser != null)
                 {
                     JavaScriptSerializer js = new JavaScriptSerializer();

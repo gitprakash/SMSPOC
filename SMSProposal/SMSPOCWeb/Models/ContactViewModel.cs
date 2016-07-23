@@ -30,6 +30,11 @@
         [StringLength(20, MinimumLength = 1)]
         public string Section { get; set; }
 
+        [Required(AllowEmptyStrings = false)]
+        public string RollNo { get; set; }
+
+        public string BloodGroup { get; set; }
+
     }
 }
 

@@ -65,7 +65,7 @@ namespace SMSPOCWeb.Controllers
                 {
                     throw new Exception(string.Format("User {0} and role {1} already mapped", User, Role));
                 }
-                SubscriberRoles sroles = new SubscriberRoles { RoleId=dbRole.Id,SubscriberId=subscriber.ID, Active=true };
+                SubscriberRoles sroles = new SubscriberRoles { RoleId=dbRole.Id,SubscriberId=subscriber.Id, Active=true };
                 await muserroleService.AddUserRole(sroles);
                 var result = new { Status = "success"};
                 return Json(result, JsonRequestBehavior.AllowGet);
