@@ -180,7 +180,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\SectionsController.cs" />
-    <Compile Include="Controllers\StandardsController.cs" />
+    <Compile Include="Controllers\StandardController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -499,19 +499,21 @@
     <Content Include="Views\Home\Start.cshtml" />
     <Content Include="Views\ManageUserRoles\UserRoles.cshtml" />
     <Content Include="Views\Contact\GetContactView.cshtml" />
-    <Content Include="Views\Standards\Create.cshtml" />
-    <Content Include="Views\Standards\Delete.cshtml" />
-    <Content Include="Views\Standards\Details.cshtml" />
-    <Content Include="Views\Standards\Edit.cshtml" />
-    <Content Include="Views\Standards\Index.cshtml" />
     <Content Include="Views\Sections\Create.cshtml" />
     <Content Include="Views\Sections\Delete.cshtml" />
     <Content Include="Views\Sections\Details.cshtml" />
     <Content Include="Views\Sections\Edit.cshtml" />
     <Content Include="Views\Sections\Index.cshtml" />
     <Content Include="Views\Notify\Sendsms.cshtml" />
+    <Content Include="Views\Standard\Create.cshtml" />
+    <Content Include="Views\Standard\Delete.cshtml" />
+    <Content Include="Views\Standard\Details.cshtml" />
+    <Content Include="Views\Standard\Edit.cshtml" />
+    <Content Include="Views\Standard\Index.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Views\Standards\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
