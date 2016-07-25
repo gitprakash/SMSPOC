@@ -19,7 +19,7 @@ namespace SMSPOCWeb.Controllers
         // GET: Sections
         public ActionResult Index()
         {
-            db.Sections.Include(s => s.Standard);
+          //  db.Sections.Include(s => s.Standard);
             return View(db.Sections.ToList());
         }
 
@@ -56,10 +56,10 @@ namespace SMSPOCWeb.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    if (await db.Sections.AnyAsync(s => s.StandardId == section.StandardId && s.Name == section.Name))
-                    {
-                       throw new Exception("Duplicate found in Standard and Section");
-                    }
+                    //if (await db.Sections.AnyAsync(s => s.StandardId == section.StandardId && s.Name == section.Name))
+                    //{
+                    //   throw new Exception("Duplicate found in Standard and Section");
+                    //}
                     db.Sections.Add(section);
                     db.SaveChanges();
                     return RedirectToAction("Index");
@@ -100,10 +100,10 @@ namespace SMSPOCWeb.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    if (await db.Sections.AnyAsync(s => s.Id !=section.Id && s.StandardId == section.StandardId && s.Name == section.Name))
-                    {
-                       throw new Exception("Duplicate found in Standard and Section");
-                    }
+                    //if (await db.Sections.AnyAsync(s => s.Id !=section.Id && s.StandardId == section.StandardId && s.Name == section.Name))
+                    //{
+                    //   throw new Exception("Duplicate found in Standard and Section");
+                    //}
                     db.Entry(section).State = EntityState.Modified;
                     db.SaveChanges();
                     return RedirectToAction("Index");

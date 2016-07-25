@@ -38,6 +38,16 @@ namespace Repositorylibrary
             }
             return await _context.Set<TObject>().AsNoTracking().Where(match).OrderByAscDsc(ordercolumn, desc).Skip(skip).Take(take).AsNoTracking().ToListAsync();
         }
+        public async Task<ICollection<TResult>> GetPagedResult<TResult>(int skip, int take, string ordercolumn, bool desc, Expression<Func<TObject, TResult>> project,
+            Expression<Func<TObject, bool>> match = null)
+        {
+            IQueryable<TObject> qry = _context.Set<TObject>().AsNoTracking();
+            if (match == null)
+            {
+                return await qry.OrderByAscDsc(ordercolumn, desc).Skip(skip).Take(take).AsNoTracking().Select(project).ToListAsync();
+            }
+           return  await qry.Where(match).AsNoTracking().Select(project).OrderByAscDsc(ordercolumn, desc).Skip(skip).Take(take).ToListAsync();
+        }
 
         public TObject Get(int id)
         {

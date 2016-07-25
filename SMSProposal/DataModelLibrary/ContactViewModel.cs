@@ -1,4 +1,4 @@
-﻿namespace SMSPOCWeb.Models
+﻿namespace DataModelLibrary
 {
     using System;
     using System.ComponentModel.DataAnnotations;
@@ -10,13 +10,11 @@
         
         public long Id { get; set; }
 
+        public long SubscriberContactId { get; set; }
+
         [Required(AllowEmptyStrings = false)]
         [StringLength(200)]
         public string Name { get; set; }
-
-        [StringLength(200)]
-        [EmailAddress]
-        public string Email { get; set; }
 
         [Required(AllowEmptyStrings = false)]
         [RegularExpression(@"^((\+91-?)|0)?[0-9]{10}$", ErrorMessage = "Please enter 10 digit Mobile Number")]

@@ -59,6 +59,6 @@ namespace DataModelLibrary
 
         public virtual ICollection<SubscriberRoles> Roles { get; set; }
 
-        public virtual ICollection<Contact> Contacts { get; set; }
+        public virtual ICollection<SubscriberStandards> SubscriberStandards { get; set; }
     }
 }

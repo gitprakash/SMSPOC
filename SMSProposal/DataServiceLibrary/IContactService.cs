@@ -9,7 +9,7 @@ namespace DataServiceLibrary
 {
     public interface IContactService
     {
-        Task<IEnumerable<Contact>> Contacts(int subcriberId, int skip, int pagesize, string ordercolumn, bool desc);
+        Task<IEnumerable<ContactViewModel>> Contacts(int subcriberId, int skip, int pagesize, string ordercolumn, bool desc);
         Task<int> TotalContacts(int subcriberId);
         Task<Contact> AddContact(Contact contact);
         Task<bool> IsUniqueMobile(long mobileno);

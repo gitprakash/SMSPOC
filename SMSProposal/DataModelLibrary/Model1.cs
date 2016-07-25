@@ -20,8 +20,10 @@ namespace DataModelLibrary
         public virtual DbSet<SubscriberRoles> SubscriberRoles { get; set; }
         public virtual DbSet<Contact> Contacts { get; set; }
         public virtual DbSet<Standard> Standards { get; set; }
+        public virtual DbSet<SubscriberStandards> SubscriberStandards { get; set; }
         public virtual DbSet<Section> Sections { get; set; }
-
+        public virtual DbSet<SubscriberStandardSections> SubscriberStandardSections { get; set; }
+        public virtual DbSet<SubscriberStandardContacts> SubscriberStandardContacts { get; set; }
          
     }
 }

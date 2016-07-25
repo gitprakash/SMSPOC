@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Contact.cs" />
+    <Compile Include="ContactViewModel.cs" />
     <Compile Include="Standard.cs" />
     <Compile Include="DBInitializer.cs" />
     <Compile Include="GenderType.cs" />
@@ -73,6 +74,9 @@
     <Compile Include="Role.cs" />
     <Compile Include="Section.cs" />
     <Compile Include="Subscriber.cs" />
+    <Compile Include="SubscriberStandardContacts.cs" />
+    <Compile Include="SubscriberStandardSections.cs" />
+    <Compile Include="SubscriberStandards.cs" />
     <Compile Include="SubscriberRoles.cs" />
   </ItemGroup>
   <ItemGroup>

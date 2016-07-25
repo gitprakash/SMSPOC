@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -9,16 +8,19 @@ using System.Threading.Tasks;
 
 namespace DataModelLibrary
 {
-    [Table("Class")]
-    public partial class Standard
+
+    [Table("SubscriberStandardSections")]
+    public class SubscriberStandardSections
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         [Required]
-        [StringLength(200)]
-        public string Name { get; set; }
+        public int SubscriberStandardsId { get; set; }
+        public virtual SubscriberStandards SubscriberStandards { get; set; }
         [Required]
+        public int SectionId { get; set; }
+        public virtual Section Sections { get; set; }
         public bool Active { get; set; }
-        public virtual ICollection<SubscriberStandards> Subscribers { get; set; }
     }
 }

@@ -31,16 +31,6 @@ namespace SMSPOCWeb.Controllers
                 int pageIndex = Convert.ToInt32(page) - 1;
                 int pageSize = rows;
                 var contacts = await mcontactService.Contacts(identity.User.Id, pageIndex * pageSize, pageSize, sidx, sort.ToUpper() == "DESC");
-                var contactvm = contacts.Select(cv => new ContactViewModel
-                {
-                    Id = cv.Id,
-                    Name = cv.Name,
-                    Mobile = cv.Mobile,
-                    Class = cv.Class,
-                    Section = cv.Section,
-                    RollNo = cv.RollNo,
-                    BloodGroup=cv.BloodGroup
-                });
                 int totalRecords = await mcontactService.TotalContacts(identity.User.Id);
                 var totalPages = (int)Math.Ceiling((float)totalRecords / (float)rows);
                 var jsonData = new
@@ -48,7 +38,7 @@ namespace SMSPOCWeb.Controllers
                     total = totalPages,
                     page,
                     records = totalRecords,
-                    rows = contactvm
+                    rows = contacts
                 };
                 return Json(jsonData, JsonRequestBehavior.AllowGet);
             }
@@ -70,7 +60,7 @@ namespace SMSPOCWeb.Controllers
                     contact = GetContact(contactvm, contact);
                     var identity = (CustomIdentity)User.Identity;
                     contact.Active = true;
-                    contact.SubscriberId = identity.User.Id;
+                   // contact.SubscriberId = identity.User.Id;
                     contact.CreatedDate = DateTime.Now;
                     contact = await mcontactService.AddContact(contact);
                 }
@@ -106,7 +96,7 @@ namespace SMSPOCWeb.Controllers
                         throw new Exception("Unable to find student details");
                     }
                     contact = GetContact(contactvm, contact);
-                      saved=await mcontactService.SaveAsync();
+                    saved = await mcontactService.SaveAsync();
                 }
                 else
                 {
@@ -164,17 +154,17 @@ namespace SMSPOCWeb.Controllers
                                 .Select(x => x.ErrorMessage));
             return messages;
         }
-        public Contact GetContact(ContactViewModel cv,Contact contact)
+        public Contact GetContact(ContactViewModel cv, Contact contact)
         {
             contact.Name = cv.Name;
             contact.Mobile = cv.Mobile;
-            contact.Class = cv.Class;
-            contact.Section = cv.Section;
+           // contact.Class = cv.Class;
+           // contact.Section = cv.Section;
             contact.RollNo = cv.RollNo;
             contact.BloodGroup = cv.BloodGroup;
             return contact;
         }
-        
+
 
     }
 }

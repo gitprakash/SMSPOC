@@ -4,7 +4,6 @@ using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Linq;
 using System.Linq.Expressions;
 namespace DataModelLibrary
 {
@@ -44,138 +43,69 @@ namespace DataModelLibrary
                 new SubscriberRoles{ RoleId=2,SubscriberId=2,Active=true}
             };
 
-            var contacts = new List<Contact>
-            {
-                new Contact
-                {
-                    Name = "prakash",
-                    Active = true,
-                    Class = "1",
-                    Section = "A",
-                    Mobile = 9940499650,
-                    BloodGroup = "AB+",
-                    RollNo = "100",
-                    CreatedDate = DateTime.Now
-                },
-                new Contact
-                {
-                    Name = "prakash1",
-                    Active = true,
-                    Class = "1",
-                    Section = "A",
-                    Mobile = 9940499652,
-                    BloodGroup = "AB+",
-                    RollNo = "101",
-                    CreatedDate = DateTime.Now
-                },
-                new Contact
-                {
-                    Name = "nazer",
-                    Active = true,
-                    Class = "2",
-                    Section = "A",
-                    Mobile = 9940499653,
-                    BloodGroup = "B+",
-                    RollNo = "102",
-                    CreatedDate = DateTime.Now
-                },
-                new Contact
-                {
-                    Name = "venki",
-                    Active = true,
-                    Class = "1",
-                    Section = "A",
-                    Mobile = 9940499654,
-                    BloodGroup = "AB+",
-                    RollNo = "103",
-                    CreatedDate = DateTime.Now
-                },
-                new Contact
-                {
-                    Name = "prakash",
-                    Active = true,
-                    Class = "1",
-                    Section = "A",
-                    Mobile = 9940499650,
-                    BloodGroup = "O+",
-                    RollNo = "104",
-                    CreatedDate = DateTime.Now
-                },
-                new Contact
-                {
-                    Name = "prakash1",
-                    Active = true,
-                    Class = "1",
-                    Section = "D",
-                    Mobile = 9940499652,
-                    BloodGroup = "AB+",
-                    RollNo = "105",
-                    CreatedDate = DateTime.Now
-                },
-                new Contact
-                {
-                    Name = "nazer",
-                    Active = true,
-                    Class = "2",
-                    Section = "A",
-                    Mobile = 9940499643,
-                    BloodGroup = "AB-",
-                    RollNo = "106",
-                    CreatedDate = DateTime.Now
-                },
-                new Contact
-                {
-                    Name = "venki",
-                    Active = true,
-                    Class = "1",
-                    Section = "C",
-                    Mobile = 9940499644,
-                    BloodGroup = "B-",
-                    RollNo = "107",
-                    CreatedDate = DateTime.Now
-                },
-                new Contact
-                {
-                    Name = "suresh",
-                    Active = true,
-                    Class = "10",
-                    Section = "A",
-                    Mobile = 9940499642,
-                    BloodGroup = "B+",
-                    RollNo = "108",
-                    CreatedDate = DateTime.Now
-                },
-                new Contact
-                {
-                    Name = "kathick",
-                    Active = true,
-                    Class = "2",
-                    Section = "A",
-                    Mobile = 9940499656,
-                    BloodGroup = "AB-",
-                    RollNo = "109",
-                    CreatedDate = DateTime.Now
-                },
-                new Contact
-                {
-                    Name = "manoj",
-                    Active = true,
-                    Class = "11",
-                    Section = "B",
-                    Mobile = 8940499654,
-                    BloodGroup = "AB-",
-                    RollNo = "110",
-                    CreatedDate = DateTime.Now
-                }
-
+            var Standards = new List<Standard> { 
+                 new Standard{  Name="1", Active=true},
+                 new Standard{  Name="2",Active=true},
+                 new Standard{  Name="3",Active=true},
+                 new Standard{  Name="4",Active=true},
+                 new Standard{  Name="5",Active=true},
+                 new Standard{  Name="6",Active=true},
+                 new Standard{  Name="7",Active=true},
+                 new Standard{  Name="8",Active=true},
+                 new Standard{  Name="9",Active=true},
+                 new Standard{  Name="10",Active=true},
+                 new Standard{  Name="11",Active=true},
+                 new Standard{  Name="12",Active=true},
+                 new Standard{  Name="PRE-KG",Active=true},
+                 new Standard{  Name="UKG",Active=true},
+                 new Standard{  Name="LKG",Active=true},
             };
-            lstsubscribers[1].Contacts=new List<Contact>();
-            contacts.ForEach(c => lstsubscribers[1].Contacts.Add(c));
+            var lstSection = new List<Section> { 
+                 new Section{  Name="A"},
+                 new Section{  Name="B"},
+                 new Section{  Name="C"}
+            };
+            
+           
+            var SubscriberStandards = new List<SubscriberStandards>();
+            Standards.ForEach(s => { SubscriberStandards.Add(new SubscriberStandards { Active = true, Subscriber = lstsubscribers[1], Standard = s }); });
+            
+            var lstSubscriberStandardSections = new List<SubscriberStandardSections>();
+            lstSection.ForEach(s => { lstSubscriberStandardSections.Add(new SubscriberStandardSections { Active = true, SubscriberStandards = SubscriberStandards[4], Sections = s }); });
+            lstSection.ForEach(s => { lstSubscriberStandardSections.Add(new SubscriberStandardSections { Active = true, SubscriberStandards = SubscriberStandards[9], Sections = s }); });
+            lstSection.ForEach(s => { lstSubscriberStandardSections.Add(new SubscriberStandardSections { Active = true, SubscriberStandards = SubscriberStandards[11], Sections = s }); });
+            var lstcontacts = new List<Contact>();
+            for (int i = 0; i < 20; i++)
+            {
+                lstcontacts.Add(new Contact
+                 {
+                     Name = "Student" + i,
+                     Active = true,
+                     Mobile = 7040499650 + i,
+                     BloodGroup = "AB+",
+                     RollNo = "100" + i,
+                     CreatedDate = DateTime.Now
+                 });
+            }
+
+            var lstssc = new List<SubscriberStandardContacts>();
+            SubscriberStandards.ForEach(s => {
+                lstcontacts.ForEach(c=>{
+                    lstssc.Add(new SubscriberStandardContacts { Active = true,  SubscriberStandards = s,Contact=c,SubscriberStandardSections=lstSubscriberStandardSections[0] });
+                });
+            });
+
             context.Roles.AddRange(Roles);
             context.GenderTypes.AddRange(GenderTypes);
             context.AccountTypes.AddRange(AccountTypes);
             context.Subscribers.AddRange(lstsubscribers);
             context.SubscriberRoles.AddRange(subscriberroles);
+            context.Standards.AddRange(Standards);
+            context.SubscriberStandards.AddRange(SubscriberStandards);
+            context.Sections.AddRange(lstSection);
+            context.SubscriberStandardSections.AddRange(lstSubscriberStandardSections);
+            context.Contacts.AddRange(lstcontacts);
+            context.SubscriberStandardContacts.AddRange(lstssc);
             base.Seed(context);
         }
     }

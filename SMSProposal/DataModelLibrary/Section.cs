@@ -13,13 +13,10 @@ namespace DataModelLibrary
     public class Section
     {
         [Key]
-        public long Id { get; set; }
+        public int Id { get; set; }
         [Required]
         [StringLength(200)]
         public string Name { get; set; }
-        [Required]
-        public int StandardId { get; set; }
-
-        public virtual Standard Standard { get; set; }
+        public virtual ICollection<SubscriberStandardSections> Subscribers { get; set; }
     }
 }

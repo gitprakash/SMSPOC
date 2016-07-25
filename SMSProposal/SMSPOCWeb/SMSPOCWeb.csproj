@@ -190,7 +190,6 @@
     <Compile Include="Models\LoginViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MyRoleProvider.cs" />
-    <Compile Include="Models\ContactViewModel.cs" />
     <Compile Include="Models\SubscriberViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
