@@ -14,9 +14,11 @@ namespace SMSPOCWeb.Controllers
     public class ContactController : Controller
     {
         IContactService mcontactService;
-        public ContactController(IContactService contactService)
+        ISubscriberStandardService mclassService;
+        public ContactController(IContactService contactService, ISubscriberStandardService classService)
         {
             mcontactService = contactService;
+            mclassService = classService;
         }
         public ActionResult GetContactView()
         {
@@ -60,7 +62,7 @@ namespace SMSPOCWeb.Controllers
                     contact = GetContact(contactvm, contact);
                     var identity = (CustomIdentity)User.Identity;
                     contact.Active = true;
-                   // contact.SubscriberId = identity.User.Id;
+                    // contact.SubscriberId = identity.User.Id;
                     contact.CreatedDate = DateTime.Now;
                     contact = await mcontactService.AddContact(contact);
                 }
@@ -158,13 +160,22 @@ namespace SMSPOCWeb.Controllers
         {
             contact.Name = cv.Name;
             contact.Mobile = cv.Mobile;
-           // contact.Class = cv.Class;
-           // contact.Section = cv.Section;
+            // contact.Class = cv.Class;
+            // contact.Section = cv.Section;
             contact.RollNo = cv.RollNo;
             contact.BloodGroup = cv.BloodGroup;
             return contact;
         }
-
-
+        public async Task<JsonResult> GetStandards()
+        {
+            var identity = (CustomIdentity)User.Identity;
+            var Standards = await mclassService.GetStandards(identity.User.Id);
+            return Json(Standards, JsonRequestBehavior.AllowGet);
+        }
+        public async Task<JsonResult> GetSections(int subscriberStandardId)
+        {
+            var Sections = await mclassService.GetSections(subscriberStandardId);
+            return Json(Sections, JsonRequestBehavior.AllowGet);
+        }
     }
 }

@@ -24,5 +24,7 @@ namespace DataModelLibrary
         public int? SubscriberStandardSectionsId { get; set; }
         public virtual SubscriberStandardSections SubscriberStandardSections { get; set; }
         public bool Active { get; set; }
+        [Required]
+        public DateTime CreatedAt { get; set; }
     }
 }

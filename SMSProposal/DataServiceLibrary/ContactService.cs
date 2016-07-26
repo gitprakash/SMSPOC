@@ -6,7 +6,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
-using System.Data.Entity;
 namespace DataServiceLibrary
 {
     public class ContactService : IContactService
@@ -32,7 +31,8 @@ namespace DataServiceLibrary
                BloodGroup = s.Contact.BloodGroup,
                Mobile = s.Contact.Mobile,
                RollNo = s.Contact.RollNo,
-               SubscriberContactId = s.Id
+               SubscriberContactId = s.Id,
+               SubscriberStandardId=s.SubscriberStandardsId,
            };
            return await msscRepository.GetPagedResult(skip, pagesize, ordercolumn, desc,select, where);
         }

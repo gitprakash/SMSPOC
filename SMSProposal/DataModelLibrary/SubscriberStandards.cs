@@ -24,6 +24,7 @@ namespace DataModelLibrary
         public bool Active { get; set; }
         public virtual ICollection<SubscriberStandardContacts> SubscriberStandardContacts { get; set; }
         public virtual ICollection<SubscriberStandardSections> SubscriberStandardSections { get; set; }
-    
+        [Required]
+        public DateTime CreatedAt { get; set; }
     }
 }

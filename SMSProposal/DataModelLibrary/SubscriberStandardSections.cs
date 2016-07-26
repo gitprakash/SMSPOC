@@ -22,5 +22,7 @@ namespace DataModelLibrary
         public int SectionId { get; set; }
         public virtual Section Sections { get; set; }
         public bool Active { get; set; }
+        [Required]
+        public DateTime CreatedAt { get; set; }
     }
 }

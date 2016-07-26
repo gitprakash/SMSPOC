@@ -44,11 +44,7 @@ namespace DataModelLibrary
             };
 
             var Standards = new List<Standard> { 
-                 new Standard{  Name="1", Active=true},
-                 new Standard{  Name="2",Active=true},
-                 new Standard{  Name="3",Active=true},
-                 new Standard{  Name="4",Active=true},
-                 new Standard{  Name="5",Active=true},
+                
                  new Standard{  Name="6",Active=true},
                  new Standard{  Name="7",Active=true},
                  new Standard{  Name="8",Active=true},
@@ -65,15 +61,23 @@ namespace DataModelLibrary
                  new Section{  Name="B"},
                  new Section{  Name="C"}
             };
-            
-           
+
+            var lststandards = new List<Standard> { 
+                 new Standard{  Name="1", Active=true},
+                 new Standard{  Name="2",Active=true},
+                 new Standard{  Name="3",Active=true},
+                 new Standard{  Name="4",Active=true},
+                 new Standard{  Name="5",Active=true}
+                  
+            };
             var SubscriberStandards = new List<SubscriberStandards>();
-            Standards.ForEach(s => { SubscriberStandards.Add(new SubscriberStandards { Active = true, Subscriber = lstsubscribers[1], Standard = s }); });
+            Standards.ForEach(s => { SubscriberStandards.Add(new SubscriberStandards { CreatedAt = DateTime.Now, Active = true, Subscriber = lstsubscribers[1], Standard = s }); });
+            lststandards.ForEach(s => { SubscriberStandards.Add(new SubscriberStandards { CreatedAt = DateTime.Now, Active = true, Subscriber = lstsubscribers[0], Standard = s }); });
             
             var lstSubscriberStandardSections = new List<SubscriberStandardSections>();
-            lstSection.ForEach(s => { lstSubscriberStandardSections.Add(new SubscriberStandardSections { Active = true, SubscriberStandards = SubscriberStandards[4], Sections = s }); });
-            lstSection.ForEach(s => { lstSubscriberStandardSections.Add(new SubscriberStandardSections { Active = true, SubscriberStandards = SubscriberStandards[9], Sections = s }); });
-            lstSection.ForEach(s => { lstSubscriberStandardSections.Add(new SubscriberStandardSections { Active = true, SubscriberStandards = SubscriberStandards[11], Sections = s }); });
+            lstSection.ForEach(s => { lstSubscriberStandardSections.Add(new SubscriberStandardSections {  CreatedAt=DateTime.Now,Active = true, SubscriberStandards = SubscriberStandards[4], Sections = s }); });
+            lstSection.ForEach(s => { lstSubscriberStandardSections.Add(new SubscriberStandardSections {CreatedAt=DateTime.Now, Active = true, SubscriberStandards = SubscriberStandards[9], Sections = s }); });
+            lstSection.ForEach(s => { lstSubscriberStandardSections.Add(new SubscriberStandardSections {CreatedAt=DateTime.Now, Active = true, SubscriberStandards = SubscriberStandards[11], Sections = s }); });
             var lstcontacts = new List<Contact>();
             for (int i = 0; i < 20; i++)
             {
@@ -91,7 +95,7 @@ namespace DataModelLibrary
             var lstssc = new List<SubscriberStandardContacts>();
           //  SubscriberStandards.ForEach(s => {
                 lstcontacts.ForEach(c=>{
-                    lstssc.Add(new SubscriberStandardContacts { Active = true, SubscriberStandards = SubscriberStandards[4], Contact = c, SubscriberStandardSections = lstSubscriberStandardSections[0] });
+                    lstssc.Add(new SubscriberStandardContacts { CreatedAt = DateTime.Now,Active = true, SubscriberStandards = SubscriberStandards[4], Contact = c, SubscriberStandardSections = lstSubscriberStandardSections[0] });
                 });
           //  });
 

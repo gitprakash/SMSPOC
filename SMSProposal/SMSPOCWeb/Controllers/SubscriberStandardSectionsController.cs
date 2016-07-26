@@ -20,7 +20,11 @@ namespace SMSPOCWeb.Controllers
         // GET: SubscriberStandardSections
         public async Task<ActionResult> Index()
         {
-            var subscriberStandardSections = db.SubscriberStandardSections.Include(s => s.Sections).Include(s => s.SubscriberStandards);
+            var authuser = ((CustomIdentity)User.Identity).User.Id;
+            var subscriberStandardSections = db.SubscriberStandardSections
+                .Where(ss=>ss.SubscriberStandards.SubscriberId==authuser)
+                .Include(s => s.Sections)
+                .Include(s => s.SubscriberStandards);
             return View(await subscriberStandardSections.ToListAsync());
         }
 
@@ -45,7 +49,7 @@ namespace SMSPOCWeb.Controllers
             var authuser = ((CustomIdentity)User.Identity).User.Id;
             ViewBag.SectionId = new SelectList(db.Sections, "Id", "Name");
             var standards = await db.SubscriberStandards.Where(s => s.Subscriber.Id == authuser).ToArrayAsync();
-            ViewBag.SubscriberStandardsId = new SelectList(standards.Select(s => s.Standard).OrderBy(s => s.Name), "Id", "Name");
+            ViewBag.SubscriberStandardsId = new SelectList(standards.Select(s => new { s.Id, s.Standard.Name }).OrderBy(s => s.Name), "Id", "Name");
             return View();
         }
 
@@ -60,8 +64,13 @@ namespace SMSPOCWeb.Controllers
             {
                 try
                 {
-                   // if(await db.SubscriberStandardSections.AnyAsync(ss=>ss.SubscriberStandardsId==))
-                    db.SubscriberStandardSections.Add(subscriberStandardSections);
+                    if (await db.SubscriberStandardSections.AnyAsync(ss => ss.SubscriberStandardsId == postsss.SubscriberStandardsId && ss.SectionId == postsss.SectionId))
+                    {
+                        var dbsection = await db.SubscriberStandardSections.SingleOrDefaultAsync(ss => ss.SubscriberStandardsId == postsss.SubscriberStandardsId && ss.SectionId == postsss.SectionId);
+                        throw new Exception(string.Format("Standard {0} and Section {1} already created", dbsection.SubscriberStandards.Standard.Name, dbsection.Sections.Name));
+                    }
+                    postsss.CreatedAt = DateTime.Now;
+                    db.SubscriberStandardSections.Add(postsss);
                     await db.SaveChangesAsync();
                     return RedirectToAction("Index");
                 }
@@ -71,10 +80,10 @@ namespace SMSPOCWeb.Controllers
                 }
             }
             var authuser = ((CustomIdentity)User.Identity).User.Id;
-            ViewBag.SectionId = new SelectList(db.Sections, "Id", "Name", subscriberStandardSections.SectionId);
+            ViewBag.SectionId = new SelectList(db.Sections, "Id", "Name", postsss.SectionId);
             var standards = await db.SubscriberStandards.Where(s => s.Subscriber.Id == authuser).ToArrayAsync();
-            ViewBag.SubscriberStandardsId = new SelectList(standards.Select(s => s.Standard).OrderBy(s => s.Name), "Id", "Name");
-            return View(subscriberStandardSections);
+            ViewBag.SubscriberStandardsId = new SelectList(standards.Select(s => new { s.Id, s.Standard.Name }).OrderBy(s => s.Name), "Id", "Name");
+            return View(postsss);
         }
 
         // GET: SubscriberStandardSections/Edit/5
@@ -92,7 +101,7 @@ namespace SMSPOCWeb.Controllers
                 return HttpNotFound();
             }
             ViewBag.SectionId = new SelectList(db.Sections, "Id", "Name", subscriberStandardSections.SectionId);
-            ViewBag.SubscriberStandardsId = new SelectList(db.SubscriberStandards, "Id", "Id", subscriberStandardSections.SubscriberStandardsId);
+            ViewBag.SubscriberStandardsId = new SelectList(db.SubscriberStandards.Select(s => new { s.Id, s.Standard.Name }).OrderBy(s => s.Name), "Id", "Name", subscriberStandardSections.SubscriberStandardsId);
             return View(subscriberStandardSections);
         }
 
@@ -106,9 +115,28 @@ namespace SMSPOCWeb.Controllers
             var authuser = ((CustomIdentity)User.Identity).User.Id;
             if (ModelState.IsValid)
             {
-                db.Entry(subscriberStandardSections).State = EntityState.Modified;
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                try
+                {
+                    if (await db.SubscriberStandardSections.AnyAsync(ss =>
+                        ss.Id != subscriberStandardSections.Id 
+                        && ss.SubscriberStandardsId == subscriberStandardSections.SubscriberStandardsId
+                        && ss.SectionId == subscriberStandardSections.SectionId))
+                    {
+                        var dbsection = await db.SubscriberStandardSections.SingleOrDefaultAsync(
+                            ss => ss.Id != subscriberStandardSections.Id 
+                        && ss.SubscriberStandardsId == subscriberStandardSections.SubscriberStandardsId
+                        && ss.SectionId == subscriberStandardSections.SectionId);
+                        throw new Exception(string.Format("Standard {0} and Section {1} already created", dbsection.SubscriberStandards.Standard.Name, dbsection.Sections.Name));
+                    }
+                    db.Entry(subscriberStandardSections).State = EntityState.Modified;
+                    subscriberStandardSections.CreatedAt = DateTime.Now;
+                    await db.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", ex.Message);
+                }
             }
             ViewBag.SectionId = new SelectList(db.Sections, "Id", "Name", subscriberStandardSections.SectionId);
             var standards = await db.SubscriberStandards.Where(s => s.Subscriber.Id == authuser).ToArrayAsync();

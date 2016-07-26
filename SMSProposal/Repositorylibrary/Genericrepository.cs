@@ -79,6 +79,13 @@ namespace Repositorylibrary
             return await _context.Set<TObject>().Where(match).ToListAsync();
         }
 
+        public async Task<ICollection<TResult>> FindAllAsync<TResult, Tkey>(Expression<Func<TObject, bool>> match,
+            Expression<Func<TObject, TResult>> select, Expression<Func<TResult, Tkey>> sort)
+        {
+            return await _context.Set<TObject>().Where(match).Select(select).OrderBy(sort).ToArrayAsync();
+        }
+
+
         public TObject Add(TObject t)
         {
             _context.Set<TObject>().Add(t);

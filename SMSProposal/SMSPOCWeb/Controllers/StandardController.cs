@@ -8,7 +8,6 @@ using System.Web;
 using System.Web.Mvc;
 using DataModelLibrary;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Identity;
 using SMSPOCWeb.Models;
 
 namespace SMSPOCWeb.Controllers
@@ -17,11 +16,13 @@ namespace SMSPOCWeb.Controllers
     public class StandardController : Controller
     {
         private Model1 db = new Model1();
-
         // GET: /Standard/
         public ActionResult Index()
         {
-            var subscriberstandards = db.SubscriberStandards.Include(s => s.Standard).Include(s => s.Subscriber);
+            var authuser = ((CustomIdentity)User.Identity).User.Id;
+            var subscriberstandards = db.SubscriberStandards.Where(s=>s.SubscriberId==authuser)
+                .Include(s => s.Standard)
+                .Include(s => s.Subscriber);
             return View(subscriberstandards.ToList());
         }
 
@@ -54,15 +55,17 @@ namespace SMSPOCWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include="Id,StandardId,Active")] SubscriberStandards subscriberstandards)
         {
+            var authuser = ((CustomIdentity)User.Identity).User.Id;
             if (ModelState.IsValid)
             {
                 try
                 {
-                    if (await db.SubscriberStandards.AnyAsync(s => s.StandardId == subscriberstandards.StandardId))
+                    if (await db.SubscriberStandards.AnyAsync(s => s.SubscriberId==authuser && s.StandardId == subscriberstandards.StandardId))
                     {
                         throw new Exception("Standard already exists");
                     }
                     subscriberstandards.SubscriberId = ((CustomIdentity)User.Identity).User.Id;
+                    subscriberstandards.CreatedAt = DateTime.Now;
                     db.SubscriberStandards.Add(subscriberstandards);
                     db.SaveChanges();
                     return RedirectToAction("Index");
@@ -101,14 +104,18 @@ namespace SMSPOCWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include="Id,SubscriberId,StandardId,Active")] SubscriberStandards subscriberstandards)
         {
+            var authuser = ((CustomIdentity)User.Identity).User.Id;
             if (ModelState.IsValid)
             {
                 try
                 {
-                    if (await db.SubscriberStandards.AnyAsync(s => s.Id!=subscriberstandards.Id && s.StandardId == subscriberstandards.StandardId))
+                    if (await db.SubscriberStandards.AnyAsync(s => s.Id!=subscriberstandards.Id 
+                        && s.SubscriberId==authuser 
+                        && s.StandardId == subscriberstandards.StandardId))
                     {
                         throw new Exception("Standard already exists");
                     }
+                    subscriberstandards.CreatedAt = DateTime.Now;
                     db.Entry(subscriberstandards).State = EntityState.Modified;
                     db.SaveChanges();
                     return RedirectToAction("Index");
