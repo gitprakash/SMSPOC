@@ -89,11 +89,11 @@ namespace DataModelLibrary
             }
 
             var lstssc = new List<SubscriberStandardContacts>();
-            SubscriberStandards.ForEach(s => {
+          //  SubscriberStandards.ForEach(s => {
                 lstcontacts.ForEach(c=>{
-                    lstssc.Add(new SubscriberStandardContacts { Active = true,  SubscriberStandards = s,Contact=c,SubscriberStandardSections=lstSubscriberStandardSections[0] });
+                    lstssc.Add(new SubscriberStandardContacts { Active = true, SubscriberStandards = SubscriberStandards[4], Contact = c, SubscriberStandardSections = lstSubscriberStandardSections[0] });
                 });
-            });
+          //  });
 
             context.Roles.AddRange(Roles);
             context.GenderTypes.AddRange(GenderTypes);

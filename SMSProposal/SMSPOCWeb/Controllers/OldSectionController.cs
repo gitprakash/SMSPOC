@@ -12,7 +12,7 @@ using DataModelLibrary;
 namespace SMSPOCWeb.Controllers
 {
     [Authorize(Roles = "Subscriber")]
-    public class SectionsController : Controller
+    public class OldSectionsController : Controller
     {
         private Model1 db = new Model1();
 

@@ -179,8 +179,9 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
-    <Compile Include="Controllers\SectionsController.cs" />
+    <Compile Include="Controllers\OldSectionController.cs" />
     <Compile Include="Controllers\StandardController.cs" />
+    <Compile Include="Controllers\SubscriberStandardSectionsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -510,6 +511,11 @@
     <Content Include="Views\Standard\Details.cshtml" />
     <Content Include="Views\Standard\Edit.cshtml" />
     <Content Include="Views\Standard\Index.cshtml" />
+    <Content Include="Views\SubscriberStandardSections\Create.cshtml" />
+    <Content Include="Views\SubscriberStandardSections\Delete.cshtml" />
+    <Content Include="Views\SubscriberStandardSections\Details.cshtml" />
+    <Content Include="Views\SubscriberStandardSections\Edit.cshtml" />
+    <Content Include="Views\SubscriberStandardSections\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Standards\" />

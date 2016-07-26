@@ -8,9 +8,12 @@ using System.Web;
 using System.Web.Mvc;
 using DataModelLibrary;
 using System.Threading.Tasks;
+using Microsoft.AspNet.Identity;
+using SMSPOCWeb.Models;
 
 namespace SMSPOCWeb.Controllers
 {
+    [Authorize(Roles = "Subscriber")]
     public class StandardController : Controller
     {
         private Model1 db = new Model1();
@@ -41,7 +44,6 @@ namespace SMSPOCWeb.Controllers
         public ActionResult Create()
         {
             ViewBag.StandardId = new SelectList(db.Standards, "Id", "Name");
-            ViewBag.SubscriberId = new SelectList(db.Subscribers, "Id", "Username");
             return View();
         }
 
@@ -50,7 +52,7 @@ namespace SMSPOCWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include="Id,SubscriberId,StandardId,Active")] SubscriberStandards subscriberstandards)
+        public async Task<ActionResult> Create([Bind(Include="Id,StandardId,Active")] SubscriberStandards subscriberstandards)
         {
             if (ModelState.IsValid)
             {
@@ -60,6 +62,7 @@ namespace SMSPOCWeb.Controllers
                     {
                         throw new Exception("Standard already exists");
                     }
+                    subscriberstandards.SubscriberId = ((CustomIdentity)User.Identity).User.Id;
                     db.SubscriberStandards.Add(subscriberstandards);
                     db.SaveChanges();
                     return RedirectToAction("Index");
@@ -96,13 +99,24 @@ namespace SMSPOCWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="Id,SubscriberId,StandardId,Active")] SubscriberStandards subscriberstandards)
+        public async Task<ActionResult> Edit([Bind(Include="Id,SubscriberId,StandardId,Active")] SubscriberStandards subscriberstandards)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(subscriberstandards).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    if (await db.SubscriberStandards.AnyAsync(s => s.Id!=subscriberstandards.Id && s.StandardId == subscriberstandards.StandardId))
+                    {
+                        throw new Exception("Standard already exists");
+                    }
+                    db.Entry(subscriberstandards).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", ex.Message);
+                }
             }
             ViewBag.StandardId = new SelectList(db.Standards, "Id", "Name", subscriberstandards.StandardId);
             ViewBag.SubscriberId = new SelectList(db.Subscribers, "Id", "Username", subscriberstandards.SubscriberId);
