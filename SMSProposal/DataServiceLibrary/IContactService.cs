@@ -11,9 +11,10 @@ namespace DataServiceLibrary
     {
         Task<IEnumerable<ContactViewModel>> Contacts(int subcriberId, int skip, int pagesize, string ordercolumn, bool desc);
         Task<int> TotalContacts(int subcriberId);
-        Task<Contact> AddContact(Contact contact);
+        Task<Contact> AddContact(ContactViewModel contact);
+        Task<int> EditContact(ContactViewModel contactvm);
         Task<bool> IsUniqueMobile(long mobileno);
-        Task<Contact> FindContact(long Id);
+        Task<SubscriberStandardContacts> FindContact(long Id);
         Task<int> SaveAsync();
     }
 }

@@ -9,26 +9,22 @@
     {
         
         public long Id { get; set; }
-
-        public long SubscriberContactId { get; set; }
-
+        [Required]
         public int SubscriberStandardId { get; set; }
 
         public int? SubscriberStandardSectionId { get; set; }
 
         [Required(AllowEmptyStrings = false)]
-        [StringLength(200)]
+        [StringLength(200),MinLength(2)]
         public string Name { get; set; }
 
         [Required(AllowEmptyStrings = false)]
         [RegularExpression(@"^((\+91-?)|0)?[0-9]{10}$", ErrorMessage = "Please enter 10 digit Mobile Number")]
         public long Mobile { get; set; }
 
-        [Required(AllowEmptyStrings = false)] 
         [StringLength(20, MinimumLength = 1)]
         public string Class { get; set; }
 
-        [Required(AllowEmptyStrings = false)]
         [StringLength(20, MinimumLength = 1)]
         public string Section { get; set; }
 
@@ -36,6 +32,7 @@
         public string RollNo { get; set; }
 
         public string BloodGroup { get; set; }
+        public string Status { get; set; }
 
     }
 }

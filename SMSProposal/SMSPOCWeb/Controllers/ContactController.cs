@@ -58,13 +58,7 @@ namespace SMSPOCWeb.Controllers
                 Contact contact;
                 if (ModelState.IsValid)
                 {
-                    contact = new Contact();
-                    contact = GetContact(contactvm, contact);
-                    var identity = (CustomIdentity)User.Identity;
-                    contact.Active = true;
-                    // contact.SubscriberId = identity.User.Id;
-                    contact.CreatedDate = DateTime.Now;
-                    contact = await mcontactService.AddContact(contact);
+                    contact = await mcontactService.AddContact(contactvm);
                 }
                 else
                 {
@@ -87,18 +81,10 @@ namespace SMSPOCWeb.Controllers
         {
             try
             {
-                Contact contact;
                 int saved = 0;
                 if (ModelState.IsValid)
                 {
-
-                    contact = await mcontactService.FindContact(contactvm.Id);
-                    if (contact == null)
-                    {
-                        throw new Exception("Unable to find student details");
-                    }
-                    contact = GetContact(contactvm, contact);
-                    saved = await mcontactService.SaveAsync();
+                    saved = await mcontactService.EditContact(contactvm);
                 }
                 else
                 {
@@ -121,16 +107,17 @@ namespace SMSPOCWeb.Controllers
         {
             try
             {
-                Contact contact;
+                SubscriberStandardContacts contact;
                 int saved = 0;
                 if (ModelState.IsValid)
                 {
                     contact = await mcontactService.FindContact(Id);
                     if (contact == null)
                     {
-                        throw new Exception("Unable to find student details");
+                        throw new Exception("Unable to find student contact details");
                     }
                     contact.Active = false;
+                    contact.Contact.Active = false;
                     saved = await mcontactService.SaveAsync();
                 }
                 else
@@ -160,8 +147,6 @@ namespace SMSPOCWeb.Controllers
         {
             contact.Name = cv.Name;
             contact.Mobile = cv.Mobile;
-            // contact.Class = cv.Class;
-            // contact.Section = cv.Section;
             contact.RollNo = cv.RollNo;
             contact.BloodGroup = cv.BloodGroup;
             return contact;

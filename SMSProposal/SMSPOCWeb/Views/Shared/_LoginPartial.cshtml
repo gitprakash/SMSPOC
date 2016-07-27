@@ -15,12 +15,12 @@
 else
 {
     <ul class="nav navbar-nav navbar-right">
-        @{
+        @*@{
             if (!Request.IsAuthenticated)
             {
                 <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
             }
-        }
+        }*@
         <li>
             @{
     if (Request.IsAuthenticated)
@@ -30,10 +30,10 @@ else
             <a href="javascript:document.getElementById('logoutForm').submit()">Logout</a>
         }
     }
-    else
+    @*else
     {
         @Html.ActionLink("Login", "Login", "Account")
-    }
+    }*@
             }
         </li>
 
