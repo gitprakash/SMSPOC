@@ -231,6 +231,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\contactjsbacup.js" />
     <Content Include="Scripts\free-jqGrid\i18n\grid.locale-ar.js" />
     <Content Include="Scripts\free-jqGrid\i18n\grid.locale-ar.min.js" />
     <Content Include="Scripts\free-jqGrid\i18n\grid.locale-bg.js" />

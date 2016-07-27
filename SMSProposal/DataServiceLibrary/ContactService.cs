@@ -33,6 +33,7 @@ namespace DataServiceLibrary
                RollNo = s.Contact.RollNo,
                SubscriberContactId = s.Id,
                SubscriberStandardId=s.SubscriberStandardsId,
+               SubscriberStandardSectionId=s.SubscriberStandardSectionsId
            };
            return await msscRepository.GetPagedResult(skip, pagesize, ordercolumn, desc,select, where);
         }

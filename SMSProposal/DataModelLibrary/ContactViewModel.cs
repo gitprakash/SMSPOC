@@ -14,6 +14,8 @@
 
         public int SubscriberStandardId { get; set; }
 
+        public int? SubscriberStandardSectionId { get; set; }
+
         [Required(AllowEmptyStrings = false)]
         [StringLength(200)]
         public string Name { get; set; }
