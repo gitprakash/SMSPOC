@@ -1,10 +1,31 @@
 ﻿
 var selectedcontactarray = [];
+$(function () {
+    $('#ContactList').on('click', '.close', function () {
+        var id = $(this).attr('contactid');
+        $('#' + id).remove();
+        $(this).remove();
+        $.each(selectedcontactarray, function (i, contact) {
+            if (selectedcontactarray[i]) {
+                if (selectedcontactarray[i].Id === id) // delete index
+                {
+                     selectedcontactarray.splice(i,1);
+                    return false;
+                }
+            }
+        });
+        return false;
+    });
+});
 
 function CreateLinks() {
-    
+    $("#ContactList").empty();
     $.each(selectedcontactarray, function (i, contact) {
-        $("<a >", { href: '#', text: contact.Rollno, id: contact.Id, title: contact.Name }).css('margin-left','10px').appendTo("#ContactList");
+        var span = $("<span  contactid=" + contact.Id + " class='close'> x <span>").css({ 'padding': '2px 5px', 'background': '#ccc', 'color': 'red' });
+        var a = $("<a href='javascript:void(0)'></a>").css({'display':'inline-block'})
+            .append(span)
+        $("<span id="+contact.Id+" class='btn btn-info btn-sm' title= "+contact.Name + ":" + contact.Mobile+">"+  contact.Rollno + "</span>").css('margin-right', '10px').appendTo("#ContactList");
+        $(a).appendTo('#ContactList');
     });
 }
 

@@ -80,6 +80,8 @@
     <Compile Include="SubscriberStandardSections.cs" />
     <Compile Include="SubscriberStandards.cs" />
     <Compile Include="SubscriberRoles.cs" />
+    <Compile Include="SubscriberTemplate.cs" />
+    <Compile Include="Template.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

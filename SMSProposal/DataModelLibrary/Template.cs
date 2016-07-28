@@ -13,21 +13,14 @@ namespace DataModelLibrary
     public partial class Template
     {
         [Key]
-        public long Id { get; set; }
+        public int Id { get; set; }
         [Required]
         [StringLength(200)]
         public string Name { get; set; }
         [Required]
-        [StringLength(500)]
         public string Description { get; set; }
 		[Required]
-		public bool Action{get;set;}
-		[Required]
 		public DateTime CreatedAt{get;set;}
-		[Required]
-		public long SubcriberId{get;set;}
-		public virtual Subscriber Subscriber{get;set;}
-
-	   
+        public DateTime ModifiedAt { get; set; }
     }
 }
