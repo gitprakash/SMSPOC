@@ -50,11 +50,15 @@ namespace SMSPOCWeb.App_Start
             container.RegisterType<IGenericRepository<SubscriberStandards>, Genericrepository<SubscriberStandards>>();
             container.RegisterType<IGenericRepository<SubscriberStandardSections>, Genericrepository<SubscriberStandardSections>>();
             container.RegisterType<IGenericRepository<SubscriberStandardContacts>, Genericrepository<SubscriberStandardContacts>>();
+            container.RegisterType<IGenericRepository<SubscriberTemplate>, Genericrepository<SubscriberTemplate>>();
+
             container.RegisterType<IRoleService, RoleService>();
             container.RegisterType<IAccountService, AccountService>();
             container.RegisterType<IUserRoleService, UserRoleService>();
             container.RegisterType<IContactService, ContactService>();
             container.RegisterType<ISubscriberStandardService, SubscriberStandardService>();
+            container.RegisterType<ITemplateService, TemplateService>();
+
 
         }
     }

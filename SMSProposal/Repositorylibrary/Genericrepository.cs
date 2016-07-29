@@ -70,6 +70,7 @@ namespace Repositorylibrary
             return await _context.Set<TObject>().SingleOrDefaultAsync(match);
         }
 
+
         public ICollection<TObject> FindAll(Expression<Func<TObject, bool>> match)
         {
             return _context.Set<TObject>().Where(match).ToList();

@@ -176,6 +176,7 @@
     <Compile Include="Controllers\OldSectionController.cs" />
     <Compile Include="Controllers\StandardController.cs" />
     <Compile Include="Controllers\SubscriberStandardSectionsController.cs" />
+    <Compile Include="Controllers\TemplateController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -447,6 +448,7 @@
     <Content Include="Scripts\Contact.js" />
     <Content Include="Scripts\Sendsms.js" />
     <Content Include="Scripts\SubscriberRole.js" />
+    <Content Include="Scripts\Template.js" />
     <Content Include="Scripts\Wintails.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
@@ -511,6 +513,7 @@
     <Content Include="Views\SubscriberStandardSections\Details.cshtml" />
     <Content Include="Views\SubscriberStandardSections\Edit.cshtml" />
     <Content Include="Views\SubscriberStandardSections\Index.cshtml" />
+    <Content Include="Views\Template\TemplateView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Standards\" />

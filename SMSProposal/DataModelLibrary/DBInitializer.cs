@@ -98,6 +98,35 @@ namespace DataModelLibrary
                     lstssc.Add(new SubscriberStandardContacts { CreatedAt = DateTime.Now,Active = true, SubscriberStandards = SubscriberStandards[4], Contact = c, SubscriberStandardSections = lstSubscriberStandardSections[0] });
                 });
           //  });
+            var lstsubcribertemplates = new List<SubscriberTemplate>
+            {
+             new SubscriberTemplate{Subscriber = lstsubscribers[1], Active = true, Templates = new Template
+             {
+                 CreatedAt  = DateTime.Now, Name = "Admission Messages",
+                 Description = "Dear Parent, you are requested to submit the admission form along with the registration fees before@date@scholl"
+             }},
+             new SubscriberTemplate{Subscriber = lstsubscribers[1], Active = true, Templates = new Template
+             {
+                 CreatedAt  = DateTime.Now, Name = "Fees Admission Messages",
+                 Description = "Dear Parent, visit the school between 9 am and 12 pm and confirm the admission by paying the fees @date @scholl"
+             }},
+             new SubscriberTemplate{Subscriber = lstsubscribers[1], Active = true, Templates = new Template
+             {
+                 CreatedAt  = DateTime.Now, Name = "Attendance/Behavior Messages",
+                 Description = "Your ward was absent today WITHOUT PRIOR INFORMATION. Please send your ward with the Leave Letter @scholl"
+             }},
+             new SubscriberTemplate{Subscriber = lstsubscribers[1], Active = true, Templates = new Template
+             {
+                 CreatedAt  = DateTime.Now, Name = "Meeting Messages",
+                 Description = "Dear Parent, kindly attend the Parent-Teacher Meeting scheduled on @Date from 9 am to 12 pm @scholl"
+             }},
+             new SubscriberTemplate{Subscriber = lstsubscribers[1], Active = true, Templates = new Template
+             {
+                 CreatedAt  = DateTime.Now, Name = "Holiday Messages",
+                 Description = "Dear Parent @Date will be holiday on occasion of @function. -@schoolname"
+             }}
+            };
+                
 
             context.Roles.AddRange(Roles);
             context.GenderTypes.AddRange(GenderTypes);
@@ -110,6 +139,7 @@ namespace DataModelLibrary
             context.SubscriberStandardSections.AddRange(lstSubscriberStandardSections);
             context.Contacts.AddRange(lstcontacts);
             context.SubscriberStandardContacts.AddRange(lstssc);
+            context.SubscriberTemplates.AddRange(lstsubcribertemplates);
             base.Seed(context);
         }
     }

@@ -82,6 +82,7 @@
     <Compile Include="SubscriberRoles.cs" />
     <Compile Include="SubscriberTemplate.cs" />
     <Compile Include="Template.cs" />
+    <Compile Include="TemplateViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

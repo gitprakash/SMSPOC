@@ -24,6 +24,9 @@ namespace DataModelLibrary
         public virtual DbSet<Section> Sections { get; set; }
         public virtual DbSet<SubscriberStandardSections> SubscriberStandardSections { get; set; }
         public virtual DbSet<SubscriberStandardContacts> SubscriberStandardContacts { get; set; }
+        public virtual DbSet<Template> Templates { get; set; }
+        public virtual DbSet<SubscriberTemplate> SubscriberTemplates { get; set; }
+
          
     }
 }

@@ -18,7 +18,7 @@ namespace DataModelLibrary
         public virtual Subscriber Subscriber { get; set; }
         [Required]
         public virtual int TemplateId { get; set; }
-        public virtual Template Template { get; set; }
+        public virtual Template Templates { get; set; }
         [Required]
         public bool Active { get; set; }
     }

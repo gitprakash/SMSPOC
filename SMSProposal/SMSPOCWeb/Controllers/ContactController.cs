@@ -46,8 +46,8 @@ namespace SMSPOCWeb.Controllers
             }
             catch (Exception ex)
             {
-
-                throw ex;
+                var result = new { Status = "error", error = ex.Message };
+                return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
         [HttpPost]
