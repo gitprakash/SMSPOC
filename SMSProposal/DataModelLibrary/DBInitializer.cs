@@ -126,7 +126,13 @@ namespace DataModelLibrary
                  Description = "Dear Parent @Date will be holiday on occasion of @function. -@schoolname"
              }}
             };
-                
+
+            
+            var lstmessagestatus=new List<MessageStatus>
+            {
+                new MessageStatus{ Name="Success"},
+                new MessageStatus{Name = "Failure"}
+            };    
 
             context.Roles.AddRange(Roles);
             context.GenderTypes.AddRange(GenderTypes);
@@ -140,6 +146,7 @@ namespace DataModelLibrary
             context.Contacts.AddRange(lstcontacts);
             context.SubscriberStandardContacts.AddRange(lstssc);
             context.SubscriberTemplates.AddRange(lstsubcribertemplates);
+            context.MessageStatus.AddRange(lstmessagestatus);
             base.Seed(context);
         }
     }

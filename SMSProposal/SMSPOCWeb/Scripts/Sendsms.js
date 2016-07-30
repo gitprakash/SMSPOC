@@ -15,27 +15,64 @@
     }
 }
 
+$(document).ready(function() {
+    $("#divwarning").hide();
+    var $remaining = $('#remaining'),
+    $messages = $remaining.next();
 
+    $('#txtsms').keyup(function () {
+            var chars = this.value.length,
+                messages = Math.ceil(chars / 160),
+                remaining = messages * 160 - (chars % (messages * 160) || messages * 160);
+
+            $remaining.text(remaining + ' characters remaining');
+            $messages.text(messages + ' message(s)');
+    });
+});
 
 var selectedcontactarray = [];
 $(function () {
 
     $('#dropdown').change(function () {
-        $('#txtsms').val($(this).val());
+        //if ($(this).val().length > 0) {
+            $('#txtsms').val($(this).val());
+            $('#txtsms').keyup();
+        //}
     });
 
     $('#submitMyForm')
         .click(function () {
+            $("#errormsg").html('');
             if (selectedcontactarray.length === 0) {
-                alert('Please select a contct');
-                return false;
-            }
-            if ($('#txtsms').val().trim().length === 0) {
-                alert('Please enter message');
-                return false;
-            }
-           
+                $("#divwarning").show();
 
+                $("#errormsg").html('Please select a contact');
+                return false;
+            }
+            else if ($('#txtsms').val().trim().length === 0) {
+                $("#divwarning").show();
+                $("#errormsg").html('Please enter some message');
+                return false;
+            }
+            else if ($('#txtsms').val().trim().length>160) {
+                $("#divwarning").show();
+                $("#errormsg").html('Please enter some message');
+                return false;
+            }
+
+            else {
+                $("#divwarning").hide();
+                $.ajax({
+                    type: 'Post',
+                    url: '/Notify/SendMessage',
+                    data: { messageViewModel: selectedcontactarray, Message: $('#txtsms').val().trim() },
+                    success: function(data) {
+                    },
+                    error: function(data, error) {
+                        alert('problem in retrieving message template details' + error);
+                    }
+                });
+            }
         });
 
     $.ajax({
@@ -74,9 +111,10 @@ function CreateLinks() {
     $("#ContactList").empty();
     $.each(selectedcontactarray, function (i, contact) {
         var span = $("<span  contactid=" + contact.Id + " class='close'> x <span>").css({ 'padding': '2px 5px', 'background': '#ccc', 'color': 'red' });
-        var a = $("<a href='javascript:void(0)'></a>").css({'display':'inline-block'})
-            .append(span)
-        $("<span id="+contact.Id+" class='btn btn-info btn-sm' title= "+contact.Name + ":" + contact.Mobile+">"+  contact.Rollno + "</span>").css('margin-right', '10px').appendTo("#ContactList");
+        var a = $("<a href='javascript:void(0)'></a>")
+            .css({ 'display': 'inline-block' })
+            .append(span);
+        $("<span id="+contact.Id+" class='btn btn-info btn-sm' title= "+contact.Name + ":" + contact.Mobile+">"+  contact.RollNo + "</span>").css('margin-right', '10px').appendTo("#ContactList");
         $(a).appendTo('#ContactList');
     });
 }
@@ -110,7 +148,7 @@ $(function () {
                                var contactvm = {
                                    'Id': rowid,
                                    'Name': name,
-                                   'Rollno': rollno,
+                                   'RollNo': rollno,
                                    'Standard': standard,
                                    'Section': section,
                                    'Mobile': mobile

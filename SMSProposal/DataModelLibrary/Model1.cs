@@ -26,6 +26,10 @@ namespace DataModelLibrary
         public virtual DbSet<SubscriberStandardContacts> SubscriberStandardContacts { get; set; }
         public virtual DbSet<Template> Templates { get; set; }
         public virtual DbSet<SubscriberTemplate> SubscriberTemplates { get; set; }
+        public virtual DbSet<MessageStatus> MessageStatus { get; set; }
+        public virtual DbSet<Message> Message { get; set; }
+        public virtual DbSet<SubscriberContactMessage> SubscriberContactMessage { get; set; }
+
 
          
     }

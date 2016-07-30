@@ -43,7 +43,10 @@
 <div class="row clearfix">
 
     <div class="input-group col-lg-12">
-        <textarea class="form-control text ui-widget-content ui-corner-all" rows="3" style="min-width: 60%" id="txtsms" name="txtsms"></textarea><br />
+        <textarea class="form-control text ui-widget-content ui-corner-all" rows="3" style="min-width: 60%" id="txtsms" name="txtsms"></textarea><br/>
+        <p>
+            <span id="remaining">160 characters remaining</span> <span id="messages">1 message(s)</span>
+        </p>
         <span class="btn btn-primary" id="submitMyForm">Send</span>
     </div>
 </div>
@@ -52,4 +55,8 @@
     <table id="list"></table>
     <div id="pager" style="text-align: center;"> </div>
 </div>
+<div class="alert alert-danger" id="divwarning">
+    <strong>Warning!</strong><span id="errormsg"></span>
+</div>
+
 

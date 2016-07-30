@@ -65,6 +65,10 @@
   <ItemGroup>
     <Compile Include="Contact.cs" />
     <Compile Include="ContactViewModel.cs" />
+    <Compile Include="Message.cs" />
+    <Compile Include="MessageStatus.cs" />
+    <Compile Include="MessageViewModel.cs" />
+    <Compile Include="SubscriberContactMessage.cs" />
     <Compile Include="SubscriberStandardSectionViewModel.cs" />
     <Compile Include="Standard.cs" />
     <Compile Include="DBInitializer.cs" />
