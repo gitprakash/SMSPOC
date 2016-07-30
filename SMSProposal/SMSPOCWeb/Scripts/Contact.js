@@ -6,6 +6,9 @@
 var clsarray = {};
 $(document).ready(function myfunction() {
 
+    //loading template drodown
+
+
     $('#list').jqGrid({
         caption: "Student Details",
         url: '/Contact/Index',

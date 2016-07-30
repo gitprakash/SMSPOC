@@ -1,6 +1,58 @@
-﻿
+﻿var helpers =
+{
+    buildDropdown: function (result, dropdown, emptyMessage) {
+        // Remove current options
+        dropdown.html('');
+        // Add the empty option with the empty message
+        dropdown.append('<option value="">' + emptyMessage + '</option>');
+        // Check result isnt empty
+        if (result !== '') {
+            // Loop through each of the results and append the option to the dropdown
+            $.each(result, function (k, v) {
+                dropdown.append('<option value="' + v.Description + '">' + v.Name + '</option>');
+            });
+        }
+    }
+}
+
+
+
 var selectedcontactarray = [];
 $(function () {
+
+    $('#dropdown').change(function () {
+        $('#txtsms').val($(this).val());
+    });
+
+    $('#submitMyForm')
+        .click(function () {
+            if (selectedcontactarray.length === 0) {
+                alert('Please select a contct');
+                return false;
+            }
+            if ($('#txtsms').val().trim().length === 0) {
+                alert('Please enter message');
+                return false;
+            }
+           
+
+        });
+
+    $.ajax({
+        type: 'Get',
+        url: '/Template/GetTemplates',
+        success: function (data) {
+            helpers.buildDropdown(
+                    data,
+                    $('#dropdown'),
+                    'Select an option'
+                );
+        },
+        error: function (data) {
+            alert('problem in retrieving message template details');
+        }
+    });
+
     $('#ContactList').on('click', '.close', function () {
         var id = $(this).attr('contactid');
         $('#' + id).remove();

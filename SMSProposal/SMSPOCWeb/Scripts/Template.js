@@ -11,17 +11,23 @@
         colModel: [
                { name: 'Id', index: 'Id', key: true, hidden: true },
               {
-                  name: 'Name', index: 'RollNo', width: 40, key: false, editable: true, align: 'center',
-                  editrules: { required: true }
+                  name: 'Name', index: 'RollNo', width: 60, key: false, editable: true, align: 'center',
+                  editrules: { required: true, cols:30 }
               },
               {
                   name: 'Description', index: 'Description', width: 120, key: false,edittype:'textarea', editable: true, align: 'center',
-                  editoptions: { rows: 5,size:30}, editrules: { required: true }
+                  editoptions: { rows:8,cols:60}, editrules: { required: true }
               },
-               
-             {
-                 name: 'Status', index: 'Status', width: 30, key: false, editable: true, align: 'center', edittype: 'checkbox',
-                 editoptions: { value: "Active:InActive" }
+        {
+            name: 'Status',
+            index: 'Status',
+            width: 30,
+            key: false,
+            editable: true,
+            align: 'center',
+            edittype: 'checkbox',
+          
+            editoptions: { value: "Active:InActive", defaultValue: "Active" }
              }
 
 
