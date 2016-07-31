@@ -14,7 +14,10 @@
         }
     }
 }
-
+$(window).resize(function () {
+    var outerwidth = $('#grid').width();
+    $('#list').setGridWidth(outerwidth); // setGridWidth method sets a new width to the grid dynamically
+});
 $(document).ready(function() {
     $("#divwarning").hide();
     var $remaining = $('#remaining'),
@@ -163,7 +166,6 @@ $(function () {
                        alert('please select a contact');
                        return false;
                    }
-
                },
                'cancel': function () {
                    $(this).dialog('close');
@@ -194,10 +196,12 @@ function ConstructJqGrid() {
         rowList: [10, 20, 50, 100],
         viewrecords: true,
         pager: jQuery("#pager"),
-        height: '100%',
-        width: '600',
+        //height: '100%',
+        //width: '600',
         multiselect: true,
-        gridview:true
+        gridview: true,
+        shrinkToFit: true,
+        autowidth: true
     });
     jQuery("#list").jqGrid('navGrid', '#pager', { edit: false, add: false, del: false, search: true });
     jQuery("#list").jqGrid('filterToolbar', { stringResult: true, searchOnEnter: false });

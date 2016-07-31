@@ -9,6 +9,11 @@
 
 </head>
 <body>
+    @*<div class="navbar navbar-default navbar-fixed-top">
+        <div class="row clearfix col-lg-12">
+            <img class="img-responsive img-rounded" src="~/Content/Image/SMSbanner.png" alt="SMS Portal">
+        </div>
+    </div>*@
     <div class="navbar navbar-default navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -17,48 +22,67 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Communication Portal", "", "", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    @{
-                        if (Request.IsAuthenticated)
+                
+                @{
+                    if (Request.IsAuthenticated)
+                    {
+                        if (User.IsInRole("Admin"))
                         {
-                            if (User.IsInRole("Admin"))
-                            {
-                                <li>@Html.ActionLink("Manage Subscriber", "List", "User")</li>
-                                <li>@Html.ActionLink("Manage Role", "GetRoleView", "Role")</li>
-                                <li>@Html.ActionLink("Manage UserRole", "GetUserRolesView", "ManageUserRoles")</li>
-                            }
-                            if (User.IsInRole("Subscriber"))
-                            {
-                                <li>@Html.ActionLink("Manage Contact", "GetContactView", "Contact")</li>
-                                <li>@Html.ActionLink("Manage Standard", "Index", "Standard")</li>
-                                <li>@Html.ActionLink("Manage Sections", "Index", "SubscriberStandardSections")</li>
-    <li>@Html.ActionLink("Manage Template", "TemplateView", "Template")</li>
+                            <div class="btn-group">
+                                <a class="btn dropdown-toggle btn-primary" data-toggle="dropdown" href="#">
+                                    Admin Action
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+                                    <li>@Html.ActionLink("Manage Subscriber", "List", "User")</li>
+                                    <li>@Html.ActionLink("Manage Role", "GetRoleView", "Role")</li>
+                                    <li>@Html.ActionLink("Manage UserRole", "GetUserRolesView", "ManageUserRoles")</li>
+                                </ul>
+                            </div>
 
-                                <li>@Html.ActionLink("Send SMS", "Sendsms", "Notify")</li>
-                                
-                            }
+
+
                         }
-}
+                        if (User.IsInRole("Subscriber"))
+                        {
+                            <div class="btn-group ">
+                                <a class="btn dropdown-toggle btn-primary" data-toggle="dropdown" href="#">
+                                    Subriber Action
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+                                    <li>@Html.ActionLink("Manage Contact", "GetContactView", "Contact")</li>
+                                    <li>@Html.ActionLink("Manage Standard", "Index", "Standard")</li>
+                                    <li>@Html.ActionLink("Manage Sections", "Index", "SubscriberStandardSections")</li>
+                                    <li>@Html.ActionLink("Manage Template", "TemplateView", "Template")</li>
 
-                </ul>
+                                    <li>@Html.ActionLink("Send SMS", "Sendsms", "Notify")</li>
+                                </ul>
+                            </div>
+
+
+                        }
+                    }
+                }
+
+
                 @Html.Partial("_LoginPartial")
             </div>
         </div>
     </div>
-<div class="container body-content">
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @Scripts.Render("~/bundles/jqueryui")
+    <div class="container body-content">
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")
+        @Scripts.Render("~/bundles/jqueryui")
 
-    @RenderBody()
-    <hr/>
-    <footer style="position:fixed;bottom:0;">
-        <p>&copy; @DateTime.Now.Year -POC Application</p>
-    </footer>
+        @RenderBody()
+        <hr />
+        <footer style="position: fixed; bottom: 5%;">
+            <p>&copy; @DateTime.Now.Year -POC Application</p>
+        </footer>
 
-    @RenderSection("scripts", required: false)
+        @RenderSection("scripts", required: false)
 </body>
 </html>

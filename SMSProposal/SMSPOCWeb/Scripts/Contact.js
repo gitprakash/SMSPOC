@@ -4,6 +4,11 @@
         [false, "Please enter valid 10 digit mobile number"];
 }
 var clsarray = {};
+$(window).resize(function () {
+    var outerwidth = $('#grid').width();
+    $('#list').setGridWidth(outerwidth); // setGridWidth method sets a new width to the grid dynamically
+});
+
 $(document).ready(function myfunction() {
 
     //loading template drodown
@@ -58,19 +63,18 @@ $(document).ready(function myfunction() {
                   editrules: { required: true, custom: true, custom_func: mobilenovalidation }
               },
               { name: 'BloodGroup', index: 'BloodGroup', width: 30, key: false, editable: true, align: 'center' },
-              
-             { name: 'Status', index: 'Status', width: 30, key: false, editable: true, align: 'center', edittype: 'checkbox', editoptions: { value: "Active:InActive"} }
+
+             { name: 'Status', index: 'Status', width: 30, key: false, editable: true, align: 'center', edittype: 'checkbox', editoptions: { value: "Active:InActive" } }
 
 
         ],
         rowNum: 10,
         rowList: [10, 20, 30],
-        jsonReader:{id:"0"} ,
+        jsonReader: { id: "0" },
         viewrecords: true,
         pager: jQuery("#pager"),
-        height: '100%',
-        autowidth: true
-
+        autowidth: true,
+        shrinkToFit: true
     });
 
     jQuery("#list").jqGrid('navGrid', '#pager', { edit: true, edittitle: 'Edit Student', add: true, addtitle: 'Add Student', del: true, deltitle: 'Delete Student', refresh: false },
@@ -91,7 +95,7 @@ $(document).ready(function myfunction() {
                 else {
                     return [false, result.error];
                 }
-            } 
+            }
         },
        {
            width: 400,
@@ -157,8 +161,7 @@ $(Standards).each(function () {
 });
 standarList += '}';
 
-function LoadSectionList(standardid)
-{
+function LoadSectionList(standardid) {
     if (standardid) {
         var sections = GetSectionList(standardid);
         var sectionsList = '{';
@@ -185,10 +188,9 @@ function GetSectionList(standardid) {
     return sections;
 }
 
-function changeSectionlist(standardid, StandardElement)
-{
+function changeSectionlist(standardid, StandardElement) {
     if (standardid) {
-        var sections = GetSectionList(standardid);
+        var sections = GetSectionList(standardid),
         newOptions = '';
         $(sections).each(function (i, val) {
             newOptions += '<option role="option" value="' + val.SubscriberStandardSectionId + '">' +

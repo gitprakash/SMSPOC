@@ -6,9 +6,11 @@
 
         <ul class="nav navbar-nav navbar-right">
             <li>
-                @Html.ActionLink("Hello " + User.Identity.Name + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+                <button type="button" class="btn btn-primary">Welcome  @User.Identity.Name </button>
+                @*<span class="label label label-primary"> </span>*@
+                @* @Html.ActionLink("Hello " + User.Identity.Name + "!", "Index", "Manage", routeValues: null, htmlAttributes: new {title = "Manage", @class = "label-primary"})*@
             </li>
-            <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+            <li><a href="javascript:document.getElementById('logoutForm').submit()" class="alert-link">Log off</a></li>
         </ul>
     }
 }

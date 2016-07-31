@@ -1,4 +1,11 @@
-﻿$(document).ready(function myfunction() {
+﻿
+$(window).resize(function () {
+    var outerwidth = $('#grid').width();
+    $('#list').setGridWidth(outerwidth); // setGridWidth method sets a new width to the grid dynamically
+});
+
+
+$(document).ready(function myfunction() {
 
     $('#list').jqGrid({
         caption: "Template Details",
@@ -37,8 +44,8 @@
         jsonReader: { id: "0" },
         viewrecords: true,
         pager: jQuery("#pager"),
-        height: '100%',
-        autowidth: true
+        autowidth: true,
+        shrinkToFit: true
 
     });
 

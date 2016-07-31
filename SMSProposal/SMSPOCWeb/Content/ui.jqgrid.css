@@ -11,6 +11,7 @@
 	box-sizing: content-box;
 	-ms-touch-action: none;
 	touch-action: none;
+
 }
 .ui-jqgrid div {
 	line-height: normal;
