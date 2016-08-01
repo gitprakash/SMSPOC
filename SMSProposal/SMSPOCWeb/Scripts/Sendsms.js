@@ -68,7 +68,7 @@ $(function () {
                 $.ajax({
                     type: 'Post',
                     url: '/Notify/SendMessage',
-                    data: { messageViewModel: selectedcontactarray, Message: $('#txtsms').val().trim() },
+                    data: { messageViewModel: selectedcontactarray, Message: $('#txtsms').val().trim(),messagecount:1 },
                     success: function(data) {
                     },
                     error: function(data, error) {

@@ -10,15 +10,16 @@ namespace DataServiceLibrary
 {
     public class MessageService : IMessageService
     {
-        private IGenericRepository<SubscriberContactMessage> sbcribermessageRepository;
+        private IGenericRepository<SubscriberContactMessage> subcribermessageRepository;
         public MessageService(IGenericRepository<SubscriberContactMessage>  messageRepository)
         {
-            sbcribermessageRepository = messageRepository;
+            subcribermessageRepository = messageRepository;
         }
 
-        public void Send(List<MessageViewModel> messageViewModel, string message, int messagecount)
+        public async Task<bool> Send(List<MessageViewModel> messageViewModel, string message, int messagecount)
         {
            //after send calling sms server api, and collected result
+            bool result = false;
             var subcribermessage = new Message
             {
                 Text = message,
@@ -26,7 +27,7 @@ namespace DataServiceLibrary
                 MessageCount = messagecount
             }; 
 
-            messageViewModel.ForEach(mvm =>
+              messageViewModel.ForEach( async (mvm) =>
             {
 
                 var scm = new SubscriberContactMessage
@@ -39,9 +40,11 @@ namespace DataServiceLibrary
                         Name = MessageStatusEnum.Sent
                     },
                     SubscriberStandardContactsId = mvm.Id
-                    
                 };
+                SubscriberContactMessage dbresult = await subcribermessageRepository.AddAsync(scm);
+             result = dbresult.Id > 0;
             });
+            return result;
         }
     }
 }

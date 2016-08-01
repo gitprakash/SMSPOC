@@ -5,23 +5,29 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using DataModelLibrary;
+using DataServiceLibrary;
 
 namespace SMSPOCWeb.Controllers
 {
     public class NotifyController : Controller
     {
         // GET: Notify
+        IMessageService m_messageService;
+        public NotifyController(IMessageService messageService)
+        {
+            m_messageService = messageService;
+        }
         public ActionResult Index()
         {
             return View();
         }
-        public JsonResult SendMessage(MessageViewModel[] messageViewModel,string message,int messagecount)
+        public JsonResult SendMessage(List<MessageViewModel> messageViewModel,string message,int messagecount)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-
+                    m_messageService.Send(messageViewModel, message, messagecount);
                 }
                 else
                 {
