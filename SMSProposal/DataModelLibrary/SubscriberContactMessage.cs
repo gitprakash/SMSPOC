@@ -12,7 +12,8 @@ namespace DataModelLibrary
    public  class SubscriberContactMessage
     {
         [Key]
-        public Guid Id { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public long Id { get; set; }
         public virtual SubscriberStandardContacts SubscriberContact { get; set; }
         [Required]
         public long SubscriberStandardContactsId { get; set; }
@@ -25,5 +26,8 @@ namespace DataModelLibrary
         [Required]
         [DataType(DataType.DateTime)]
         public DateTime CreateDateTime { get; set; }
+
+        [Required]
+        public Guid Guid { get; set; }
     }
 }

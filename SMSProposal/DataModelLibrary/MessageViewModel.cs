@@ -22,5 +22,7 @@ namespace DataModelLibrary
 
         public string RollNo { get; set; }
 
+        public bool SentStatus { get; set; }
+
     }
 }

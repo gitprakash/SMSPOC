@@ -12,10 +12,13 @@ namespace DataModelLibrary
     public class Message
     {
         [Key]
-        public Guid Id { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public long Id { get; set; }
         [Required]
         public string Text { get; set; }
         [Required]
         public int MessageCount { get; set; }
+        [Required]
+        public Guid SubcriberGuid { get; set; }
     }
 }

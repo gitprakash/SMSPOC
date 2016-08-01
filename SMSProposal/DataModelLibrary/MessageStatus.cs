@@ -14,6 +14,14 @@ namespace DataModelLibrary
         [Key]
         public int Id { get; set; }
         [Required]
-        public string Name { get; set; }
+        [Range(1, 4), Display(Name = "Message Status Enum")]
+        public MessageStatusEnum Name { get; set; }
+         
+    }
+    public enum MessageStatusEnum
+    {
+        Sent = 1,
+        NotSent = 2,
+        NotDelivered = 3,
     }
 }

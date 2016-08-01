@@ -16,9 +16,32 @@ namespace DataServiceLibrary
             sbcribermessageRepository = messageRepository;
         }
 
-        public void send(MessageViewModel[] messageViewModel, string message, int messagecount)
+        public void Send(List<MessageViewModel> messageViewModel, string message, int messagecount)
         {
-            throw new NotImplementedException();
+           //after send calling sms server api, and collected result
+            var subcribermessage = new Message
+            {
+                Text = message,
+                SubcriberGuid = Guid.NewGuid(),
+                MessageCount = messagecount
+            }; 
+
+            messageViewModel.ForEach(mvm =>
+            {
+
+                var scm = new SubscriberContactMessage
+                {
+                    CreateDateTime = DateTime.Now, 
+                    Guid = Guid.NewGuid(),
+                    Message = subcribermessage, 
+                    MessageStatus = new MessageStatus
+                    {
+                        Name = MessageStatusEnum.Sent
+                    },
+                    SubscriberStandardContactsId = mvm.Id
+                    
+                };
+            });
         }
     }
 }

@@ -9,6 +9,6 @@ namespace DataServiceLibrary
 {
     public interface IMessageService
     {
-        void send(MessageViewModel[] messageViewModel, string message, int messagecount);
+        void Send(List<MessageViewModel> messageViewModel, string message, int messagecount);
     }
 }

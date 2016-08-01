@@ -130,8 +130,9 @@ namespace DataModelLibrary
             
             var lstmessagestatus=new List<MessageStatus>
             {
-                new MessageStatus{ Name="Success"},
-                new MessageStatus{Name = "Failure"}
+                new MessageStatus{  Name=MessageStatusEnum.NotSent},
+                new MessageStatus {Name = MessageStatusEnum.Sent},
+                new MessageStatus {Name = MessageStatusEnum.NotDelivered}
             };    
 
             context.Roles.AddRange(Roles);
