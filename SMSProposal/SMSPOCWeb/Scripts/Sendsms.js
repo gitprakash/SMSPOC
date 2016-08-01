@@ -47,29 +47,30 @@ $(function () {
         .click(function () {
             $("#errormsg").html('');
             if (selectedcontactarray.length === 0) {
-                $("#divwarning").show();
+                
+                showAlert("Please select a contact", "danger", 5000);
 
-                $("#errormsg").html('Please select a contact');
                 return false;
             }
             else if ($('#txtsms').val().trim().length === 0) {
-                $("#divwarning").show();
-                $("#errormsg").html('Please enter some message');
+                showAlert("Please enter some message", "danger", 5000);
                 return false;
             }
-            else if ($('#txtsms').val().trim().length>160) {
-                $("#divwarning").show();
-                $("#errormsg").html('Please enter some message');
-                return false;
-            }
+             
 
             else {
-                $("#divwarning").hide();
+                 
                 $.ajax({
                     type: 'Post',
                     url: '/Notify/SendMessage',
                     data: { messageViewModel: selectedcontactarray, Message: $('#txtsms').val().trim(),messagecount:1 },
-                    success: function(data) {
+                    success: function (data) {
+                        if (data.Status === 'success' || data.Status === 'successwithnoinsertion') {
+                            showAlert("Data Processed, please check Sent history for status", "success", 5000);
+                        }
+                        if (data.Status === 'error') {
+                            showAlert("'Data Processedw with error, please check Sent history for status", "info", 5000);
+                        }
                     },
                     error: function(data, error) {
                         alert('problem in retrieving message template details' + error);
@@ -206,4 +207,31 @@ function ConstructJqGrid() {
     jQuery("#list").jqGrid('navGrid', '#pager', { edit: false, add: false, del: false, search: true });
     jQuery("#list").jqGrid('filterToolbar', { stringResult: true, searchOnEnter: false });
 
+}
+
+function showAlert(message, type, closeDelay) {
+
+    if ($("#alerts-container").length === 0) {
+        // alerts-container does not exist, create it
+        $("body")
+            .append( $('<div id="alerts-container" style="position: fixed;width: 50%; left: 25%; top: 10%;">') );
+    }
+
+    // default to alert-info; other options include success, warning, danger
+    type = type || "info";    
+
+    // create the alert div
+    var alert = $('<div class="alert alert-' + type + ' fade in">')
+        .append(
+            $('<button type="button" class="close" data-dismiss="alert">')
+            .append("&times;")
+        )
+        .append(message);
+
+    // add the alert div to top of alerts-container, use append() to add to bottom
+    $("#alerts-container").prepend(alert);
+
+    // if closeDelay was passed - set a timeout to close the alert
+    if (closeDelay)
+        window.setTimeout(function() { alert.alert("close") }, closeDelay);     
 }

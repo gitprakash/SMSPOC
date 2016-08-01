@@ -32,6 +32,8 @@ namespace Repositorylibrary
         IQueryable<TObject> GetAllLazyLoad(Expression<Func<TObject, bool>> filter, params Expression<Func<TObject, object>>[] children);
         Task<ICollection<TResult>> GetPagedResult<TResult>(int skip, int take, string ordercolumn, bool desc, Expression<Func<TObject, TResult>> project,
             Expression<Func<TObject, bool>> match = null);
+
+        Task<int> AddRangeAsync(List<TObject> t);
         Task<int> SaveAsync();
 
 

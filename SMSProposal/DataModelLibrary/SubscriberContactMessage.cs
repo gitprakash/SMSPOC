@@ -19,10 +19,9 @@ namespace DataModelLibrary
         public long SubscriberStandardContactsId { get; set; }
         public virtual Message Message { get; set; }
         [Required]
-        public Guid MessageId { get; set; }
-        public virtual MessageStatus MessageStatus { get; set; }
+        public long MessageId { get; set; }
         [Required]
-        public int MessageStatusId { get; set; }
+        public MessageStatusEnum MessageStatus { get; set; }
         [Required]
         [DataType(DataType.DateTime)]
         public DateTime CreateDateTime { get; set; }

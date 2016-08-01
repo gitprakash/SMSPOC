@@ -21,20 +21,23 @@ namespace SMSPOCWeb.Controllers
         {
             return View();
         }
-        public JsonResult SendMessage(List<MessageViewModel> messageViewModel,string message,int messagecount)
+        public async Task<JsonResult> SendMessage(List<MessageViewModel> messageViewModel,string message,int messagecount)
         {
             try
             {
+                bool result = false;
                 if (ModelState.IsValid)
                 {
-                    m_messageService.Send(messageViewModel, message, messagecount);
+                    result= await  m_messageService.Send(messageViewModel, message, messagecount);
                 }
                 else
                 {
                     string messages = GetModelStateError();
                     throw new Exception(messages);
                 }
-                return Json("", JsonRequestBehavior.AllowGet);
+                var jsonresult=new {Status=result == true ? "success" : "successwithnoinsertion", JsonRequestBehavior.AllowGet};
+                return Json(jsonresult, JsonRequestBehavior.AllowGet);
+
             }
             catch (Exception ex)
             {

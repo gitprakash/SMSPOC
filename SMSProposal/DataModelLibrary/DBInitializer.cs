@@ -128,13 +128,13 @@ namespace DataModelLibrary
             };
 
             
-            var lstmessagestatus=new List<MessageStatus>
+          /*  var lstmessagestatus=new List<MessageStatus>
             {
                 new MessageStatus{  Name=MessageStatusEnum.NotSent},
                 new MessageStatus {Name = MessageStatusEnum.Sent},
                 new MessageStatus {Name = MessageStatusEnum.NotDelivered}
             };    
-
+            */
             context.Roles.AddRange(Roles);
             context.GenderTypes.AddRange(GenderTypes);
             context.AccountTypes.AddRange(AccountTypes);
@@ -147,7 +147,6 @@ namespace DataModelLibrary
             context.Contacts.AddRange(lstcontacts);
             context.SubscriberStandardContacts.AddRange(lstssc);
             context.SubscriberTemplates.AddRange(lstsubcribertemplates);
-            context.MessageStatus.AddRange(lstmessagestatus);
             base.Seed(context);
         }
     }
