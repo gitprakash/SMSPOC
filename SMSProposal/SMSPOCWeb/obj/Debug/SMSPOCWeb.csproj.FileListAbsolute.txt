@@ -79,8 +79,6 @@ C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\SMSPOCWeb\bin\DataMo
 C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\SMSPOCWeb\bin\DataServiceLibrary.dll
 C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\SMSPOCWeb\bin\EntityFramework.dll
 C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\SMSPOCWeb\bin\EntityFramework.SqlServer.dll
-C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\SMSPOCWeb\bin\Microsoft.AspNet.Identity.Core.dll
-C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\SMSPOCWeb\bin\Microsoft.AspNet.Identity.Owin.dll
 C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\SMSPOCWeb\bin\Microsoft.Owin.dll
 C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\SMSPOCWeb\bin\Microsoft.Owin.Host.SystemWeb.dll
 C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\SMSPOCWeb\bin\Microsoft.Owin.Security.Cookies.dll
@@ -125,8 +123,6 @@ C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\SMSPOCWeb\bin\System
 C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\SMSPOCWeb\bin\System.Web.WebPages.Razor.xml
 C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\SMSPOCWeb\bin\Antlr3.Runtime.pdb
 C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\SMSPOCWeb\bin\Newtonsoft.Json.xml
-C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\SMSPOCWeb\bin\Microsoft.AspNet.Identity.Core.xml
-C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\SMSPOCWeb\bin\Microsoft.AspNet.Identity.Owin.xml
 C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\SMSPOCWeb\bin\Microsoft.Owin.xml
 C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\SMSPOCWeb\bin\Microsoft.Owin.Host.SystemWeb.xml
 C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\SMSPOCWeb\bin\Microsoft.Owin.Security.xml

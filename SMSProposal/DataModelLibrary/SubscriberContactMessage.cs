@@ -9,11 +9,8 @@ using System.Threading.Tasks;
 namespace DataModelLibrary
 {
     [Table("SubscriberContactMessage")]
-   public  class SubscriberContactMessage
+   public  class SubscriberContactMessage:BaseEntity
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public long Id { get; set; }
         public virtual SubscriberStandardContacts SubscriberContact { get; set; }
         [Required]
         public long SubscriberStandardContactsId { get; set; }
@@ -22,11 +19,5 @@ namespace DataModelLibrary
         public long MessageId { get; set; }
         [Required]
         public MessageStatusEnum MessageStatus { get; set; }
-        [Required]
-        [DataType(DataType.DateTime)]
-        public DateTime CreateDateTime { get; set; }
-
-        [Required]
-        public Guid Guid { get; set; }
     }
 }

@@ -73,11 +73,11 @@ namespace DataModelLibrary
             var SubscriberStandards = new List<SubscriberStandards>();
             Standards.ForEach(s => { SubscriberStandards.Add(new SubscriberStandards { CreatedAt = DateTime.Now, Active = true, Subscriber = lstsubscribers[1], Standard = s }); });
             lststandards.ForEach(s => { SubscriberStandards.Add(new SubscriberStandards { CreatedAt = DateTime.Now, Active = true, Subscriber = lstsubscribers[0], Standard = s }); });
-            
+
             var lstSubscriberStandardSections = new List<SubscriberStandardSections>();
-            lstSection.ForEach(s => { lstSubscriberStandardSections.Add(new SubscriberStandardSections {  CreatedAt=DateTime.Now,Active = true, SubscriberStandards = SubscriberStandards[4], Sections = s }); });
-            lstSection.ForEach(s => { lstSubscriberStandardSections.Add(new SubscriberStandardSections {CreatedAt=DateTime.Now, Active = true, SubscriberStandards = SubscriberStandards[9], Sections = s }); });
-            lstSection.ForEach(s => { lstSubscriberStandardSections.Add(new SubscriberStandardSections {CreatedAt=DateTime.Now, Active = true, SubscriberStandards = SubscriberStandards[11], Sections = s }); });
+            lstSection.ForEach(s => { lstSubscriberStandardSections.Add(new SubscriberStandardSections { CreatedAt = DateTime.Now, Active = true, SubscriberStandards = SubscriberStandards[4], Sections = s }); });
+            lstSection.ForEach(s => { lstSubscriberStandardSections.Add(new SubscriberStandardSections { CreatedAt = DateTime.Now, Active = true, SubscriberStandards = SubscriberStandards[9], Sections = s }); });
+            lstSection.ForEach(s => { lstSubscriberStandardSections.Add(new SubscriberStandardSections { CreatedAt = DateTime.Now, Active = true, SubscriberStandards = SubscriberStandards[11], Sections = s }); });
             var lstcontacts = new List<Contact>();
             for (int i = 0; i < 20; i++)
             {
@@ -93,48 +93,59 @@ namespace DataModelLibrary
             }
 
             var lstssc = new List<SubscriberStandardContacts>();
-          //  SubscriberStandards.ForEach(s => {
-                lstcontacts.ForEach(c=>{
-                    lstssc.Add(new SubscriberStandardContacts { CreatedAt = DateTime.Now,Active = true, SubscriberStandards = SubscriberStandards[4], Contact = c, SubscriberStandardSections = lstSubscriberStandardSections[0] });
-                });
-          //  });
+            //  SubscriberStandards.ForEach(s => {
+            lstcontacts.ForEach(c =>
+            {
+                lstssc.Add(new SubscriberStandardContacts { CreatedAt = DateTime.Now, Active = true, SubscriberStandards = SubscriberStandards[4], Contact = c, SubscriberStandardSections = lstSubscriberStandardSections[0] });
+            });
+            //  });
             var lstsubcribertemplates = new List<SubscriberTemplate>
             {
-             new SubscriberTemplate{Subscriber = lstsubscribers[1], Active = true, Templates = new Template
+             new SubscriberTemplate{Subscriber = lstsubscribers[1], Active = true, Guid=Guid.NewGuid(), CreatedAt=DateTime.Now, Templates = new Template
              {
                  CreatedAt  = DateTime.Now, Name = "Admission Messages",
                  Description = "Dear Parent, you are requested to submit the admission form along with the registration fees before@date@scholl"
              }},
-             new SubscriberTemplate{Subscriber = lstsubscribers[1], Active = true, Templates = new Template
+             new SubscriberTemplate{Subscriber = lstsubscribers[1], Active = true,Guid=Guid.NewGuid(), CreatedAt=DateTime.Now, Templates = new Template
              {
                  CreatedAt  = DateTime.Now, Name = "Fees Admission Messages",
                  Description = "Dear Parent, visit the school between 9 am and 12 pm and confirm the admission by paying the fees @date @scholl"
              }},
-             new SubscriberTemplate{Subscriber = lstsubscribers[1], Active = true, Templates = new Template
+             new SubscriberTemplate{Subscriber = lstsubscribers[1], Active = true, Guid=Guid.NewGuid(), CreatedAt=DateTime.Now,Templates = new Template
              {
                  CreatedAt  = DateTime.Now, Name = "Attendance/Behavior Messages",
                  Description = "Your ward was absent today WITHOUT PRIOR INFORMATION. Please send your ward with the Leave Letter @scholl"
              }},
-             new SubscriberTemplate{Subscriber = lstsubscribers[1], Active = true, Templates = new Template
+             new SubscriberTemplate{Subscriber = lstsubscribers[1], Active = true,Guid=Guid.NewGuid(), CreatedAt=DateTime.Now, Templates = new Template
              {
                  CreatedAt  = DateTime.Now, Name = "Meeting Messages",
                  Description = "Dear Parent, kindly attend the Parent-Teacher Meeting scheduled on @Date from 9 am to 12 pm @scholl"
              }},
-             new SubscriberTemplate{Subscriber = lstsubscribers[1], Active = true, Templates = new Template
+             new SubscriberTemplate{Subscriber = lstsubscribers[1], Active = true,Guid=Guid.NewGuid(), CreatedAt=DateTime.Now, Templates = new Template
              {
                  CreatedAt  = DateTime.Now, Name = "Holiday Messages",
                  Description = "Dear Parent @Date will be holiday on occasion of @function. -@schoolname"
              }}
             };
 
-            
-          /*  var lstmessagestatus=new List<MessageStatus>
-            {
-                new MessageStatus{  Name=MessageStatusEnum.NotSent},
-                new MessageStatus {Name = MessageStatusEnum.Sent},
-                new MessageStatus {Name = MessageStatusEnum.NotDelivered}
-            };    
-            */
+
+            /*  var lstmessagestatus=new List<MessageStatus>
+              {
+                  new MessageStatus{  Name=MessageStatusEnum.NotSent},
+                  new MessageStatus {Name = MessageStatusEnum.Sent},
+                  new MessageStatus {Name = MessageStatusEnum.NotDelivered}
+              };    
+              */
+            var lstsubscribermsgbalancecount = new List<SubscriberMessageBalance> {
+                new SubscriberMessageBalance{Guid=Guid.NewGuid(), Subcriber=lstsubscribers[1],CreatedAt=DateTime.Now, 
+                     OpeningCount=1000, RemainingCount=1000},
+                new SubscriberMessageBalance{Guid=Guid.NewGuid(), Subcriber=lstsubscribers[0],CreatedAt=DateTime.Now,OpeningCount=1000, RemainingCount=1000},
+            };
+            var lstsubscribermsgbalancehistorycount = new List<SubscriberMessageBalanceHistory> {
+                new SubscriberMessageBalanceHistory{Guid=Guid.NewGuid(),Subcriber=lstsubscribers[1], CreatedAt=DateTime.Now,   OpeningCount=1000, RemainingCount=1000},
+                new SubscriberMessageBalanceHistory{Guid=Guid.NewGuid(), Subcriber=lstsubscribers[0],CreatedAt=DateTime.Now,  OpeningCount=1000, RemainingCount=1000},
+            };
+
             context.Roles.AddRange(Roles);
             context.GenderTypes.AddRange(GenderTypes);
             context.AccountTypes.AddRange(AccountTypes);
@@ -147,6 +158,8 @@ namespace DataModelLibrary
             context.Contacts.AddRange(lstcontacts);
             context.SubscriberStandardContacts.AddRange(lstssc);
             context.SubscriberTemplates.AddRange(lstsubcribertemplates);
+            context.SubscriberMessageBalance.AddRange(lstsubscribermsgbalancecount);
+            context.SubscriberMessageBalanceHistory.AddRange(lstsubscribermsgbalancehistorycount);
             base.Seed(context);
         }
     }

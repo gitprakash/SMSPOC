@@ -84,7 +84,7 @@ namespace DataServiceLibrary
             return Expression.Lambda<Func<T, bool>>(resultBody, parameter);
         }
 
-        public async Task<SubscriberTemplate> FindTemplate(int subcriberId, int templateId = 0,
+        public async Task<SubscriberTemplate> FindTemplate(int subcriberId, long templateId = 0,
             string templatename = null)
         {
            /* Expression<Func<SubscriberTemplate, bool>> resultExpression = n => false;

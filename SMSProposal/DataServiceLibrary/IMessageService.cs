@@ -9,6 +9,7 @@ namespace DataServiceLibrary
 {
     public interface IMessageService
     {
-        Task<bool> Send(List<MessageViewModel> messageViewModel, string message, int messagecount);
+        Task<bool> CheckMessageBalance(int mvmcnt, int messagecount, int subscriberId);
+        Task<bool> LogAllMessage(List<MessageViewModel> messageViewModel, string message, int messagecount);
     }
 }

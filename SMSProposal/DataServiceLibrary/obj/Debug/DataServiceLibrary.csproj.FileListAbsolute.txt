@@ -20,3 +20,4 @@ C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\DataServiceLibrary\b
 C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\DataServiceLibrary\obj\Debug\DataServiceLibrary.csprojResolveAssemblyReference.cache
 C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\DataServiceLibrary\obj\Debug\DataServiceLibrary.dll
 C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\DataServiceLibrary\obj\Debug\DataServiceLibrary.pdb
+C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\DataServiceLibrary.dll.config

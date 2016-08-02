@@ -18,18 +18,23 @@ $(window).resize(function () {
     var outerwidth = $('#grid').width();
     $('#list').setGridWidth(outerwidth); // setGridWidth method sets a new width to the grid dynamically
 });
-$(document).ready(function() {
-    $("#divwarning").hide();
+
+function GetSMSMessageCount(value) {
+    var chars = value.length,
+            messages = Math.ceil(chars / 160),
+    remaining = messages * 160 - (chars % (messages * 160) || messages * 160);
+    return { 'messages': messages, 'remaining': remaining };
+}
+
+$(document).ready(function () {
     var $remaining = $('#remaining'),
     $messages = $remaining.next();
-
     $('#txtsms').keyup(function () {
-            var chars = this.value.length,
-                messages = Math.ceil(chars / 160),
-                remaining = messages * 160 - (chars % (messages * 160) || messages * 160);
-
-            $remaining.text(remaining + ' characters remaining');
-            $messages.text(messages + ' message(s)');
+        var messagesremaining = GetSMSMessageCount(this.value.trim()),
+          remaining = messagesremaining.remaining;
+        messages = messagesremaining.messages;
+        $remaining.text(remaining + ' characters remaining');
+        $messages.text(messages + ' message(s)');
     });
 });
 
@@ -37,42 +42,39 @@ var selectedcontactarray = [];
 $(function () {
 
     $('#dropdown').change(function () {
-        //if ($(this).val().length > 0) {
-            $('#txtsms').val($(this).val());
-            $('#txtsms').keyup();
-        //}
+        $('#txtsms').val($(this).val());
+        $('#txtsms').keyup();
     });
-
     $('#submitMyForm')
         .click(function () {
             $("#errormsg").html('');
             if (selectedcontactarray.length === 0) {
-                
-                showAlert("Please select a contact", "danger", 5000);
+
+                showAlert("Please select a contact", "danger", 10000);
 
                 return false;
             }
             else if ($('#txtsms').val().trim().length === 0) {
-                showAlert("Please enter some message", "danger", 5000);
+                showAlert("Please enter some message", "danger", 10000);
                 return false;
             }
-             
+
 
             else {
-                 
+                var count = GetSMSMessageCount($('#txtsms').val().trim())
                 $.ajax({
                     type: 'Post',
                     url: '/Notify/SendMessage',
-                    data: { messageViewModel: selectedcontactarray, Message: $('#txtsms').val().trim(),messagecount:1 },
+                    data: { messageViewModel: selectedcontactarray, Message: $('#txtsms').val().trim(), messagecount: count.messages },
                     success: function (data) {
                         if (data.Status === 'success' || data.Status === 'successwithnoinsertion') {
-                            showAlert("Data Processed, please check Sent history for status", "success", 5000);
+                            showAlert("Data Processed, please check Sent history for status", "success", 10000);
                         }
                         if (data.Status === 'error') {
-                            showAlert("'Data Processedw with error, please check Sent history for status", "info", 5000);
+                            showAlert("'Data Processedw with error, please check Sent history for status", "info", 10000);
                         }
                     },
-                    error: function(data, error) {
+                    error: function (data, error) {
                         alert('problem in retrieving message template details' + error);
                     }
                 });
@@ -102,7 +104,7 @@ $(function () {
             if (selectedcontactarray[i]) {
                 if (selectedcontactarray[i].Id === id) // delete index
                 {
-                     selectedcontactarray.splice(i,1);
+                    selectedcontactarray.splice(i, 1);
                     return false;
                 }
             }
@@ -118,7 +120,7 @@ function CreateLinks() {
         var a = $("<a href='javascript:void(0)'></a>")
             .css({ 'display': 'inline-block' })
             .append(span);
-        $("<span id="+contact.Id+" class='btn btn-info btn-sm' title= "+contact.Name + ":" + contact.Mobile+">"+  contact.RollNo + "</span>").css('margin-right', '10px').appendTo("#ContactList");
+        $("<span id=" + contact.Id + " class='btn btn-info btn-sm' title= " + contact.Name + ":" + contact.Mobile + ">" + contact.RollNo + "</span>").css('margin-right', '10px').appendTo("#ContactList");
         $(a).appendTo('#ContactList');
     });
 }
@@ -128,7 +130,7 @@ $(function () {
     $('#LoadContact').click(function () {
         $("#dialog-div")
        .dialog({
-           title:"Student details",
+           title: "Student details",
            resizable: true,
            autoOpen: true,
            position: { my: "center top+15%", at: "center top+15%" },
@@ -143,7 +145,7 @@ $(function () {
 
                        selectedcontactarray = [];
                        $.each(ids,
-                           function(i, rowid) {
+                           function (i, rowid) {
                                var name = $('#list').jqGrid('getCell', rowid, 'Name');
                                var rollno = $('#list').jqGrid('getCell', rowid, 'RollNo');
                                var standard = $('#list').jqGrid('getCell', rowid, 'Class');
@@ -210,15 +212,15 @@ function ConstructJqGrid() {
 }
 
 function showAlert(message, type, closeDelay) {
-
+    $("#alerts-container").empty();
     if ($("#alerts-container").length === 0) {
         // alerts-container does not exist, create it
         $("body")
-            .append( $('<div id="alerts-container" style="position: fixed;width: 50%; left: 25%; top: 10%;">') );
+            .append($('<div id="alerts-container" style="position: fixed;width: 50%; left: 25%; top: 10%;">'));
     }
 
     // default to alert-info; other options include success, warning, danger
-    type = type || "info";    
+    type = type || "info";
 
     // create the alert div
     var alert = $('<div class="alert alert-' + type + ' fade in">')
@@ -233,5 +235,5 @@ function showAlert(message, type, closeDelay) {
 
     // if closeDelay was passed - set a timeout to close the alert
     if (closeDelay)
-        window.setTimeout(function() { alert.alert("close") }, closeDelay);     
+        window.setTimeout(function () { alert.alert("close") }, closeDelay);
 }

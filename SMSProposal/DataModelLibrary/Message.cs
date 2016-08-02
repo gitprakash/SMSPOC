@@ -9,16 +9,11 @@ using System.Threading.Tasks;
 namespace DataModelLibrary
 {
     [Table("SubcriberMessage")]
-    public class Message
+    public class Message:BaseEntity
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public long Id { get; set; }
         [Required]
         public string Text { get; set; }
         [Required]
         public int MessageCount { get; set; }
-        [Required]
-        public Guid SubcriberGuid { get; set; }
     }
 }

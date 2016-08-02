@@ -63,11 +63,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseEntity.cs" />
     <Compile Include="Contact.cs" />
     <Compile Include="ContactViewModel.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="MessageStatus.cs" />
     <Compile Include="MessageViewModel.cs" />
+    <Compile Include="SubscriberMessageBalanceHistory.cs" />
+    <Compile Include="SubscriberMessageBalance.cs" />
+    <Compile Include="SubscriberMessageBalanceType.cs" />
     <Compile Include="SubscriberContactMessage.cs" />
     <Compile Include="SubscriberStandardSectionViewModel.cs" />
     <Compile Include="Standard.cs" />

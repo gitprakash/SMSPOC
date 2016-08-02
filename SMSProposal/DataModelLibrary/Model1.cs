@@ -29,6 +29,8 @@ namespace DataModelLibrary
       //  public virtual DbSet<MessageStatus> MessageStatus { get; set; }
         public virtual DbSet<Message> Message { get; set; }
         public virtual DbSet<SubscriberContactMessage> SubscriberContactMessage { get; set; }
+        public virtual DbSet<SubscriberMessageBalance> SubscriberMessageBalance { get; set; }
+        public virtual DbSet<SubscriberMessageBalanceHistory> SubscriberMessageBalanceHistory { get; set; }
 
 
          

@@ -9,10 +9,8 @@ using System.Threading.Tasks;
 namespace DataModelLibrary
 {
     [Table("SubscriberTemplate")]
-    public class SubscriberTemplate
+    public class SubscriberTemplate:BaseEntity
     {
-        [Key]
-        public int Id { get; set; }
         [Required]
         public virtual int SubscriberId { get; set; }
         public virtual Subscriber Subscriber { get; set; }

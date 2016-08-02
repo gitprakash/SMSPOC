@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using DataModelLibrary;
 using DataServiceLibrary;
+using SMSPOCWeb.Models;
 
 namespace SMSPOCWeb.Controllers
 {
@@ -26,17 +27,29 @@ namespace SMSPOCWeb.Controllers
             try
             {
                 bool result = false;
-                if (ModelState.IsValid)
-                {
-                    result= await  m_messageService.Send(messageViewModel, message, messagecount);
-                }
-                else
-                {
-                    string messages = GetModelStateError();
-                    throw new Exception(messages);
-                }
-                var jsonresult=new {Status=result == true ? "success" : "successwithnoinsertion", JsonRequestBehavior.AllowGet};
-                return Json(jsonresult, JsonRequestBehavior.AllowGet);
+                 var identity = (CustomIdentity)User.Identity;
+                 if (messageViewModel != null && messagecount >= 1 && !string.IsNullOrEmpty(message))
+                 {
+                     if (ModelState.IsValid)
+                     {
+                         if (!await m_messageService.CheckMessageBalance(messageViewModel.Count(), messagecount, identity.User.Id))
+                         {
+                             throw new Exception("Insufficient Message Balance, Contact Administator to update Your Package");
+                         }
+                         result = await m_messageService.LogAllMessage(messageViewModel, message, messagecount);
+                     }
+                     else
+                     {
+                         string messages = GetModelStateError();
+                         throw new Exception(messages);
+                     }
+                     var jsonresult = new { Status = result == true ? "success" : "successwithnoinsertion", JsonRequestBehavior.AllowGet };
+                     return Json(jsonresult, JsonRequestBehavior.AllowGet);
+                 }
+                 else
+                 {
+                     throw new Exception("Invalid inputs, check your selected contact, message details");
+                 }
 
             }
             catch (Exception ex)
