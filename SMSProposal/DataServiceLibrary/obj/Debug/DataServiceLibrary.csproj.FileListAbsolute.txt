@@ -1,14 +1,3 @@
-E:\Github\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\DataServiceLibrary.dll
-E:\Github\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\DataServiceLibrary.pdb
-E:\Github\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\DataModelLibrary.dll
-E:\Github\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\Repositorylibrary.dll
-E:\Github\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\EntityFramework.dll
-E:\Github\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\DataModelLibrary.pdb
-E:\Github\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\Repositorylibrary.pdb
-E:\Github\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\EntityFramework.xml
-E:\Github\SMSPOC\SMSProposal\DataServiceLibrary\obj\Debug\DataServiceLibrary.csprojResolveAssemblyReference.cache
-E:\Github\SMSPOC\SMSProposal\DataServiceLibrary\obj\Debug\DataServiceLibrary.dll
-E:\Github\SMSPOC\SMSProposal\DataServiceLibrary\obj\Debug\DataServiceLibrary.pdb
 C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\DataServiceLibrary.dll
 C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\DataServiceLibrary.pdb
 C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\DataModelLibrary.dll
@@ -21,3 +10,15 @@ C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\DataServiceLibrary\o
 C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\DataServiceLibrary\obj\Debug\DataServiceLibrary.dll
 C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\DataServiceLibrary\obj\Debug\DataServiceLibrary.pdb
 C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\DataServiceLibrary.dll.config
+E:\Github\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\DataServiceLibrary.dll.config
+E:\Github\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\DataServiceLibrary.dll
+E:\Github\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\DataServiceLibrary.pdb
+E:\Github\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\DataModelLibrary.dll
+E:\Github\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\Repositorylibrary.dll
+E:\Github\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\EntityFramework.dll
+E:\Github\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\DataModelLibrary.pdb
+E:\Github\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\Repositorylibrary.pdb
+E:\Github\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\EntityFramework.xml
+E:\Github\SMSPOC\SMSProposal\DataServiceLibrary\obj\Debug\DataServiceLibrary.csprojResolveAssemblyReference.cache
+E:\Github\SMSPOC\SMSProposal\DataServiceLibrary\obj\Debug\DataServiceLibrary.dll
+E:\Github\SMSPOC\SMSProposal\DataServiceLibrary\obj\Debug\DataServiceLibrary.pdb

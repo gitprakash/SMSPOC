@@ -164,7 +164,6 @@
     <Compile Include="backup\BoSaleService.cs" />
     <Compile Include="backup\ExpressionBuilder.cs" />
     <Compile Include="backup\GenericRepository.cs" />
-    <Compile Include="backup\JgGridParam.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ContactController.cs" />
     <Compile Include="Controllers\ManageUserRolesController.cs" />

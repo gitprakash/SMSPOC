@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DataModelLibrary;
 using Repositorylibrary;
+using System.Linq.Expressions;
 
 namespace DataServiceLibrary
 {
@@ -13,6 +14,7 @@ namespace DataServiceLibrary
         private IGenericRepository<SubscriberContactMessage> subcribermessageRepository;
         private IGenericRepository<SubscriberMessageBalance> msubscriberMessageBalance;
         private IGenericRepository<SubscriberMessageBalanceHistory> msubscriberMessageBalanceHistory;
+
         public MessageService(IGenericRepository<SubscriberContactMessage> messageRepository,
             IGenericRepository<SubscriberMessageBalance> subscriberMessageBalance,
              IGenericRepository<SubscriberMessageBalanceHistory> subscriberMessageBalanceHistory
@@ -23,7 +25,7 @@ namespace DataServiceLibrary
             msubscriberMessageBalanceHistory = subscriberMessageBalanceHistory;
         }
 
-        public async Task<bool> LogAllMessage(List<MessageViewModel> messageViewModel, string message, int messagecount)
+        public async Task<bool> LogAllMessage(List<MessageViewModel> messageViewModel, string message, int messagecount, int SubscriberId)
         {
             //after send calling sms server api, and collected result
             bool result = false;
@@ -46,13 +48,17 @@ namespace DataServiceLibrary
                                    }).AsParallel().ToList();
 
             int dbresult = await subcribermessageRepository.AddRangeAsync(lstsubsribedmsg);
+            if (messageViewModel.Any(mvm => mvm.SentStatus == true))
+            {
+                await UpdateMessageBalance(messageViewModel, messagecount, SubscriberId);
+            }
             result = dbresult > 0;
             return result;
         }
 
         public async Task<int> UpdateMessageBalance(List<MessageViewModel> messageViewModel, int messagecount, int subscriberId)
         {
-            int sentmsgcount = messageViewModel.Where(mvm => mvm.SentStatus == true).Count();
+            int sentmsgcount = messageViewModel.Count(mvm => mvm.SentStatus == true);
             sentmsgcount = sentmsgcount * messagecount;
             var userMsgBalance = await msubscriberMessageBalance.FindAsync(smb => smb.SubcriberId == subscriberId);
             userMsgBalance.RemainingCount = -sentmsgcount;
@@ -66,6 +72,29 @@ namespace DataServiceLibrary
             var userMsgBalance = await msubscriberMessageBalance.FindAsync(smb => smb.SubcriberId == subscriberId);
             return userMsgBalance.RemainingCount > sentmsgcount;
         }
-
+        public async Task<ICollection<SubcriberContactMessageViewModel>> MessageHistory(JgGridParam jgGridParam, int subcriberId)
+        {
+            int pageIndex = Convert.ToInt32(jgGridParam.page) - 1;
+            int pageSize = jgGridParam.rows;
+            string sort =jgGridParam.sord?? "asc";
+            string ordercolumn = jgGridParam.sidx;
+            bool desc = sort.ToUpper() == "DESC";
+            Expression<Func<SubscriberContactMessage, SubcriberContactMessageViewModel>> project =
+                scm => new SubcriberContactMessageViewModel
+                {
+                    SubscriberContactId = scm.SubscriberStandardContactsId,
+                    Message = scm.Message.Text,
+                    Name = scm.SubscriberContact.Contact.Name,
+                    SubscriberContactGuid=scm.Guid,
+                    Section = scm.SubscriberContact.SubscriberStandardSections.Sections.Name,
+                    SentDateTime = scm.CreatedAt,
+                    MobileNo = scm.SubscriberContact.Contact.Mobile,
+                    Status =((MessageStatusEnum)scm.MessageStatus).ToString(),
+                    Class = scm.SubscriberContact.SubscriberStandards.Standard.Name,
+                    RollNo = scm.SubscriberContact.Contact.RollNo
+                };
+            return await subcribermessageRepository.GetPagedResult(pageSize * pageIndex, pageSize, ordercolumn, desc, project,
+                  sc => sc.SubscriberContact.SubscriberStandards.SubscriberId == subcriberId);
+        }
     }
 }

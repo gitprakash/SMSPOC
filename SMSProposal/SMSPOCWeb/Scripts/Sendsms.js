@@ -61,21 +61,25 @@ $(function () {
 
 
             else {
-                var count = GetSMSMessageCount($('#txtsms').val().trim())
+                var count = GetSMSMessageCount($('#txtsms').val().trim());
+                showDisableLayer();
+                //$('#submitMyForm').adda
                 $.ajax({
                     type: 'Post',
                     url: '/Notify/SendMessage',
                     data: { messageViewModel: selectedcontactarray, Message: $('#txtsms').val().trim(), messagecount: count.messages },
                     success: function (data) {
+                        hideDisableLayer();
                         if (data.Status === 'success' || data.Status === 'successwithnoinsertion') {
                             showAlert("Data Processed, please check Sent history for status", "success", 10000);
                         }
                         if (data.Status === 'error') {
-                            showAlert("'Data Processedw with error, please check Sent history for status", "info", 10000);
+                            showAlert("Error Occured "+data.error, "danger", 10000);
                         }
                     },
                     error: function (data, error) {
-                        alert('problem in retrieving message template details' + error);
+                        hideDisableLayer();
+                        alert('problem in sending message template details' + data);
                     }
                 });
             }
@@ -237,3 +241,12 @@ function showAlert(message, type, closeDelay) {
     if (closeDelay)
         window.setTimeout(function () { alert.alert("close") }, closeDelay);
 }
+var showDisableLayer = function () {
+    $('<div id="loading" style="position:fixed; z-index: 2147483647; top:0; left:0; background-color: white; opacity:0.0;filter:alpha(opacity=0);"></div>').appendTo(document.body);
+    $("#loading").height($(document).height());
+    $("#loading").width($(document).width());
+};
+
+var hideDisableLayer = function () {
+    $("#loading").remove();
+};

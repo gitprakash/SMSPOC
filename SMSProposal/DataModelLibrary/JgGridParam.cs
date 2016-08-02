@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DomainEntities
+namespace DataModelLibrary
 {
     public class JgGridParam
     {

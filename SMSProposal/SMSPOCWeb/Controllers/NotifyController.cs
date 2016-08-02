@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using DataModelLibrary;
 using DataServiceLibrary;
+using Newtonsoft.Json.Schema;
 using SMSPOCWeb.Models;
 
 namespace SMSPOCWeb.Controllers
@@ -36,7 +37,7 @@ namespace SMSPOCWeb.Controllers
                          {
                              throw new Exception("Insufficient Message Balance, Contact Administator to update Your Package");
                          }
-                         result = await m_messageService.LogAllMessage(messageViewModel, message, messagecount);
+                         result = await m_messageService.LogAllMessage(messageViewModel, message, messagecount,identity.User.Id);
                      }
                      else
                      {
@@ -62,6 +63,15 @@ namespace SMSPOCWeb.Controllers
         {
             return View();
         }
+
+        //public Task<JsonResult> GetMessageHistory(JgGridParam jgGridParam)
+        //{
+             
+
+        //    throw NotImplementedException();
+
+        //}
+
         private string GetModelStateError()
         {
             string messages = string.Join("; ", ModelState.Values
