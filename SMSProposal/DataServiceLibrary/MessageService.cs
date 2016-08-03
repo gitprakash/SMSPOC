@@ -82,7 +82,7 @@ namespace DataServiceLibrary
             Expression<Func<SubscriberContactMessage, SubcriberContactMessageViewModel>> project =
                 scm => new SubcriberContactMessageViewModel
                 {
-                    SubscriberContactId = scm.SubscriberStandardContactsId,
+                    Id = scm.SubscriberStandardContactsId,
                     Message = scm.Message.Text,
                     Name = scm.SubscriberContact.Contact.Name,
                     SubscriberContactGuid=scm.Guid,
@@ -95,6 +95,12 @@ namespace DataServiceLibrary
                 };
             return await subcribermessageRepository.GetPagedResult(pageSize * pageIndex, pageSize, ordercolumn, desc, project,
                   sc => sc.SubscriberContact.SubscriberStandards.SubscriberId == subcriberId);
+        }
+
+        public async Task<int> TotalMessageHistory(int subscriberId)
+        {
+            return await subcribermessageRepository.CountAsync(
+                scm => scm.SubscriberContact.SubscriberStandards.SubscriberId == subscriberId);
         }
     }
 }

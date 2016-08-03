@@ -38,6 +38,9 @@ namespace SMSPOCWeb
             bundles.Add(new ScriptBundle("~/bundles/Template").Include(
                 "~/Scripts/Template.js")
                 );
+            bundles.Add(new ScriptBundle("~/bundles/MessageHistory").Include(
+            "~/Scripts/MessageHistory.js")
+            );
 
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're

@@ -11,6 +11,7 @@ using SMSPOCWeb.Models;
 
 namespace SMSPOCWeb.Controllers
 {
+    [Authorize(Roles = "Subscriber")]
     public class NotifyController : Controller
     {
         // GET: Notify
@@ -64,13 +65,30 @@ namespace SMSPOCWeb.Controllers
             return View();
         }
 
-        //public Task<JsonResult> GetMessageHistory(JgGridParam jgGridParam)
-        //{
-             
+        public ActionResult GetMessageHistoryView()
+        {
+            return View();
+        }
 
-        //    throw NotImplementedException();
-
-        //}
+        public async Task<JsonResult> GetMessageHistory(JgGridParam jgGridParam)
+        {
+            var identity = (CustomIdentity)User.Identity;
+            if (jgGridParam != null)
+            {
+                var messages = await m_messageService.MessageHistory(jgGridParam, identity.User.Id);
+                int totalRecords = await m_messageService.TotalMessageHistory(identity.User.Id);
+                var totalPages = (int) Math.Ceiling((float) totalRecords/(float) jgGridParam.rows);
+                var jsonData = new
+                {
+                    total = totalPages,
+                    jgGridParam.page,
+                    records = totalRecords,
+                    rows = messages
+                };
+                return Json(jsonData, JsonRequestBehavior.AllowGet);
+            }
+            throw  new Exception("invalid inputs ");
+        }
 
         private string GetModelStateError()
         {

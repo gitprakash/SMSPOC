@@ -57,8 +57,9 @@
                                     <li>@Html.ActionLink("Manage Standard", "Index", "Standard")</li>
                                     <li>@Html.ActionLink("Manage Sections", "Index", "SubscriberStandardSections")</li>
                                     <li>@Html.ActionLink("Manage Template", "TemplateView", "Template")</li>
-
                                     <li>@Html.ActionLink("Send SMS", "Sendsms", "Notify")</li>
+                                    <li>@Html.ActionLink("Sent History", "GetMessageHistoryView", "Notify")</li>
+
                                 </ul>
                             </div>
 
@@ -84,5 +85,6 @@
         </footer>
 
         @RenderSection("scripts", required: false)
+        </div>
 </body>
 </html>
