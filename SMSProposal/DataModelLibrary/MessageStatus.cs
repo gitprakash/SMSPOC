@@ -21,6 +21,7 @@ namespace DataModelLibrary
     public enum MessageStatusEnum
     {
         Sent = 1,
+       [Display(Name = "Not Sent")]
         NotSent = 2,
         NotDelivered = 3,
     }

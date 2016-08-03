@@ -2,7 +2,22 @@
 @{
     ViewBag.Title = "GetMessageHistoryView";
 }
-
+<style type="text/css">
+    .ui-state-default .ui-icon-customtrash {
+        background: url("/Content/Image/Resend.PNG");
+        background-position: 0 0;
+        background-repeat:no-repeat;
+        width: 67px;
+        height: 33px;
+    }
+    .ui-state-default .ui-icon-customedit {
+        background: url("/Content/Image/Edit.PNG");
+        background-position: 0 0;
+        background-repeat: no-repeat;
+        width: 45px;
+        height: 33px;
+    }
+</style>
 <div id="grid" class="jqGrid">
     <table id="list"></table>
     <div id="pager">

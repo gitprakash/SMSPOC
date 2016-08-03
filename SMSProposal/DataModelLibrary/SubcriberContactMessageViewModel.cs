@@ -8,8 +8,8 @@ namespace DataModelLibrary
 {
     public class SubcriberContactMessageViewModel
     {
-        public long Id { get; set; }
-        public Guid SubscriberContactGuid { get; set; }
+        public Guid Id { get; set; }
+      //  public Guid SubscriberContactGuid { get; set; }
         public string RollNo { get; set; }
         public string Name { get; set; }
         public string Class { get; set; }

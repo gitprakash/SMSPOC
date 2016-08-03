@@ -90,6 +90,13 @@ namespace SMSPOCWeb.Controllers
             throw  new Exception("invalid inputs ");
         }
 
+        public async Task<JsonResult> Resend(Guid Id)
+        {
+            var identity = (CustomIdentity)User.Identity;
+            int count = await m_messageService.ResendMessage(identity.User.Id,Id);
+            var resultstatus = new { Status = "success", Id = count };
+            return Json(resultstatus, JsonRequestBehavior.AllowGet);
+        }
         private string GetModelStateError()
         {
             string messages = string.Join("; ", ModelState.Values

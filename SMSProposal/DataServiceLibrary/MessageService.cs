@@ -60,6 +60,11 @@ namespace DataServiceLibrary
         {
             int sentmsgcount = messageViewModel.Count(mvm => mvm.SentStatus == true);
             sentmsgcount = sentmsgcount * messagecount;
+            return await UpdateSubscirberMessageBalance(subscriberId, sentmsgcount);
+        }
+
+        private async Task<int> UpdateSubscirberMessageBalance(int subscriberId, int sentmsgcount)
+        {
             var userMsgBalance = await msubscriberMessageBalance.FindAsync(smb => smb.SubcriberId == subscriberId);
             userMsgBalance.RemainingCount = -sentmsgcount;
             var msgbalhis = await msubscriberMessageBalanceHistory.FindAsync(smb => smb.SubcriberId == subscriberId);
@@ -82,10 +87,9 @@ namespace DataServiceLibrary
             Expression<Func<SubscriberContactMessage, SubcriberContactMessageViewModel>> project =
                 scm => new SubcriberContactMessageViewModel
                 {
-                    Id = scm.SubscriberStandardContactsId,
+                    Id = scm.Guid,
                     Message = scm.Message.Text,
                     Name = scm.SubscriberContact.Contact.Name,
-                    SubscriberContactGuid=scm.Guid,
                     Section = scm.SubscriberContact.SubscriberStandardSections.Sections.Name,
                     SentDateTime = scm.CreatedAt,
                     MobileNo = scm.SubscriberContact.Contact.Mobile,
@@ -101,6 +105,17 @@ namespace DataServiceLibrary
         {
             return await subcribermessageRepository.CountAsync(
                 scm => scm.SubscriberContact.SubscriberStandards.SubscriberId == subscriberId);
+        }
+        public async Task<int> ResendMessage( int subscriberId,Guid messageId)
+        {
+            var scm = await subcribermessageRepository.FindAsync(sm => sm.Guid == messageId);
+            //call service to update
+            scm.MessageStatus = MessageStatusEnum.Sent;
+            if (scm.MessageStatus==MessageStatusEnum.Sent)
+            {
+               await UpdateSubscirberMessageBalance(subscriberId, 1);
+            }
+           return await subcribermessageRepository.SaveAsync();
         }
     }
 }
