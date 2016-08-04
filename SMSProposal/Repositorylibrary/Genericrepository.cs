@@ -47,7 +47,7 @@ namespace Repositorylibrary
             {
                 return await qry.OrderByAscDsc(ordercolumn, desc).Skip(skip).Take(take).AsNoTracking().Select(project).ToListAsync();
             }
-           return  await qry.Where(match).AsNoTracking().Select(project).OrderByAscDsc(ordercolumn, desc).Skip(skip).Take(take).ToListAsync();
+            return await qry.Where(match).AsNoTracking().Select(project).OrderByAscDsc(ordercolumn, desc).Skip(skip).Take(take).ToListAsync();
         }
 
         public TObject Get(int id)
@@ -97,16 +97,19 @@ namespace Repositorylibrary
 
         public async Task<TObject> AddAsync(TObject t)
         {
-           // _context.Database.Log = (data => Debug.WriteLine(data));
+            // _context.Database.Log = (data => Debug.WriteLine(data));
             _context.Set<TObject>().Add(t);
             await _context.SaveChangesAsync();
             return t;
         }
         public async Task<int> AddRangeAsync(List<TObject> t)
         {
+            _context.Configuration.AutoDetectChangesEnabled = false;
             _context.Database.Log = (data => Debug.WriteLine(data));
             _context.Set<TObject>().AddRange(t);
-           return await _context.SaveChangesAsync();
+            int result = await _context.SaveChangesAsync();
+            _context.Configuration.AutoDetectChangesEnabled = true;
+            return result;
         }
 
         public TObject Update(TObject updated, int key)

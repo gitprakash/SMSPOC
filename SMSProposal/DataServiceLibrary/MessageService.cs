@@ -27,26 +27,29 @@ namespace DataServiceLibrary
         public async Task SendMessage(List<MessageViewModel> messageViewModel, string message, int messagecount, int SubscriberId)
         {   
             ExternalMessageServiceAPI smsserviceAPI = new ExternalMessageServiceAPI();
-            string apiformaturl = ConfigUtility.GetAPIConfigvalue();
-            apiformaturl = apiformaturl + "&dest_mobileno={0}&message={1}&response=Y";
+            var apiformaturl = Apiformaturl();
             foreach (var smvm in messageViewModel)
             {
                 try
                 {
                     apiformaturl = string.Format(apiformaturl, smvm.Mobile, message);
-                    Tuple<bool, DateTime> tuplemsgstatus = await smsserviceAPI.SendMessage(apiformaturl);
-                    if (tuplemsgstatus.Item1)
-                    {
-                        smvm.SentStatus = true;
-                        smvm.SentTime = tuplemsgstatus.Item2;
-                    }
+                    string tuplemsgstatus = await smsserviceAPI.SendMessage(apiformaturl);
+                    smvm.SentStatus = true;
                 }
                 catch (Exception ex)
                 {
                     smvm.SentStatus = false;
                 }
+                smvm.SentTime = DateTime.Now;
             }
             await LogAllMessage(messageViewModel, message, messagecount, SubscriberId);
+        }
+
+        private static string Apiformaturl()
+        {
+            string apiformaturl = ConfigUtility.GetAPIConfigvalue();
+            apiformaturl = apiformaturl + "&dest_mobileno={0}&message={1}&response=Y";
+            return apiformaturl;
         }
 
         public async Task<bool> LogAllMessage(List<MessageViewModel> messageViewModel, string message, int messagecount, int SubscriberId)
@@ -139,10 +142,21 @@ namespace DataServiceLibrary
         }
         public async Task<int> ResendMessage(int subscriberId, Guid messageId)
         {
-            var scm = await subcribermessageRepository.FindAsync(sm => sm.Guid == messageId);
-            //call service to update
-            scm.MessageStatus = MessageStatusEnum.Sent;
-            if (scm.MessageStatus == MessageStatusEnum.Sent)
+            var smvm = await subcribermessageRepository.FindAsync(sm => sm.Guid == messageId);
+            var apiformaturl = Apiformaturl();
+            ExternalMessageServiceAPI smsserviceAPI = new ExternalMessageServiceAPI();
+            try
+            {
+                apiformaturl = string.Format(apiformaturl, smvm.SubscriberContact.Contact.Mobile, smvm.Message.Text);
+                string tuplemsgstatus = await smsserviceAPI.SendMessage(apiformaturl);
+                smvm.MessageStatus = MessageStatusEnum.Sent;
+            }
+            catch (Exception ex)
+            {
+                smvm.MessageStatus = MessageStatusEnum.NotSent;
+            }
+            smvm.ModifiedAt = DateTime.Now;
+            if (smvm.MessageStatus == MessageStatusEnum.Sent)
             {
                 await UpdateSubscirberMessageBalance(subscriberId, 1);
             }

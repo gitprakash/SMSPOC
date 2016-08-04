@@ -24,3 +24,4 @@ C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\DataServiceLibrary\o
 C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\DataServiceLibrary\obj\Debug\DataServiceLibrary.pdb
 C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\System.Net.Http.Formatting.dll
 C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\System.Net.Http.Formatting.xml
+E:\Github\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\Newtonsoft.Json.dll

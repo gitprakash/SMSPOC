@@ -68,7 +68,7 @@ $(document).ready(function myfunction() {
 
 
         ],
-        rowNum: 10,
+        rowNum: 20,
         rowList: [10, 20, 30],
         jsonReader: { id: "0" },
         viewrecords: true,
