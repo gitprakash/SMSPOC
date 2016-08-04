@@ -32,7 +32,13 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Net.Http.WebRequest" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -41,7 +47,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountService.cs" />
+    <Compile Include="ConfigUtility.cs" />
     <Compile Include="ContactService.cs" />
+    <Compile Include="ExternalMessageServiceAPI.cs" />
     <Compile Include="IAccountService.cs" />
     <Compile Include="IContactService.cs" />
     <Compile Include="IMessageService.cs" />
@@ -52,6 +60,7 @@
     <Compile Include="MessageService.cs" />
     <Compile Include="RoleService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="servicereftextfile.txt" />
     <Compile Include="SubscriberStandardService.cs" />
     <Compile Include="TemplateService.cs" />
     <Compile Include="UserRoleService.cs" />

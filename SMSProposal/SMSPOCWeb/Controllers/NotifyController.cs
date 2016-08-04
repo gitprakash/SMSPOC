@@ -28,7 +28,6 @@ namespace SMSPOCWeb.Controllers
         {
             try
             {
-                bool result = false;
                  var identity = (CustomIdentity)User.Identity;
                  if (messageViewModel != null && messagecount >= 1 && !string.IsNullOrEmpty(message))
                  {
@@ -38,14 +37,14 @@ namespace SMSPOCWeb.Controllers
                          {
                              throw new Exception("Insufficient Message Balance, Contact Administator to update Your Package");
                          }
-                         result = await m_messageService.LogAllMessage(messageViewModel, message, messagecount,identity.User.Id);
+                         await m_messageService.SendMessage(messageViewModel, message, messagecount,identity.User.Id);
                      }
                      else
                      {
                          string messages = GetModelStateError();
                          throw new Exception(messages);
                      }
-                     var jsonresult = new { Status = result == true ? "success" : "successwithnoinsertion", JsonRequestBehavior.AllowGet };
+                     var jsonresult = new { Status = "success", JsonRequestBehavior.AllowGet };
                      return Json(jsonresult, JsonRequestBehavior.AllowGet);
                  }
                  else

@@ -22,3 +22,5 @@ C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\DataServiceLibrary\b
 C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\EntityFramework.xml
 C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\DataServiceLibrary\obj\Debug\DataServiceLibrary.dll
 C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\DataServiceLibrary\obj\Debug\DataServiceLibrary.pdb
+C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\System.Net.Http.Formatting.dll
+C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\System.Net.Http.Formatting.xml

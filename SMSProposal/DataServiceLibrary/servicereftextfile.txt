@@ -1,0 +1,9 @@
+﻿Url: http://sms2.kapsystem.com/
+User Name: kapint
+Password: kap@user!123
+API URL: http://123.63.33.43/blank/sms/user/urlsmstemp.php?username=kapint&pass=kap@user!123&senderid=257147&dest_mobileno=XXXXX&message=XXXXXX&response=Y
+Transactional Demo Account Login Credentials:
+Url: http://sms2.kapsystem.com/
+User Name: kapbulk
+Password: kap@user!23
+Sample API: http://123.63.33.43/blank/sms/user/urlsmstemp.php?username=XXXXXX&pass=XXXXX&senderid=XXXXX&dest_mobileno=XXXXX&message=XXXXXX&response=Y

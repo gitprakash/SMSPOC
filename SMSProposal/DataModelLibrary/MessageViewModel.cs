@@ -24,5 +24,6 @@ namespace DataModelLibrary
 
         public bool SentStatus { get; set; }
 
+        public DateTime? SentTime { get; set; }
     }
 }

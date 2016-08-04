@@ -11,7 +11,7 @@ namespace DataServiceLibrary
     {
         Task<bool> CheckMessageBalance(int mvmcnt, int messagecount, int subscriberId);
         Task<int> ResendMessage(int subscriberId,Guid messageId);
-        Task<bool> LogAllMessage(List<MessageViewModel> messageViewModel, string message, int messagecount, int subscriberId);
+        Task SendMessage(List<MessageViewModel> messageViewModel, string message, int messagecount, int SubscriberId);
         Task<ICollection<SubcriberContactMessageViewModel>> MessageHistory(JgGridParam jgGridParam, int subcriberId);
         Task<int> TotalMessageHistory(int subscriberId);
     }
