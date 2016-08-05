@@ -56,6 +56,8 @@ namespace DataModelLibrary
         public int GenderTypeId { get; set; }
 
         public virtual GenderType GenderType { get; set; }
+        [Required]
+        public bool IsActivated { get; set; }
 
         public virtual ICollection<SubscriberRoles> Roles { get; set; }
 

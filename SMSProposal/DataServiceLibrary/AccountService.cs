@@ -54,13 +54,20 @@ namespace DataServiceLibrary
         {
             return await msubscriberrepository.AnyAsync(s => s.Mobile == mobileno);
         }
-        public async Task<Tuple<bool, bool>> CheckLogin(string username, string password)
+        public async Task<Tuple<bool, bool, bool, Subscriber>> CheckLogin(string username, string password)
         {
-            Tuple<bool, bool> logintuple = new Tuple<bool, bool>(
-                    await msubscriberrepository.AnyAsync(s => s.Username == username),
-                    await msubscriberrepository.AnyAsync(s => s.Username == username && s.Password == password)
-                );
-            return logintuple;
+            bool isuserexits=false, ispasswordmatch=false, isactivated=false;
+            var user =await msubscriberrepository.FindAsync(s => s.Username == username);
+            if (user != null)
+            {
+                isuserexits = true;
+                if (user.Password.Trim() == password.Trim())
+                {
+                    ispasswordmatch = true;
+                }
+                isactivated = user.IsActivated;
+            }
+            return Tuple.Create(isuserexits, ispasswordmatch, isactivated,user);
         }
         public Subscriber Finduser(string username)
         {

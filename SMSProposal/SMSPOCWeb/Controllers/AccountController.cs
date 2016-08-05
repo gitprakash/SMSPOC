@@ -24,8 +24,8 @@ namespace SMSPOCWeb.Controllers
             return View();
         }
 
-      
-       
+
+
 
         public async Task<ActionResult> Register()
         {
@@ -46,14 +46,15 @@ namespace SMSPOCWeb.Controllers
                 GenderTypeId = subscriberviewmodel.GenderTypeId,
                 LastName = subscriberviewmodel.LastName,
                 Password = subscriberviewmodel.Password,
-                Username = subscriberviewmodel.Username
+                Username = subscriberviewmodel.Username,
+                IsActivated = false
             };
             return subscriber;
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(SubscriberViewModel subscriberviewmodel)
+        public async Task<ActionResult> Register([Bind(Exclude = "IsActivated")]SubscriberViewModel subscriberviewmodel)
         {
             if (ModelState.IsValid)
             {
@@ -61,6 +62,7 @@ namespace SMSPOCWeb.Controllers
                 var useradd = await maccountService.Add(subscriber);
                 return RedirectToAction("Index", "Home");
             }
+            ModelState.Remove("Password");
             return View(subscriberviewmodel);
         }
         public ActionResult Login()
@@ -74,47 +76,52 @@ namespace SMSPOCWeb.Controllers
             try
             {
 
-            Tuple<bool,bool> tupleuser = await maccountService.CheckLogin(l.Username, l.Password);
-
-            if (tupleuser.Item2)
-            {
-                Subscriber suser = await maccountService.FinduserAsync(l.Username);
-                SubscriberViewModel dbuser = new SubscriberViewModel { Id = suser.Id, Username = suser.Username, Email = suser.Email };
-                if (suser != null)
+                Tuple<bool, bool, bool, Subscriber> tupleuser = await maccountService.CheckLogin(l.Username, l.Password);
+                // if  account not exists
+                if (!tupleuser.Item1)
                 {
-                    JavaScriptSerializer js = new JavaScriptSerializer();
-                    string data = js.Serialize(dbuser);
-                    FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(1, suser.Username, DateTime.Now, DateTime.Now.AddMinutes(20), l.RememberMe, data);
-                    string encToken = FormsAuthentication.Encrypt(ticket);
-                    HttpCookie authoCookies = new HttpCookie(FormsAuthentication.FormsCookieName, encToken);
-                    Response.Cookies.Add(authoCookies);
+                    ModelState.AddModelError("", "Invalid User,please register");
                 }
-                if (Url.IsLocalUrl(ReturnUrl))
+                 //if password not matched
+                else if (!tupleuser.Item2)
                 {
-                    return Redirect(ReturnUrl);
+                    ModelState.AddModelError("", "Invalid Password");
+                }
+                //if account not activated
+                else if (!tupleuser.Item3)
+                {
+                    ModelState.AddModelError("", "Credentails matched but Account not activated");
                 }
                 else
                 {
-                    return RedirectToAction("Start", "Home");
+                    Subscriber suser = tupleuser.Item4;
+                    SubscriberViewModel dbuser = new SubscriberViewModel { Id = suser.Id, Username = suser.Username, Email = suser.Email };
+                    if (suser != null)
+                    {
+                        JavaScriptSerializer js = new JavaScriptSerializer();
+                        string data = js.Serialize(dbuser);
+                        FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(1, suser.Username, DateTime.Now, DateTime.Now.AddMinutes(20), l.RememberMe, data);
+                        string encToken = FormsAuthentication.Encrypt(ticket);
+                        HttpCookie authoCookies = new HttpCookie(FormsAuthentication.FormsCookieName, encToken);
+                        Response.Cookies.Add(authoCookies);
+                    }
+                    if (Url.IsLocalUrl(ReturnUrl))
+                    {
+                        return Redirect(ReturnUrl);
+                    }
+                    else
+                    {
+                        return RedirectToAction("Start", "Home");
+                    }
                 }
-            }
-            else if (tupleuser.Item1)
-            {
-                
-                ModelState.AddModelError("", "Invalid Password");
-            }
-            else
-            {
-                ModelState.AddModelError("", "Invalid User,please register");
-            }
-            ModelState.Remove("Password");
-            return View(l);
+                ModelState.Remove("Password");
+                return View(l);
 
             }
             catch (Exception ex)
             {
-
-                throw ex;
+                ModelState.AddModelError("", ex.Message);
+                return View(l);
             }
         }
         [Authorize]
@@ -166,10 +173,10 @@ namespace SMSPOCWeb.Controllers
                 return Json(true, JsonRequestBehavior.AllowGet);
             }
         }
-        [Authorize(Roles="Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<JsonResult> GetAllUsers()
         {
-            var users=  await maccountService.GetAllUsers();
+            var users = await maccountService.GetAllUsers();
             return Json(users, JsonRequestBehavior.AllowGet);
         }
     }

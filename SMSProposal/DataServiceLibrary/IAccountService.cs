@@ -15,7 +15,7 @@ namespace DataServiceLibrary
           Task<bool> IsUserNameExists(string username);
           Task<bool> IsUserEmailExists(string email);
           Task<bool> IsUniqueMobile(long mobileno);
-          Task<Tuple<bool, bool>> CheckLogin(string username, string password);
+          Task<Tuple<bool, bool, bool, Subscriber>> CheckLogin(string username, string password);
           Subscriber Finduser(string username);
           Task<Subscriber> FinduserAsync(string username);
           Task<IEnumerable<Tuple<int, string, string>>> GetUserRole();
