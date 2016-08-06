@@ -64,6 +64,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseEntity.cs" />
+    <Compile Include="SectionViewModel.cs" />
+    <Compile Include="ClassViewModel.cs" />
     <Compile Include="Contact.cs" />
     <Compile Include="ContactViewModel.cs" />
     <Compile Include="JgGridParam.cs" />
@@ -75,6 +77,8 @@
     <Compile Include="SubscriberMessageBalance.cs" />
     <Compile Include="SubscriberMessageBalanceType.cs" />
     <Compile Include="SubscriberContactMessage.cs" />
+    <Compile Include="SubscriberRoleviewModel.cs" />
+    <Compile Include="SubscriberSection.cs" />
     <Compile Include="SubscriberStandardSectionViewModel.cs" />
     <Compile Include="Standard.cs" />
     <Compile Include="DBInitializer.cs" />

@@ -1,29 +1,28 @@
-﻿@model IEnumerable<DataModelLibrary.SubscriberStandards>
+﻿@model IEnumerable<DataModelLibrary.SectionViewModel>
 
 @{
-    ViewBag.Title = "Class List";
+    ViewBag.Title = "Index";
 }
-
 
 <div class="panel panel-primary">
     <div class="panel-heading">
-        <h3 class="panel-title">Class List</h3>
+        <h3 class="panel-title">Section List</h3>
     </div>
     <div class="panel-body">
+
         <p>
             @Html.ActionLink("Create New", "Create")
         </p>
-        <table class="table table-bordered table-hover">
+        <table class="table table-bordered  table-hover">
             <tr>
-                <th class="text-primary">
-                    @Html.DisplayNameFor(model => model.Standard.Name)
+                <th class="text-primary text-center">
+                    @Html.DisplayNameFor(model => model.Name)
                 </th>
-
-                <th class="text-primary">
+                <th class="text-primary text-center">
                     @Html.DisplayNameFor(model => model.Active)
                 </th>
-                <th class="text-primary">
-                    @Html.DisplayName("Action")
+                <th class="text-primary text-center">
+                    Action
                 </th>
             </tr>
 
@@ -31,20 +30,20 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Standard.Name)
+                        @Html.DisplayFor(modelItem => item.Name)
                     </td>
-
                     <td>
                         @Html.DisplayFor(modelItem => item.Active)
                     </td>
                     <td>
                         @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.Id }) |
                         @Html.ActionLink("Delete", "Delete", new { id = item.Id })
                     </td>
                 </tr>
             }
 
         </table>
+
     </div>
 </div>
-

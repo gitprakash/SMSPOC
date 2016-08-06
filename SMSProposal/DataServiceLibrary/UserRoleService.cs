@@ -21,9 +21,34 @@ namespace DataServiceLibrary
        {
            return await msubscriberrolesrepository.AddAsync(sroles);
        }
-       public async Task<bool> CheckExists(string user,string role)
+       public async Task<bool> CheckExists(int userId,int roleId)
        {
-           return await msubscriberrolesrepository.AnyAsync(sr=>sr.Subscriber.Username==user&&sr.role.Name==role);
+           return await msubscriberrolesrepository.AnyAsync(sr=>sr.SubscriberId==userId&&sr.RoleId==roleId);
+       }
+       public async Task<SubscriberRoles> GetUserRole(int subscriberId)
+       {
+           return await msubscriberrolesrepository.GetAsync(subscriberId);
+       }
+
+       public async Task<IEnumerable<SubscriberRoleviewModel>> GetUserRoles(int subscriberId)
+       {
+           return
+               await
+                   msubscriberrolesrepository.FindAllAsync(s => s.SubscriberId == subscriberId,
+                       sr => new SubscriberRoleviewModel
+                       {
+                           Id = sr.Id,
+                           SubscriberId = sr.SubscriberId,
+                           UserName = sr.Subscriber.Username,
+                           RoleId = sr.RoleId,
+                           RoleName = sr.role.Name,
+                           Status = sr.Active ? "Active" : "InActive"
+                       });
+       }
+
+       public async Task<int> SaveAsync()
+       {
+           return await msubscriberrolesrepository.SaveAsync();
        }
     }
 }

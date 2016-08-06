@@ -8,18 +8,15 @@ using System.Threading.Tasks;
 
 namespace DataModelLibrary
 {
-
-    [Table("SubscriberStandards")]
-    public partial class SubscriberStandards:BaseEntity
+    [Table("SubscriberSection")]
+    public partial class SubscriberSection:BaseEntity
     {
         [Required]
         public int SubscriberId { get; set; }
         public virtual Subscriber Subscriber { get; set; }
         [Required]
-        public int StandardId { get; set; }
-        public virtual Standard Standard { get; set; }
+        public int SectionId { get; set; }
+        public virtual Section Sections { get; set; }
         public bool Active { get; set; }
-      //  public virtual ICollection<SubscriberStandardContacts> SubscriberStandardContacts { get; set; }
-       // public virtual ICollection<SubscriberStandardSections> SubscriberStandardSections { get; set; }
     }
 }

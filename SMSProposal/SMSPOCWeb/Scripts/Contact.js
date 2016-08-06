@@ -41,7 +41,7 @@ $(document).ready(function myfunction() {
                   editoptions: {
                       value: eval('(' + standarList + ')'),
                       dataInit: function (elem) {
-                          LoadSectionList($(elem).val())
+                          LoadSectionList($(elem).val());
                       },
                       dataEvents: [
                            { type: 'change', fn: function (e) { changeSectionlist($(e.target).val(), e.target); } }

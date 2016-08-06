@@ -27,9 +27,14 @@ namespace DataServiceLibrary
         {
             return await mrole.DeleteAsync(role);
         }
-        public async Task<Role> FindRole(string name)
+        public async Task<bool> FindRoleAsync(int roleId=0,string name="")
         {
-            return await mrole.FindAsync(r=>r.Name==name);
+             if (roleId > 0)
+                return await mrole.AnyAsync(s => s.Id == roleId);
+            if (!string.IsNullOrEmpty(name))
+                return await mrole.AnyAsync(s => s.Name == name);
+            else
+                return false;
         }
        public async Task<IEnumerable<Role>> GetRoles(int skip, int pagesize,string ordercolumn,bool desc)
         {
@@ -40,11 +45,13 @@ namespace DataServiceLibrary
            return await mrole.CountAsync();
        }
 
-       public async Task<string[]> GetAllRoles()
-       {
-           return await mrole.ToArrayAsync(r=>r.Name);
-       }
-       public async Task<bool> IsRoleExists(string name)
+        public async Task<IEnumerable<Tuple<int, string>>> GetAllRoles()
+        {
+            var users = await mrole.ToArrayAsync(s => new { Name = s.Name, Id = s.Id });
+            return users.Select(u => new Tuple<int, string>(u.Id, u.Name));
+        }
+
+        public async Task<bool> IsRoleExists(string name)
        {
            return await mrole.AnyAsync(r => r.Name.Equals(name));
        }

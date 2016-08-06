@@ -17,8 +17,8 @@ namespace DataModelLibrary
         [Required]
         [StringLength(200)]
         public string Name { get; set; }
-        [Required]
-        public bool Active { get; set; }
-        public virtual ICollection<SubscriberStandards> Subscribers { get; set; }
+       // [Required]
+        //public bool Active { get; set; }
+       // public virtual ICollection<SubscriberStandards> Subscribers { get; set; }
     }
 }

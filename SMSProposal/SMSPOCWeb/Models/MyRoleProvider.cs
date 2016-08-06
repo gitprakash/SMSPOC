@@ -72,8 +72,7 @@ namespace SMSPOCWeb.Models
                 return (string[])HttpRuntime.Cache[cacheKey];
             }
             string[] roles = new string[]{};
-            var user=   mAccountService.Finduser(username);
-           
+            var user = mAccountService.Finduser(username: username);
             if (user != null)
             {
                 roles=user.Roles.Select(r => r.role.Name).ToArray();

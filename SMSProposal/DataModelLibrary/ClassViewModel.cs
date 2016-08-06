@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace DataModelLibrary
 {
-    public class SubscriberStandardViewModel
+    public class ClassViewModel
     {
-        public long  SubscriberStandardId  { get; set; }  
-        public int SubscriberId { get; set; } 
-        public int StandardId { get; set; }
-        public string StandardName { get; set; }
+        [Key]
+        public long Id { get; set; }
+        [Required(AllowEmptyStrings = false)]
+        public string ClassName { get; set; }
         public bool Active { get; set; }
     }
 }

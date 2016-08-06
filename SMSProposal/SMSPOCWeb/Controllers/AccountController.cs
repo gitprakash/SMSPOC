@@ -82,7 +82,7 @@ namespace SMSPOCWeb.Controllers
                 {
                     ModelState.AddModelError("", "Invalid User,please register");
                 }
-                 //if password not matched
+                //if password not matched
                 else if (!tupleuser.Item2)
                 {
                     ModelState.AddModelError("", "Invalid Password");
@@ -90,21 +90,19 @@ namespace SMSPOCWeb.Controllers
                 //if account not activated
                 else if (!tupleuser.Item3)
                 {
-                    ModelState.AddModelError("", "Credentails matched but Account not activated");
+                    ModelState.AddModelError("", "Please Activate Your Account");
                 }
                 else
                 {
                     Subscriber suser = tupleuser.Item4;
                     SubscriberViewModel dbuser = new SubscriberViewModel { Id = suser.Id, Username = suser.Username, Email = suser.Email };
-                    if (suser != null)
-                    {
-                        JavaScriptSerializer js = new JavaScriptSerializer();
-                        string data = js.Serialize(dbuser);
-                        FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(1, suser.Username, DateTime.Now, DateTime.Now.AddMinutes(20), l.RememberMe, data);
-                        string encToken = FormsAuthentication.Encrypt(ticket);
-                        HttpCookie authoCookies = new HttpCookie(FormsAuthentication.FormsCookieName, encToken);
-                        Response.Cookies.Add(authoCookies);
-                    }
+
+                    JavaScriptSerializer js = new JavaScriptSerializer();
+                    string data = js.Serialize(dbuser);
+                    FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(1, suser.Username, DateTime.Now, DateTime.Now.AddMinutes(20), l.RememberMe, data);
+                    string encToken = FormsAuthentication.Encrypt(ticket);
+                    HttpCookie authoCookies = new HttpCookie(FormsAuthentication.FormsCookieName, encToken);
+                    Response.Cookies.Add(authoCookies);
                     if (Url.IsLocalUrl(ReturnUrl))
                     {
                         return Redirect(ReturnUrl);
@@ -173,11 +171,6 @@ namespace SMSPOCWeb.Controllers
                 return Json(true, JsonRequestBehavior.AllowGet);
             }
         }
-        [Authorize(Roles = "Admin")]
-        public async Task<JsonResult> GetAllUsers()
-        {
-            var users = await maccountService.GetAllUsers();
-            return Json(users, JsonRequestBehavior.AllowGet);
-        }
+        
     }
 }

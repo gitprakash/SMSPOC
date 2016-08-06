@@ -34,7 +34,6 @@ namespace SMSPOCWeb.Controllers
             int pageIndex = Convert.ToInt32(page) - 1;
             int pageSize = rows;
             var usersrolelist = await maccountService.GetUserRole();
-            var usersroles = usersrolelist.Select(t => new { Id = t.Item1, User = t.Item2, Role = t.Item3 });
             int totalRecords = await maccountService.TotalUserRoles();
             var totalPages = (int)Math.Ceiling((float)totalRecords / (float)rows);
             var jsonData = new
@@ -42,32 +41,28 @@ namespace SMSPOCWeb.Controllers
                 total = totalPages,
                 page,
                 records = totalRecords,
-                rows = usersroles
+                rows = usersrolelist
             };
             return Json(jsonData, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
-        public async Task<JsonResult> Add(string User,string Role)
+        public async Task<JsonResult> Add(SubscriberRoleviewModel subscriberRoleviewModel)
         {
             try
             {
-                Subscriber subscriber = await maccountService.FinduserAsync(User);
-                Role dbRole = await mroleService.FindRole(Role);
-                if (subscriber==null)
+                await ValidateUserDetails(subscriberRoleviewModel);
+                if (await muserroleService.CheckExists(subscriberRoleviewModel.SubscriberId, subscriberRoleviewModel.RoleId))
                 {
-                    throw new Exception(string.Format("user {0} not exists", User, Role));
+                    throw new Exception(string.Format("User {0} and role {1} already mapped", subscriberRoleviewModel.UserName, subscriberRoleviewModel.RoleName));
                 }
-                if (dbRole == null)
+                SubscriberRoles sroles = new SubscriberRoles
                 {
-                    throw new Exception(string.Format("Role {0} not exists", User, Role));
-                }
-                if (await muserroleService.CheckExists(User, Role))
-                {
-                    throw new Exception(string.Format("User {0} and role {1} already mapped", User, Role));
-                }
-                SubscriberRoles sroles = new SubscriberRoles { RoleId=dbRole.Id,SubscriberId=subscriber.Id, Active=true };
+                    RoleId = subscriberRoleviewModel.RoleId,
+                    SubscriberId = subscriberRoleviewModel.SubscriberId,
+                    Active = subscriberRoleviewModel.Status == "Active" ? true : false
+                };
                 await muserroleService.AddUserRole(sroles);
-                var result = new { Status = "success"};
+                var result = new { Status = "success" };
                 return Json(result, JsonRequestBehavior.AllowGet);
 
             }
@@ -76,6 +71,64 @@ namespace SMSPOCWeb.Controllers
                 var result = new { Status = "error", error = ex.Message };
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
+        }
+
+        private async Task ValidateUserDetails(SubscriberRoleviewModel subscriberRoleviewModel)
+        {
+            bool isUserExists = await maccountService.FinduserAsync(subscriberRoleviewModel.SubscriberId);
+            bool isRoleExistis = await mroleService.FindRoleAsync(subscriberRoleviewModel.RoleId);
+            if (!isUserExists)
+            {
+                throw new Exception(string.Format("user {0} not exists", subscriberRoleviewModel.UserName));
+            }
+            if (!isRoleExistis)
+            {
+                throw new Exception(string.Format("Role {0} not exists", subscriberRoleviewModel.RoleName));
+            }
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> Edit(SubscriberRoleviewModel subscriberRoleviewModel)
+        {
+            try
+            {
+                var status=subscriberRoleviewModel.Status == "Active" ? true : false;
+                await ValidateUserDetails(subscriberRoleviewModel);
+                var userRoles = await muserroleService.GetUserRoles(subscriberRoleviewModel.SubscriberId);
+                if (
+                    userRoles.Any(
+                        ur => ur.RoleId == subscriberRoleviewModel.RoleId && ur.Id != subscriberRoleviewModel.Id))
+                {
+                    throw new Exception(string.Format("User {0} and role {1} already mapped",
+                        subscriberRoleviewModel.UserName, subscriberRoleviewModel.RoleName));
+                }
+                if (
+                    userRoles.Any(
+                        ur =>
+                            ur.RoleId == subscriberRoleviewModel.RoleId && ur.Id == subscriberRoleviewModel.Id &&
+                            ur.Status == subscriberRoleviewModel.Status))
+                {
+                    throw new Exception("No Change found");
+                }
+                var userRole = await muserroleService.GetUserRole(subscriberRoleviewModel.Id);
+                userRole.Active = status;
+                userRole.SubscriberId = subscriberRoleviewModel.SubscriberId;
+                userRole.RoleId = subscriberRoleviewModel.RoleId;
+                await muserroleService.SaveAsync();
+                var result = new { Status = "success" };
+                return Json(result, JsonRequestBehavior.AllowGet);
+
+            }
+            catch (Exception ex)
+            {
+                var result = new { Status = "error", error = ex.Message };
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+        }
+        public async Task<JsonResult> GetAllUsers()
+        {
+            var users = await maccountService.GetAllUsers();
+            return Json(users.Select(u => new { Id = u.Item1, Name = u.Item2 }), JsonRequestBehavior.AllowGet);
         }
     }
 }

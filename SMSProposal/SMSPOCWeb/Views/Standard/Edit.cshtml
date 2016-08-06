@@ -1,43 +1,49 @@
-﻿@model DataModelLibrary.SubscriberStandards
+﻿@model DataModelLibrary.ClassViewModel
 
 @{
     ViewBag.Title = "Edit";
 }
 
-<h2>Edit</h2>
-
+ 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Class</h3>
+        </div>
+        <div class="panel-body">
+            <div id="ContactList">
+                <div class="form-horizontal">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(model => model.Id)
 
-    <div class="form-horizontal">
-        <h4>SubscriberStandards</h4>
-        <hr/>
-        @Html.ValidationSummary(true)
-        @Html.HiddenFor(model => model.Id)
-        @Html.HiddenFor(model => model.SubscriberId)
-        @Html.HiddenFor(model => model.StandardId)
-        <div class="form-group">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ClassName, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.ClassName, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.ClassName, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Active, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.CheckBoxFor(model => model.Active, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.Active, new {@class = "control-label col-md-2"})
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Active)
-                    @Html.ValidationMessageFor(model => model.Active)
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Save" class="btn btn-default"/>
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Save" class="btn btn-primary" />
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+   
 }
 
-
-
-    <div>
+<div>
     @Html.ActionLink("Back to List", "Index")
 </div>

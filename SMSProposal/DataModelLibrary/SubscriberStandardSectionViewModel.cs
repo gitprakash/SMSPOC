@@ -8,8 +8,8 @@ namespace DataModelLibrary
 {
     public class SubscriberStandardSectionViewModel
     {
-        public int SubscriberStandardId { get; set; }
-        public int SubscriberStandardSectionId { get; set; }
+        public long SubscriberStandardId { get; set; }
+        public long SubscriberStandardSectionId { get; set; }
         public string SectionName { get; set; }
         public bool Active { get; set; }
     }

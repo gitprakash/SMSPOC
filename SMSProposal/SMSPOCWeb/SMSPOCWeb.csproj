@@ -158,6 +158,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\CustomAuthorizeAttribute.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
@@ -174,6 +175,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
+    <Compile Include="Controllers\SectionController.cs" />
     <Compile Include="Controllers\StandardController.cs" />
     <Compile Include="Controllers\SubscriberStandardSectionsController.cs" />
     <Compile Include="Controllers\TemplateController.cs" />
@@ -473,18 +475,6 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
-    <Content Include="Views\oldaccount\_ExternalLoginsListPartial.cshtml" />
-    <Content Include="Views\oldaccount\ConfirmEmail.cshtml" />
-    <Content Include="Views\oldaccount\ExternalLoginConfirmation.cshtml" />
-    <Content Include="Views\oldaccount\ExternalLoginFailure.cshtml" />
-    <Content Include="Views\oldaccount\ForgotPassword.cshtml" />
-    <Content Include="Views\oldaccount\ForgotPasswordConfirmation.cshtml" />
-    <Content Include="Views\oldaccount\Login.cshtml" />
-    <Content Include="Views\oldaccount\Register.cshtml" />
-    <Content Include="Views\oldaccount\ResetPassword.cshtml" />
-    <Content Include="Views\oldaccount\ResetPasswordConfirmation.cshtml" />
-    <Content Include="Views\oldaccount\SendCode.cshtml" />
-    <Content Include="Views\oldaccount\VerifyCode.cshtml" />
     <Content Include="Views\Manage\AddPhoneNumber.cshtml" />
     <Content Include="Views\Manage\ChangePassword.cshtml" />
     <Content Include="Views\Manage\Index.cshtml" />
@@ -495,7 +485,6 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Role\Index.cshtml" />
     <Content Include="Views\Role\Create.cshtml" />
-    <Content Include="Views\oldaccount\Create.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Account\LoginOld.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
@@ -504,14 +493,10 @@
     <Content Include="Views\Contact\GetContactView.cshtml" />
     <Content Include="Views\Sections\Create.cshtml" />
     <Content Include="Views\Sections\Delete.cshtml" />
-    <Content Include="Views\Sections\Details.cshtml" />
     <Content Include="Views\Sections\Edit.cshtml" />
     <Content Include="Views\Sections\Index.cshtml" />
     <Content Include="Views\Notify\Sendsms.cshtml" />
-    <Content Include="Views\Standard\Create.cshtml" />
     <Content Include="Views\Standard\Delete.cshtml" />
-    <Content Include="Views\Standard\Details.cshtml" />
-    <Content Include="Views\Standard\Edit.cshtml" />
     <Content Include="Views\Standard\Index.cshtml" />
     <Content Include="Views\SubscriberStandardSections\Create.cshtml" />
     <Content Include="Views\SubscriberStandardSections\Delete.cshtml" />
@@ -520,6 +505,12 @@
     <Content Include="Views\SubscriberStandardSections\Index.cshtml" />
     <Content Include="Views\Template\TemplateView.cshtml" />
     <Content Include="Views\Notify\GetMessageHistoryView.cshtml" />
+    <Content Include="Views\Standard\Create.cshtml" />
+    <Content Include="Views\Standard\Edit.cshtml" />
+    <Content Include="Views\Section\Create.cshtml" />
+    <Content Include="Views\Section\Delete.cshtml" />
+    <Content Include="Views\Section\Edit.cshtml" />
+    <Content Include="Views\Section\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Standards\" />

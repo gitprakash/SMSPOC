@@ -81,6 +81,12 @@ namespace Repositorylibrary
             return await _context.Set<TObject>().Where(match).ToListAsync();
         }
 
+        public async Task<ICollection<TResult>> FindAllAsync<TResult>(Expression<Func<TObject, bool>> match,
+            Expression<Func<TObject, TResult>> project)
+        {
+            return await _context.Set<TObject>().Where(match).Select(project).ToListAsync();
+        }
+
         public async Task<ICollection<TResult>> FindAllAsync<TResult, Tkey>(Expression<Func<TObject, bool>> match,
             Expression<Func<TObject, TResult>> select, Expression<Func<TResult, Tkey>> sort)
         {
@@ -160,9 +166,9 @@ namespace Repositorylibrary
         public async Task<int> CountAsync(Expression<Func<TObject, bool>> match = null)
         {
             if (match != null)
-                return await _context.Set<TObject>().CountAsync();
-            else
                 return await _context.Set<TObject>().CountAsync(match);
+            else
+                return await _context.Set<TObject>().CountAsync();
 
         }
 

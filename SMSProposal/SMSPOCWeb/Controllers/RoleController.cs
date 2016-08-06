@@ -10,6 +10,7 @@ using System.Web.Mvc;
 
 namespace SMSPOCWeb.Controllers
 {
+     [Authorize(Roles = "Admin")]
     public class RoleController : Controller
     {
         // GET: Role
@@ -68,11 +69,10 @@ namespace SMSPOCWeb.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin")]
         public async Task<JsonResult> GetAllRoles()
         {
             var roles = await mroleService.GetAllRoles();
-            return Json(roles, JsonRequestBehavior.AllowGet);
+            return Json(roles.Select(u => new { Id = u.Item1, Name = u.Item2 }), JsonRequestBehavior.AllowGet);
         }
     }
 }

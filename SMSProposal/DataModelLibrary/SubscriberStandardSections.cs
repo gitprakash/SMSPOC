@@ -16,11 +16,11 @@ namespace DataModelLibrary
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         [Required]
-        public int SubscriberStandardsId { get; set; }
+        public long SubscriberStandardsId { get; set; }
         public virtual SubscriberStandards SubscriberStandards { get; set; }
         [Required]
-        public int SectionId { get; set; }
-        public virtual Section Sections { get; set; }
+        public long SubscriberSectionId { get; set; }
+        public virtual SubscriberSection SubscriberSection { get; set; }
         public bool Active { get; set; }
         [Required]
         public DateTime CreatedAt { get; set; }

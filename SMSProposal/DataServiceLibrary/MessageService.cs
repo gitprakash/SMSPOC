@@ -124,7 +124,7 @@ namespace DataServiceLibrary
                     Id = scm.Guid,
                     Message = scm.Message.Text,
                     Name = scm.SubscriberContact.Contact.Name,
-                    Section = scm.SubscriberContact.SubscriberStandardSections.Sections.Name,
+                    Section = scm.SubscriberContact.SubscriberStandardSections.SubscriberSection.Sections.Name,
                     SentDateTime = scm.CreatedAt,
                     MobileNo = scm.SubscriberContact.Contact.Mobile,
                     Status = ((MessageStatusEnum)scm.MessageStatus).ToString(),

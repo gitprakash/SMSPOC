@@ -56,8 +56,8 @@ namespace DataServiceLibrary
         }
         public async Task<Tuple<bool, bool, bool, Subscriber>> CheckLogin(string username, string password)
         {
-            bool isuserexits=false, ispasswordmatch=false, isactivated=false;
-            var user =await msubscriberrepository.FindAsync(s => s.Username == username);
+            bool isuserexits = false, ispasswordmatch = false, isactivated = false;
+            var user = await msubscriberrepository.FindAsync(s => s.Username == username);
             if (user != null)
             {
                 isuserexits = true;
@@ -67,42 +67,65 @@ namespace DataServiceLibrary
                 }
                 isactivated = user.IsActivated;
             }
-            return Tuple.Create(isuserexits, ispasswordmatch, isactivated,user);
+            return Tuple.Create(isuserexits, ispasswordmatch, isactivated, user);
         }
         public Subscriber Finduser(string username)
         {
             return msubscriberrepository.Find(s => s.Username.Equals((username)));
         }
-        public Subscriber Finduser(string username,bool includechild)
+        public Subscriber Finduser(string username, bool includechild)
         {
             //if (includechild)
             //{
             //    Expression<Func<Subscriber, bool>> where = s => s.Username == username;
             //    var lstexrpess = new Expression<Func<Subscriber, object>>[1];
-                
+
             //    Expression<Func<Subscriber, object>> childlist = s => s.Roles;
             //    return msubscriberrepository.GetAllLazyLoad(where, lstexrpess);
             //}
             return msubscriberrepository.Find(s => s.Username.Equals((username)));
         }
-        public  async Task<Subscriber> FinduserAsync(string username)
+        public async Task<bool> FinduserAsync(int subscriberId = 0, string username = "")
         {
-            return await msubscriberrepository.FindAsync(s => s.Username.Equals((username)));
+            if (subscriberId > 0)
+                return await msubscriberrepository.AnyAsync(s => s.Id == subscriberId);
+            if (!string.IsNullOrEmpty(username))
+                return await msubscriberrepository.AnyAsync(s => s.Username == username);
+            else
+                return false;
+        }
+        public async Task<Subscriber> GetuserAsync(int subscriberId = 0, string username = "")
+        {
+            if (subscriberId > 0)
+                return await msubscriberrepository.FindAsync(s => s.Id == subscriberId);
+            if (!string.IsNullOrEmpty(username))
+                return await msubscriberrepository.FindAsync(s => s.Username == username);
+            else
+                return null;
         }
 
-        public async Task<IEnumerable<Tuple<int, string, string>>> GetUserRole()
+        public async Task<SubscriberRoleviewModel[]> GetUserRole()
         {
-            var result = await msubscriberrolesrepository.ToArrayAsync(sr => new { Id = sr.Id, sr.Subscriber.Username, RoleNmae = sr.role.Name });
-            return result.Select(s => Tuple.Create(s.Id, s.Username, s.RoleNmae));
+            var result = await msubscriberrolesrepository.ToArrayAsync(sr => new SubscriberRoleviewModel
+            {
+                Id = sr.Id,
+                SubscriberId = sr.SubscriberId,
+                UserName = sr.Subscriber.Username,
+                RoleId = sr.RoleId,
+                RoleName = sr.role.Name,
+                Status = sr.Active ? "Active" : "InActive"
+            });
+            return result;
         }
         public async Task<int> TotalUserRoles()
         {
-          return await msubscriberrolesrepository.CountAsync();
+            return await msubscriberrolesrepository.CountAsync();
         }
-        public async Task<string[]> GetAllUsers()
+        public async Task<IEnumerable<Tuple<int,string>>> GetAllUsers()
         {
-            return await msubscriberrepository.ToArrayAsync(s => s.Username);
+            var users= await msubscriberrepository.ToArrayAsync(s => new {UserName=s.Username,Id=s.Id});
+            return users.Select(u => new Tuple<int, string>(u.Id, u.UserName));
         }
-         
+
     }
 }

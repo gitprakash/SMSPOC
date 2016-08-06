@@ -12,10 +12,10 @@ namespace DataServiceLibrary
         Task<Role> Add(Role role);
         Task<Role> Edit(Role role);
         Task<int> Delete(Role role);
-        Task<Role> FindRole(string name);
+        Task<bool> FindRoleAsync(int roleId=0,string name="");
         Task<IEnumerable<Role>> GetRoles(int skip, int pagesize, string ordercolumn,bool desc);
         Task<int> TotalRoles();
-        Task<string[]> GetAllRoles();
+        Task<IEnumerable<Tuple<int, string>>> GetAllRoles();
         Task<bool> IsRoleExists(string name);
     }
 }

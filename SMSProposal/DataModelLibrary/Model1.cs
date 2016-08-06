@@ -1,3 +1,5 @@
+using System.Data.Entity.ModelConfiguration.Conventions;
+
 namespace DataModelLibrary
 {
     using System;
@@ -31,8 +33,11 @@ namespace DataModelLibrary
         public virtual DbSet<SubscriberContactMessage> SubscriberContactMessage { get; set; }
         public virtual DbSet<SubscriberMessageBalance> SubscriberMessageBalance { get; set; }
         public virtual DbSet<SubscriberMessageBalanceHistory> SubscriberMessageBalanceHistory { get; set; }
-
-
-         
+        public virtual DbSet<SubscriberSection> SubscriberSection { get; set; }
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            //modelBuilder.GetType(a=)
+            modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
+        }
     }
 }

@@ -25,26 +25,10 @@ namespace SMSPOCWeb.Controllers
                 .Include(s => s.Subscriber);
             return View(subscriberstandards.ToList());
         }
-
-        // GET: /Standard/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            SubscriberStandards subscriberstandards = db.SubscriberStandards.Find(id);
-            if (subscriberstandards == null)
-            {
-                return HttpNotFound();
-            }
-            return View(subscriberstandards);
-        }
-
+ 
         // GET: /Standard/Create
         public ActionResult Create()
         {
-            ViewBag.StandardId = new SelectList(db.Standards, "Id", "Name");
             return View();
         }
 
@@ -53,21 +37,27 @@ namespace SMSPOCWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include="Id,StandardId,Active")] SubscriberStandards subscriberstandards)
+        public async Task<ActionResult> Create(ClassViewModel classvm)
         {
-            var authuser = ((CustomIdentity)User.Identity).User.Id;
             if (ModelState.IsValid)
             {
                 try
                 {
-                    if (await db.SubscriberStandards.AnyAsync(s => s.SubscriberId==authuser && s.StandardId == subscriberstandards.StandardId))
+                    var authuser = ((CustomIdentity)User.Identity).User.Id;
+                    if (await db.SubscriberStandards.AnyAsync(ss => ss.Standard.Name.Equals(classvm.ClassName) && ss.SubscriberId==authuser))
+                          throw new Exception("Standard already exists");
+                    var standard = new Standard { Name = classvm.ClassName};
+                    var subscriberclasses = new SubscriberStandards
                     {
-                        throw new Exception("Standard already exists");
-                    }
-                    subscriberstandards.SubscriberId = ((CustomIdentity)User.Identity).User.Id;
-                    subscriberstandards.CreatedAt = DateTime.Now;
-                    db.SubscriberStandards.Add(subscriberstandards);
-                    db.SaveChanges();
+                        Active = true,
+                        CreatedAt = DateTime.Now,
+                        Guid = Guid.NewGuid(),
+                        SubscriberId = authuser,
+                        Standard = standard
+                    };
+                    
+                   db.SubscriberStandards.Add(subscriberclasses);
+                   db.SaveChanges();
                     return RedirectToAction("Index");
                 }
                 catch (Exception ex)
@@ -75,26 +65,29 @@ namespace SMSPOCWeb.Controllers
                     ModelState.AddModelError("", ex.Message);
                 }
             }
-            ViewBag.StandardId = new SelectList(db.Standards, "Id", "Name", subscriberstandards.StandardId);
-           // ViewBag.SubscriberId = new SelectList(db.Subscribers, "Id", "Username", subscriberstandards.SubscriberId);
-            return View(subscriberstandards);
+            return View(classvm);
         }
 
         // GET: /Standard/Edit/5
-        public ActionResult Edit(int? id)
+        public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            SubscriberStandards subscriberstandards = db.SubscriberStandards.Find(id);
+            var subscriberstandards =await db.SubscriberStandards.FindAsync(id);
             if (subscriberstandards == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.StandardId = new SelectList(db.Standards, "Id", "Name", subscriberstandards.StandardId);
-           // ViewBag.SubscriberId = new SelectList(db.Subscribers, "Id", "Username", subscriberstandards.SubscriberId);
-            return View(subscriberstandards);
+            var classvm = new ClassViewModel
+            {
+                ClassName = subscriberstandards.Standard.Name,
+                Id = subscriberstandards.Id,
+                Active = subscriberstandards.Active
+
+            };
+            return View(classvm);
         }
 
         // POST: /Standard/Edit/5
@@ -102,22 +95,28 @@ namespace SMSPOCWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include="Id,SubscriberId,StandardId,Active")] SubscriberStandards subscriberstandards)
+        public async Task<ActionResult> Edit(ClassViewModel classvm)
         {
             var authuser = ((CustomIdentity)User.Identity).User.Id;
             if (ModelState.IsValid)
             {
                 try
                 {
-                    if (await db.SubscriberStandards.AnyAsync(s => s.Id!=subscriberstandards.Id 
-                        && s.SubscriberId==authuser 
-                        && s.StandardId == subscriberstandards.StandardId))
+                    if (await db.SubscriberStandards.AnyAsync(ss => ss.Standard.Name.Equals(classvm.ClassName)
+                                                                    && ss.SubscriberId == authuser
+                                                                    && ss.Id != classvm.Id))
+                        throw new Exception(string.Format("Standard{0}already exists", classvm.ClassName));
+                    var dbclass = await db.SubscriberStandards.FindAsync(classvm.Id);
+                    if (dbclass != null)
                     {
-                        throw new Exception("Standard already exists");
+                        dbclass.Standard.Name = classvm.ClassName;
+                        dbclass.Active = classvm.Active;
+                        db.SaveChanges(); 
                     }
-                    subscriberstandards.CreatedAt = DateTime.Now;
-                    db.Entry(subscriberstandards).State = EntityState.Modified;
-                    db.SaveChanges();
+                    else
+                    {
+                        throw new Exception(string.Format("Unabe to find Standard {0} details, try again", classvm.ClassName));
+                    }
                     return RedirectToAction("Index");
                 }
                 catch (Exception ex)
@@ -125,9 +124,8 @@ namespace SMSPOCWeb.Controllers
                     ModelState.AddModelError("", ex.Message);
                 }
             }
-            ViewBag.StandardId = new SelectList(db.Standards, "Id", "Name", subscriberstandards.StandardId);
-            ViewBag.SubscriberId = new SelectList(db.Subscribers, "Id", "Username", subscriberstandards.SubscriberId);
-            return View(subscriberstandards);
+           
+            return View(classvm);
         }
 
         // GET: /Standard/Delete/5
@@ -151,7 +149,7 @@ namespace SMSPOCWeb.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             SubscriberStandards subscriberstandards = db.SubscriberStandards.Find(id);
-            db.SubscriberStandards.Remove(subscriberstandards);
+            subscriberstandards.Active = false;
             db.SaveChanges();
             return RedirectToAction("Index");
         }
