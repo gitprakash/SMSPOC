@@ -7,3 +7,14 @@ Url: http://sms2.kapsystem.com/
 User Name: kapbulk
 Password: kap@user!23
 Sample API: http://123.63.33.43/blank/sms/user/urlsmstemp.php?username=XXXXXX&pass=XXXXX&senderid=XXXXX&dest_mobileno=XXXXX&message=XXXXXX&response=Y
+
+http://checkdnd.com/api/check_dnd_no_api.php?mobiles=8825518669
+
+excel upload and download work
+
+subscriber sms details
+
+contact student
+
+dnd status registration
+

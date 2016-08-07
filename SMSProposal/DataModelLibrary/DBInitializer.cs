@@ -129,27 +129,27 @@ namespace DataModelLibrary
             {
              new SubscriberTemplate{Subscriber = lstsubscribers[1], Active = true, Guid=Guid.NewGuid(), CreatedAt=DateTime.Now, Templates = new Template
              {
-                 CreatedAt  = DateTime.Now, Name = "Admission Messages",
+                 Name = "Admission Messages",
                  Description = "Dear Parent, you are requested to submit the admission form along with the registration fees before@date@scholl"
              }},
              new SubscriberTemplate{Subscriber = lstsubscribers[1], Active = true,Guid=Guid.NewGuid(), CreatedAt=DateTime.Now, Templates = new Template
              {
-                 CreatedAt  = DateTime.Now, Name = "Fees Admission Messages",
+                 Name = "Fees Admission Messages",
                  Description = "Dear Parent, visit the school between 9 am and 12 pm and confirm the admission by paying the fees @date @scholl"
              }},
              new SubscriberTemplate{Subscriber = lstsubscribers[1], Active = true, Guid=Guid.NewGuid(), CreatedAt=DateTime.Now,Templates = new Template
              {
-                 CreatedAt  = DateTime.Now, Name = "Attendance/Behavior Messages",
+                   Name = "Attendance/Behavior Messages",
                  Description = "Your ward was absent today WITHOUT PRIOR INFORMATION. Please send your ward with the Leave Letter @scholl"
              }},
              new SubscriberTemplate{Subscriber = lstsubscribers[1], Active = true,Guid=Guid.NewGuid(), CreatedAt=DateTime.Now, Templates = new Template
              {
-                 CreatedAt  = DateTime.Now, Name = "Meeting Messages",
+                 Name = "Meeting Messages",
                  Description = "Dear Parent, kindly attend the Parent-Teacher Meeting scheduled on @Date from 9 am to 12 pm @scholl"
              }},
              new SubscriberTemplate{Subscriber = lstsubscribers[1], Active = true,Guid=Guid.NewGuid(), CreatedAt=DateTime.Now, Templates = new Template
              {
-                 CreatedAt  = DateTime.Now, Name = "Holiday Messages",
+                Name = "Holiday Messages",
                  Description = "Dear Parent @Date will be holiday on occasion of @function. -@schoolname"
              }}
             };

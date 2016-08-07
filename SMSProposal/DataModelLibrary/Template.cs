@@ -19,8 +19,5 @@ namespace DataModelLibrary
         public string Name { get; set; }
         [Required]
         public string Description { get; set; }
-		[Required]
-		public DateTime CreatedAt{get;set;}
-        public DateTime? ModifiedAt { get; set; }
     }
 }

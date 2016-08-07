@@ -57,10 +57,12 @@ namespace DataServiceLibrary
             var stemplate = new SubscriberTemplate
             {
                 SubscriberId = subscirberId,
+                CreatedAt = DateTime.Now,
+                Guid = Guid.NewGuid(),
                 Templates =
                     new Template
                     {
-                        CreatedAt = DateTime.Now,
+                       
                         Name = templateViewModel.Name,
                         Description = templateViewModel.Description
                     },

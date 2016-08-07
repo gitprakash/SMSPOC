@@ -103,7 +103,7 @@ namespace SMSPOCWeb.Controllers
             SubscriberStandardSections subscriberStandardSections = await db.SubscriberStandardSections.FindAsync(id);
             var authuser = ((CustomIdentity)User.Identity).User.Id;
 
-            if (subscriberStandardSections == null)
+            if (subscriberStandardSections == null) 
             {
                 return HttpNotFound();
             }
