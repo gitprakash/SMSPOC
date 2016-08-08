@@ -25,7 +25,7 @@ namespace DataServiceLibrary
             msubscriberMessageBalanceHistory = subscriberMessageBalanceHistory;
         }
         public async Task SendMessage(List<MessageViewModel> messageViewModel, string message, int messagecount, int SubscriberId)
-        {   
+        {
             ExternalMessageServiceAPI smsserviceAPI = new ExternalMessageServiceAPI();
             var apiformaturl = Apiformaturl();
             foreach (var smvm in messageViewModel)
@@ -100,9 +100,9 @@ namespace DataServiceLibrary
         private async Task<int> UpdateSubscirberMessageBalance(int subscriberId, int sentmsgcount)
         {
             var userMsgBalance = await msubscriberMessageBalance.FindAsync(smb => smb.SubcriberId == subscriberId);
-            userMsgBalance.RemainingCount = -sentmsgcount;
+            userMsgBalance.RemainingCount -= sentmsgcount;
             var msgbalhis = await msubscriberMessageBalanceHistory.FindAsync(smb => smb.SubcriberId == subscriberId);
-            msgbalhis.RemainingCount = -sentmsgcount;
+            msgbalhis.RemainingCount -= sentmsgcount;
             return await msubscriberMessageBalanceHistory.SaveAsync();
         }
         public async Task<bool> CheckMessageBalance(int mvmcnt, int messagecount, int subscriberId)
@@ -124,7 +124,7 @@ namespace DataServiceLibrary
                     Id = scm.Guid,
                     Message = scm.Message.Text,
                     Name = scm.SubscriberContact.Contact.Name,
-                    Section = scm.SubscriberContact.SubscriberStandardSections.SubscriberSection.Sections.Name,
+                    Section = scm.SubscriberContact.SubscriberStandardSections.SubscriberSection.Section.Name,
                     SentDateTime = scm.CreatedAt,
                     MobileNo = scm.SubscriberContact.Contact.Mobile,
                     Status = ((MessageStatusEnum)scm.MessageStatus).ToString(),
@@ -162,6 +162,12 @@ namespace DataServiceLibrary
             }
             return await subcribermessageRepository.SaveAsync();
         }
+        public async Task<Tuple<long, long>> GetMessageBalance(int subscriberId)
+        {
+            var messagebal = await msubscriberMessageBalance.FindAsync(mb => mb.SubcriberId == subscriberId);
+            return Tuple.Create(messagebal.OpeningCount,messagebal.RemainingCount);
+        }
+
 
     }
 }

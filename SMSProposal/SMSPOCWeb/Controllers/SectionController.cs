@@ -20,7 +20,7 @@ namespace SMSPOCWeb.Controllers
         public async Task<ActionResult> Index()
         {
             var svm = await db.SubscriberSection.ToListAsync();
-            var svmlist = svm.Select(s => new SectionViewModel {Id = s.Id, Name = s.Sections.Name, Active = s.Active});
+            var svmlist = svm.Select(s => new SectionViewModel {Id = s.Id, Name = s.Section.Name, Active = s.Active});
             return View(svmlist);
         }
 
@@ -43,7 +43,7 @@ namespace SMSPOCWeb.Controllers
             {
                 try
                 {
-                    if (await db.SubscriberSection.AnyAsync(s => s.Sections.Name == sectionViewModel.Name))
+                    if (await db.SubscriberSection.AnyAsync(s => s.Section.Name == sectionViewModel.Name))
                     {
                         throw new Exception("Section already exists");
                     }
@@ -54,7 +54,7 @@ namespace SMSPOCWeb.Controllers
                         CreatedAt = DateTime.Now,
                         SubscriberId = authuser,
                         Guid = Guid.NewGuid(),
-                        Sections = section,
+                        Section = section,
                         Active = true
                     };
                     db.SubscriberSection.Add(subscribersection);
@@ -88,7 +88,7 @@ namespace SMSPOCWeb.Controllers
 
         private static SectionViewModel SectionViewModel(SubscriberSection sections)
         {
-            var svm = new SectionViewModel {Id = sections.Id, Name = sections.Sections.Name, Active = sections.Active};
+            var svm = new SectionViewModel {Id = sections.Id, Name = sections.Section.Name, Active = sections.Active};
             return svm;
         }
 
@@ -104,7 +104,7 @@ namespace SMSPOCWeb.Controllers
                 try
                 {
                     var authuser = ((CustomIdentity)User.Identity).User.Id;
-                    if (await db.SubscriberSection.AnyAsync(ss => ss.Sections.Name.Equals(sectionViewModel.Name)
+                    if (await db.SubscriberSection.AnyAsync(ss => ss.Section.Name.Equals(sectionViewModel.Name)
                                                                        && ss.SubscriberId == authuser
                                                                        && ss.Id != sectionViewModel.Id))
                         throw new Exception(string.Format("Standard{0}already exists", sectionViewModel.Name));
@@ -112,7 +112,7 @@ namespace SMSPOCWeb.Controllers
                     var dbsection = await db.SubscriberSection.FindAsync(sectionViewModel.Id);
                     if (dbsection != null)
                     {
-                        dbsection.Sections.Name = sectionViewModel.Name;
+                        dbsection.Section.Name = sectionViewModel.Name;
                         dbsection.Active = sectionViewModel.Active;
                         await db.SaveChangesAsync();
                     }

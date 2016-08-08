@@ -57,7 +57,7 @@ namespace DataModelLibrary
                  new Standard{  Name="LKG"},
             };
             var lstSection = new List<SubscriberSection> { 
-                new SubscriberSection{ Subscriber = lstsubscribers[1],Sections = new Section{  Name="A"}, 
+                new SubscriberSection{ Subscriber = lstsubscribers[1],Section = new Section{  Name="A"}, 
                     CreatedAt =DateTime.Now,Active =true,Guid = Guid.NewGuid()}
             };
 
@@ -70,8 +70,8 @@ namespace DataModelLibrary
                   
             };
             var SubscriberStandards = new List<SubscriberStandards>();
-            Standards.ForEach(s => { SubscriberStandards.Add(new SubscriberStandards { CreatedAt = DateTime.Now, Active = true, Subscriber = lstsubscribers[1], Standard = s }); });
-            lststandards.ForEach(s => { SubscriberStandards.Add(new SubscriberStandards { CreatedAt = DateTime.Now, Active = true, Subscriber = lstsubscribers[0], Standard = s }); });
+            Standards.ForEach(s => { SubscriberStandards.Add(new SubscriberStandards {Guid=Guid.NewGuid(), CreatedAt = DateTime.Now, Active = true, Subscriber = lstsubscribers[1], Standard = s }); });
+            lststandards.ForEach(s => { SubscriberStandards.Add(new SubscriberStandards { Guid=Guid.NewGuid(),CreatedAt = DateTime.Now, Active = true, Subscriber = lstsubscribers[0], Standard = s }); });
 
             var lstSubscriberStandardSections = new List<SubscriberStandardSections>();
             lstSection.ForEach(s =>

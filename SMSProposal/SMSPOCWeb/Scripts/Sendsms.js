@@ -100,6 +100,23 @@ $(function () {
         }
     });
 
+
+    $.ajax({
+        type: 'Get',
+        async:false,
+        url: '/Notify/GetSubscriberSMS',
+        dataType: 'json',
+        success: function (data,success) {
+            //var result = JSON.parse(data);
+            $("#opensmscnt").html(data.Openingsms);
+            $("#smsbalcnt").html(data.balancesms);
+        },
+        error: function (data) {
+            alert('problem in retrieving message balance details');
+        }
+    });
+
+
     $('#ContactList').on('click', '.close', function () {
         var id = $(this).attr('contactid');
         $('#' + id).remove();

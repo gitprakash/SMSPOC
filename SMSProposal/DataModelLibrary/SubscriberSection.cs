@@ -16,7 +16,7 @@ namespace DataModelLibrary
         public virtual Subscriber Subscriber { get; set; }
         [Required]
         public int SectionId { get; set; }
-        public virtual Section Sections { get; set; }
+        public virtual Section Section { get; set; }
         public bool Active { get; set; }
     }
 }

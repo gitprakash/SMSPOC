@@ -29,7 +29,7 @@ namespace DataServiceLibrary
         public async Task<ICollection<SubscriberStandardSectionViewModel>> GetSections(int subscirberStandardId)
         {
             Expression<Func<SubscriberStandardSections, SubscriberStandardSectionViewModel>> select = s => new SubscriberStandardSectionViewModel { SubscriberStandardId = s.SubscriberStandardsId, 
-                SubscriberStandardSectionId   = s.Id,SectionName = s.SubscriberSection.Sections.Name };
+                SubscriberStandardSectionId   = s.Id,SectionName = s.SubscriberSection.Section.Name };
             Expression<Func<SubscriberStandardSectionViewModel, string>> orderby = s => s.SectionName;
             return await msectionRepository.FindAllAsync(c => c.SubscriberStandardsId == subscirberStandardId && c.Active, select, orderby);
         }

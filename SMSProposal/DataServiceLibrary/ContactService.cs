@@ -24,7 +24,7 @@ namespace DataServiceLibrary
             Expression<Func<SubscriberStandardContacts, bool>> where = s => s.SubscriberStandards.SubscriberId == subcriberId;
             Expression<Func<SubscriberStandardContacts, ContactViewModel>> select = s => new ContactViewModel
             {
-                Section = s.SubscriberStandardSections.SubscriberSection.Sections.Name,
+                Section = s.SubscriberStandardSections.SubscriberSection.Section.Name,
                 Class = s.SubscriberStandards.Standard.Name, 
                 Name = s.Contact.Name,
                 BloodGroup = s.Contact.BloodGroup,

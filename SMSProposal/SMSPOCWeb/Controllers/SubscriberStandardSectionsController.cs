@@ -48,7 +48,7 @@ namespace SMSPOCWeb.Controllers
         {
             var authuser = ((CustomIdentity)User.Identity).User.Id;
             var sections = await db.SubscriberSection.ToListAsync();
-            ViewBag.SubscriberSectionId = new SelectList(sections.Select(s => new { s.Id, s.Sections.Name }).OrderBy(s => s.Name), "Id", "Name");
+            ViewBag.SubscriberSectionId = new SelectList(sections.Select(s => new { s.Id, s.Section.Name }).OrderBy(s => s.Name), "Id", "Name");
             var standards = await db.SubscriberStandards.Where(s => s.Subscriber.Id == authuser).ToArrayAsync();
             ViewBag.SubscriberStandardsId = new SelectList(standards.Select(s => new { s.Id, s.Standard.Name }).OrderBy(s => s.Name), "Id", "Name");
             return View();
@@ -72,7 +72,7 @@ namespace SMSPOCWeb.Controllers
                             .SingleOrDefaultAsync(ss => ss.SubscriberStandardsId == postsss.SubscriberStandardsId
                             && ss.SubscriberSectionId == postsss.SubscriberSectionId);
                         throw new Exception(string.Format("Standard {0} and Section {1} already created", dbsection.SubscriberStandards.Standard.Name, 
-                            dbsection.SubscriberSection.Sections.Name));
+                            dbsection.SubscriberSection.Section.Name));
                     }
                     postsss.CreatedAt = DateTime.Now;
                     postsss.Active = true;
@@ -87,7 +87,7 @@ namespace SMSPOCWeb.Controllers
             }
             var authuser = ((CustomIdentity)User.Identity).User.Id;
             var sections = await db.SubscriberSection.ToListAsync();
-            ViewBag.SubscriberSectionId = new SelectList(sections.Select(s => new { s.Id, s.Sections.Name }).OrderBy(s => s.Name), "Id", "Name");
+            ViewBag.SubscriberSectionId = new SelectList(sections.Select(s => new { s.Id, s.Section.Name }).OrderBy(s => s.Name), "Id", "Name");
             var standards = await db.SubscriberStandards.Where(s => s.Subscriber.Id == authuser).ToArrayAsync();
             ViewBag.SubscriberStandardsId = new SelectList(standards.Select(s => new { s.Id, s.Standard.Name }).OrderBy(s => s.Name), "Id", "Name");
             return View(postsss);
@@ -108,7 +108,7 @@ namespace SMSPOCWeb.Controllers
                 return HttpNotFound();
             }
             var sections = await db.SubscriberSection.ToListAsync();
-            ViewBag.SubscriberSectionId = new SelectList(sections.Select(s => new { s.Id, s.Sections.Name }).OrderBy(s => s.Name), "Id", "Name");
+            ViewBag.SubscriberSectionId = new SelectList(sections.Select(s => new { s.Id, s.Section.Name }).OrderBy(s => s.Name), "Id", "Name");
             ViewBag.SubscriberStandardsId = new SelectList(db.SubscriberStandards.Select(s => new { s.Id, s.Standard.Name }).OrderBy(s => s.Name), "Id", "Name", subscriberStandardSections.SubscriberStandardsId);
             return View(subscriberStandardSections);
         }
@@ -135,7 +135,7 @@ namespace SMSPOCWeb.Controllers
                         && ss.SubscriberStandardsId == subscriberStandardSections.SubscriberStandardsId
                         && ss.SubscriberSectionId == subscriberStandardSections.SubscriberSectionId);
                         throw new Exception(string.Format("Standard {0} and Section {1} already created", dbsection.SubscriberStandards.Standard.Name, 
-                            dbsection.SubscriberSection.Sections.Name));
+                            dbsection.SubscriberSection.Section.Name));
                     }
                     db.Entry(subscriberStandardSections).State = EntityState.Modified;
                     subscriberStandardSections.CreatedAt = DateTime.Now;
@@ -148,7 +148,7 @@ namespace SMSPOCWeb.Controllers
                 }
             }
             var sections = await db.SubscriberSection.ToListAsync();
-            ViewBag.SubscriberSectionId = new SelectList(sections.Select(s => new { s.Id, s.Sections.Name }).OrderBy(s => s.Name), "Id", "Name");
+            ViewBag.SubscriberSectionId = new SelectList(sections.Select(s => new { s.Id, s.Section.Name }).OrderBy(s => s.Name), "Id", "Name");
             var standards = await db.SubscriberStandards.Where(s => s.Subscriber.Id == authuser).ToArrayAsync();
             ViewBag.SubscriberStandardsId = new SelectList(standards.Select(s => s.Standard).OrderBy(s => s.Name), "Id", "Name");
             return View(subscriberStandardSections);

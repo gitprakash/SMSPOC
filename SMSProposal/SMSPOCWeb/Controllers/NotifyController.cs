@@ -12,7 +12,7 @@ using SMSPOCWeb.Models;
 namespace SMSPOCWeb.Controllers
 {
     [Authorize(Roles = "Subscriber")]
-    public class NotifyController : Controller
+    public class NotifyController : AsyncController
     {
         // GET: Notify
         IMessageService m_messageService;
@@ -102,6 +102,14 @@ namespace SMSPOCWeb.Controllers
                                 .SelectMany(x => x.Errors)
                                 .Select(x => x.ErrorMessage));
             return messages;
+        }
+
+        public async Task<JsonResult> GetSubscriberSMS()
+        {
+            var identity = (CustomIdentity)User.Identity;
+            var messagetuple = await m_messageService.GetMessageBalance(identity.User.Id);
+            var result = new { Openingsms=messagetuple.Item1,balancesms=messagetuple.Item2};
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
     }
 }
