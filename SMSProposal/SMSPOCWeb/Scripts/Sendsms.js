@@ -36,6 +36,15 @@ $(document).ready(function () {
         $remaining.text(remaining + ' characters remaining');
         $messages.text(messages + ' message(s)');
     });
+
+    $('#StudentModal').on('show.bs.modal', function (e) {
+        // do something...
+        ConstructJqGrid();
+    })
+    $('#btnstudentconfirm').on('click', function (e) {
+        // do something...
+        ProcessSelectedStudent();
+    })
 });
 
 var selectedcontactarray = [];
@@ -186,6 +195,8 @@ $(function () {
        });
     });
 });
+
+
 function ConstructJqGrid() {
     $('#list').jqGrid({
         caption: "Student Details",
@@ -260,3 +271,36 @@ function fnsuccess(data) {
       $("#opensmscnt").html(data.Openingsms);
      $("#smsbalcnt").html(data.balancesms);
 }
+var ProcessSelectedStudent = function () {
+    var ids = $("#list").jqGrid('getGridParam', 'selarrrow');
+    if (ids.length > 0) {
+
+        selectedcontactarray = [];
+        $.each(ids,
+            function (i, rowid) {
+                var name = $('#list').jqGrid('getCell', rowid, 'Name');
+                var rollno = $('#list').jqGrid('getCell', rowid, 'RollNo');
+                var standard = $('#list').jqGrid('getCell', rowid, 'Class');
+                var section = $('#list').jqGrid('getCell', rowid, 'Section');
+                var mobile = $('#list').jqGrid('getCell', rowid, 'Mobile');
+                var contactvm = {
+                    'Id': rowid,
+                    'Name': name,
+                    'RollNo': rollno,
+                    'Standard': standard,
+                    'Section': section,
+                    'Mobile': mobile
+                };
+                if (rowid) {
+                    selectedcontactarray.push(contactvm);
+                }
+            });
+        CreateLinks();
+        $('#StudentModal').modal({
+            show: false
+        })
+    } else {
+        alert('please select a contact');
+        return false;
+    }
+};

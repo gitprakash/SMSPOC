@@ -4,10 +4,14 @@ $(window).resize(function () {
     $('#list').setGridWidth(outerwidth); // setGridWidth method sets a new width to the grid dynamically
 });
 $.extend($.jgrid.nav, {editicon: "ui-icon-customedit" , delicon: "ui-icon-customtrash" });
-
+function fnsuccess(data) {
+    $("#opensmscnt").html(data.Openingsms);
+    $("#smsbalcnt").html(data.balancesms);
+}
 var lastsel;
-$(document).ready(function myfunction() {
+LoadSubscriberSMS(fnsuccess, true);
 
+$(document).ready(function myfunction() {
     $('#list').jqGrid({
         caption: "Sent Message Status",
         url: '/Notify/GetMessageHistory',
@@ -91,6 +95,7 @@ $(document).ready(function myfunction() {
             //responsetext 1 and 0 ajax success or else its a error
             if (response.responseText == "1" || response.responseText == "0") {
                 alert('Successfully updated Wintails details');
+                LoadSubscriberSMS(fnsuccess, true);
                 $(this).jqGrid('setGridParam',
                   { datatype: 'json' }).trigger('reloadGrid');
                 return [true, '']
@@ -116,6 +121,7 @@ $(document).ready(function myfunction() {
             //responsetext 1 and 0 ajax success or else its a error
             if (result.Status == "success") {
                 alert('Messing has been sent');
+                LoadSubscriberSMS(fnsuccess, true);
                 $(this).jqGrid('setGridParam',
                   { datatype: 'json' }).trigger('reloadGrid');
                 return [true, '']
