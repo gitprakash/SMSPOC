@@ -67,6 +67,7 @@ namespace Repositorylibrary
 
         public async Task<TObject> FindAsync(Expression<Func<TObject, bool>> match)
         {
+            _context.Database.Log = (data => Debug.WriteLine(data));
             return await _context.Set<TObject>().SingleOrDefaultAsync(match);
         }
 

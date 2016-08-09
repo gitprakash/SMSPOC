@@ -103,6 +103,7 @@ namespace DataServiceLibrary
             userMsgBalance.RemainingCount -= sentmsgcount;
             var msgbalhis = await msubscriberMessageBalanceHistory.FindAsync(smb => smb.SubcriberId == subscriberId);
             msgbalhis.RemainingCount -= sentmsgcount;
+            await msubscriberMessageBalance.SaveAsync();
             return await msubscriberMessageBalanceHistory.SaveAsync();
         }
         public async Task<bool> CheckMessageBalance(int mvmcnt, int messagecount, int subscriberId)

@@ -71,10 +71,11 @@ $(function () {
                     success: function (data) {
                         hideDisableLayer();
                         if (data.Status === 'success' || data.Status === 'successwithnoinsertion') {
-                            showAlert("Data Processed, please check Sent history for status", "success", 10000);
+                            showAlert("Data Processed, please check Sent history for status", "success");
+                             LoadSubscriberSMS(fnsuccess,false);
                         }
                         if (data.Status === 'error') {
-                            showAlert("Error Occured "+data.error, "danger", 10000);
+                            showAlert("Error Occured "+data.error, "danger");
                         }
                     },
                     error: function (data, error) {
@@ -101,20 +102,7 @@ $(function () {
     });
 
 
-    $.ajax({
-        type: 'Get',
-        async:false,
-        url: '/Notify/GetSubscriberSMS',
-        dataType: 'json',
-        success: function (data,success) {
-            //var result = JSON.parse(data);
-            $("#opensmscnt").html(data.Openingsms);
-            $("#smsbalcnt").html(data.balancesms);
-        },
-        error: function (data) {
-            alert('problem in retrieving message balance details');
-        }
-    });
+    LoadSubscriberSMS(fnsuccess, false);
 
 
     $('#ContactList').on('click', '.close', function () {
@@ -267,3 +255,8 @@ var showDisableLayer = function () {
 var hideDisableLayer = function () {
     $("#loading").remove();
 };
+
+function fnsuccess(data) {
+      $("#opensmscnt").html(data.Openingsms);
+     $("#smsbalcnt").html(data.balancesms);
+}

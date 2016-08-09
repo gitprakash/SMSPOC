@@ -38,6 +38,9 @@ namespace SMSPOCWeb
             bundles.Add(new ScriptBundle("~/bundles/Template").Include(
                 "~/Scripts/Template.js")
                 );
+            bundles.Add(new ScriptBundle("~/bundles/Messageutility").Include(
+              "~/Scripts/Messageutility.js")
+              );
             bundles.Add(new ScriptBundle("~/bundles/MessageHistory").Include(
             "~/Scripts/MessageHistory.js")
             );
