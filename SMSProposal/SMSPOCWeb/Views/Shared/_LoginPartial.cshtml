@@ -2,42 +2,18 @@
 {
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
     {
-        @Html.AntiForgeryToken()
-
-        <ul class="nav navbar-nav navbar-right">
-            <li>
-                <button type="button" class="btn btn-primary">Welcome  @User.Identity.Name </button>
-                @*<span class="label label label-primary"> </span>*@
-                @* @Html.ActionLink("Hello " + User.Identity.Name + "!", "Index", "Manage", routeValues: null, htmlAttributes: new {title = "Manage", @class = "label-primary"})*@
-            </li>
+        @Html.AntiForgeryToken() 
+       
+    <div class="btn-group  navbar-right">
+        <a class="btn dropdown-toggle btn-primary" data-toggle="dropdown" href="#">
+            @User.Identity.Name
+            <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+            <li>@Html.ActionLink("Profile", "Prfile", "User")</li> 
             <li><a href="javascript:document.getElementById('logoutForm').submit()" class="alert-link">Log off</a></li>
         </ul>
+    </div>
     }
 }
-else
-{
-    <ul class="nav navbar-nav navbar-right">
-        @*@{
-            if (!Request.IsAuthenticated)
-            {
-                <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
-            }
-        }*@
-        <li>
-            @{
-    if (Request.IsAuthenticated)
-    {
-        using (Html.BeginForm("Logout", "Account", FormMethod.Post, new { id = "logoutForm" }))
-        {
-            <a href="javascript:document.getElementById('logoutForm').submit()">Logout</a>
-        }
-    }
-    @*else
-    {
-        @Html.ActionLink("Login", "Login", "Account")
-    }*@
-            }
-        </li>
-
-    </ul>
-}
+ 

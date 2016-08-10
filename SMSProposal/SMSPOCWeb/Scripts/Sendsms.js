@@ -14,9 +14,18 @@
         }
     }
 }
+//$(document).ready(ajustamodal);
+//$(window).resize(ajustamodal);
+function ajustamodal() {
+    var altura = $(window).height() - 205; //value corresponding to the modal heading + footer
+    $(".ativa-scroll").css({ "height": altura, "overflow-y": "auto" });
+}
+
 $(window).resize(function () {
     var outerwidth = $('#grid').width();
     $('#list').setGridWidth(outerwidth); // setGridWidth method sets a new width to the grid dynamically
+    //modal height scrollbar
+    ajustamodal();
 });
 
 function GetSMSMessageCount(value) {
@@ -45,6 +54,7 @@ $(document).ready(function () {
         // do something...
         ProcessSelectedStudent();
     })
+    ajustamodal();
 });
 
 var selectedcontactarray = [];
@@ -138,63 +148,12 @@ function CreateLinks() {
         var a = $("<a href='javascript:void(0)'></a>")
             .css({ 'display': 'inline-block' })
             .append(span);
-        $("<span id=" + contact.Id + " class='btn btn-info btn-sm' title= " + contact.Name + ":" + contact.Mobile + ">" + contact.RollNo + "</span>").css('margin-right', '10px').appendTo("#ContactList");
+        $("<span id=" + contact.Id + " class='btn btn-group btn-info btn-xs' title= " + contact.Name + ":" + contact.Mobile + ">" + contact.RollNo + "</span>").css('margin-right', '10px').appendTo("#ContactList");
         $(a).appendTo('#ContactList');
     });
 }
 
-$(function () {
 
-    $('#LoadContact').click(function () {
-        $("#dialog-div")
-       .dialog({
-           title: "Student details",
-           resizable: true,
-           autoOpen: true,
-           position: { my: "center top+15%", at: "center top+15%" },
-           minWidth: 700,
-           open: function (event, ui) {
-               ConstructJqGrid();
-           },
-           buttons: {
-               'Confirm': function () {
-                   var ids = $("#list").jqGrid('getGridParam', 'selarrrow');
-                   if (ids.length > 0) {
-
-                       selectedcontactarray = [];
-                       $.each(ids,
-                           function (i, rowid) {
-                               var name = $('#list').jqGrid('getCell', rowid, 'Name');
-                               var rollno = $('#list').jqGrid('getCell', rowid, 'RollNo');
-                               var standard = $('#list').jqGrid('getCell', rowid, 'Class');
-                               var section = $('#list').jqGrid('getCell', rowid, 'Section');
-                               var mobile = $('#list').jqGrid('getCell', rowid, 'Mobile');
-                               var contactvm = {
-                                   'Id': rowid,
-                                   'Name': name,
-                                   'RollNo': rollno,
-                                   'Standard': standard,
-                                   'Section': section,
-                                   'Mobile': mobile
-                               };
-                               if (rowid) {
-                                   selectedcontactarray.push(contactvm);
-                               }
-                           });
-                       CreateLinks();
-                       $(this).dialog('close');
-                   } else {
-                       alert('please select a contact');
-                       return false;
-                   }
-               },
-               'cancel': function () {
-                   $(this).dialog('close');
-               }
-           }
-       });
-    });
-});
 
 
 function ConstructJqGrid() {
@@ -208,19 +167,17 @@ function ConstructJqGrid() {
         colNames: ['Id', 'RollNo', 'Name', 'Class', 'Section', 'Mobile'],
         colModel: [
               { name: 'Id', index: 'Id', key: true, hidden: true },
-              { name: 'RollNo', index: 'RollNo', width: 40, key: false, align: 'center' },
-              { name: 'Name', index: 'Name', width: 70, key: false, align: 'center' },
+              { name: 'RollNo', index: 'RollNo', width: 70, key: false, align: 'center' },
+              { name: 'Name', index: 'Name', width: 140, key: false, align: 'center' },
               { name: 'Class', index: 'Class', width: 30, key: false, align: 'center' },
-              { name: 'Section', index: 'Section', width: 30, key: false, align: 'center' },
-              { name: 'Mobile', index: 'Mobile', width: 70, key: false, align: 'center' }
+              { name: 'Section', index: 'Section', width: 60, key: false, align: 'center' },
+              { name: 'Mobile', index: 'Mobile', width: 90, key: false, align: 'center' }
 
         ],
         rowNum: 10,
         rowList: [10, 20, 50, 100],
         viewrecords: true,
-        pager: jQuery("#pager"),
-        //height: '100%',
-        //width: '600',
+        pager: jQuery("#pager"), 
         multiselect: true,
         gridview: true,
         shrinkToFit: true,
@@ -296,11 +253,9 @@ var ProcessSelectedStudent = function () {
                 }
             });
         CreateLinks();
-        $('#StudentModal').modal({
-            show: false
-        })
+        $('#StudentModal').modal('hide')
     } else {
-        alert('please select a contact');
+        alert('please select a student');
         return false;
     }
 };
