@@ -55,6 +55,7 @@ namespace SMSPOCWeb.App_Start
             container.RegisterType<IGenericRepository<MessageStatus>, Genericrepository<MessageStatus>>();
             container.RegisterType<IGenericRepository<SubscriberMessageBalance>, Genericrepository<SubscriberMessageBalance>>();
             container.RegisterType<IGenericRepository<SubscriberMessageBalanceHistory>, Genericrepository<SubscriberMessageBalanceHistory>>();
+            container.RegisterType<IGenericRepository<SubscriberSection>, Genericrepository<SubscriberSection>>();
             container.RegisterType<IRoleService, RoleService>();
             container.RegisterType<IAccountService, AccountService>();
             container.RegisterType<IUserRoleService, UserRoleService>();

@@ -20,7 +20,7 @@ namespace Repositorylibrary
         Task<ICollection<TResult>> FindAllAsync<TResult>(Expression<Func<TObject, bool>> match, Expression<Func<TObject, TResult>> project);
         Task<ICollection<TResult>> FindAllAsync<TResult, Tkey>(Expression<Func<TObject, bool>> match,
              Expression<Func<TObject, TResult>> select, Expression<Func<TResult, Tkey>> sort);
-        Task<ICollection<TObject>> GetPagedResult(int skip, int take, string sortcolumn, bool desc, Expression<Func<TObject, bool>> match = null);
+        Task<ICollection<TObject>> GetPagedResult(int skip, int take, string sortcolumn, bool asc, Expression<Func<TObject, bool>> match = null, List<Filter> filter = null);
         TObject Add(TObject t);
         Task<TObject> AddAsync(TObject t);
         TObject Update(TObject updated, int key);
@@ -32,7 +32,7 @@ namespace Repositorylibrary
         Task<TResult[]> ToArrayAsync<TResult>(Expression<Func<TObject, TResult>> select);
         IQueryable<TObject> GetAllLazyLoad(Expression<Func<TObject, bool>> filter, params Expression<Func<TObject, object>>[] children);
         Task<ICollection<TResult>> GetPagedResult<TResult>(int skip, int take, string ordercolumn, bool desc, Expression<Func<TObject, TResult>> project,
-            Expression<Func<TObject, bool>> match = null);
+            Expression<Func<TObject, bool>> match = null, List<Filter> filter = null);
 
         Task<int> AddRangeAsync(List<TObject> t);
         Task<int> SaveAsync();

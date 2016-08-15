@@ -31,23 +31,23 @@ namespace Repositorylibrary
         {
             return await _context.Set<TObject>().AsNoTracking().ToListAsync();
         }
-        public async Task<ICollection<TObject>> GetPagedResult(int skip, int take, string ordercolumn, bool desc, Expression<Func<TObject, bool>> match = null)
+        public async Task<ICollection<TObject>> GetPagedResult(int skip, int take, string ordercolumn, bool asc, Expression<Func<TObject, bool>> match = null, 
+            List<Filter> filter = null)
         {
-            if (match == null)
-            {
-                return await _context.Set<TObject>().AsNoTracking().OrderByAscDsc(ordercolumn, desc).Skip(skip).Take(take).AsNoTracking().ToListAsync();
-            }
-            return await _context.Set<TObject>().AsNoTracking().Where(match).OrderByAscDsc(ordercolumn, desc).Skip(skip).Take(take).AsNoTracking().ToListAsync();
+            IQueryable<TObject> query = _context.Set<TObject>().AsNoTracking();
+            Expression<Func<TObject, bool>> deleg = ExpressionBuilder.GetExpression<TObject>(filter);
+                query = filter!=null? filter.Count>0 ? query.Where(deleg):query:query;
+            query = match != null ? query.Where(match) : query;
+            return await query.OrderByAscDsc(ordercolumn, asc).Skip(skip).Take(take).AsNoTracking().ToListAsync();
         }
         public async Task<ICollection<TResult>> GetPagedResult<TResult>(int skip, int take, string ordercolumn, bool desc, Expression<Func<TObject, TResult>> project,
-            Expression<Func<TObject, bool>> match = null)
+            Expression<Func<TObject, bool>> match = null, List<Filter> filter = null)
         {
-            IQueryable<TObject> qry = _context.Set<TObject>().AsNoTracking();
-            if (match == null)
-            {
-                return await qry.OrderByAscDsc(ordercolumn, desc).Skip(skip).Take(take).AsNoTracking().Select(project).ToListAsync();
-            }
-            return await qry.Where(match).AsNoTracking().Select(project).OrderByAscDsc(ordercolumn, desc).Skip(skip).Take(take).ToListAsync();
+            IQueryable<TObject> query = _context.Set<TObject>().AsNoTracking();
+            Expression<Func<TObject, bool>> deleg = ExpressionBuilder.GetExpression<TObject>(filter);
+            query = filter != null ? filter.Count > 0 ? query.Where(deleg) : query : query;
+            query = match != null ? query.Where(match) : query;
+            return await query.Select(project).OrderByAscDsc(ordercolumn, desc).Skip(skip).Take(take).ToListAsync();
         }
 
         public TObject Get(int id)

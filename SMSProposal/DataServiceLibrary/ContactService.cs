@@ -2,6 +2,8 @@
 using Repositorylibrary;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -19,8 +21,14 @@ namespace DataServiceLibrary
             msscRepository = sscRepository;
 
         }
-        public async Task<IEnumerable<ContactViewModel>> Contacts(int subcriberId, int skip, int pagesize, string ordercolumn, bool desc)
+        public async Task<IEnumerable<ContactViewModel>> Contacts(int subcriberId, JgGridParam jgGridParam)
         {
+            int pageIndex = Convert.ToInt32(jgGridParam.page) - 1;
+            int pageSize = jgGridParam.rows;
+            string sort = jgGridParam.sord ?? "asc";
+            string ordercolumn = jgGridParam.sidx;
+            bool desc = sort.ToUpper() == "ASC";
+            var filter = GetFilter(jgGridParam);
             Expression<Func<SubscriberStandardContacts, bool>> where = s => s.SubscriberStandards.SubscriberId == subcriberId;
             Expression<Func<SubscriberStandardContacts, ContactViewModel>> select = s => new ContactViewModel
             {
@@ -35,9 +43,29 @@ namespace DataServiceLibrary
                 SubscriberStandardSectionId = s.SubscriberStandardSectionsId,
                 Status=s.Active?"Active":"InActive"
             };
-            return await msscRepository.GetPagedResult(skip, pagesize, ordercolumn, desc, select, where);
+            return await msscRepository.GetPagedResult(pageSize * pageIndex, pageSize, ordercolumn, desc, select, where, filter);
         }
-
+        private static List<Filter> GetFilter(JgGridParam jgGridParam)
+        {
+            List<Filter> filter = new List<Filter>();
+            int rollno = 0;
+            if (!string.IsNullOrEmpty(jgGridParam.searchField))
+            {
+                Filter instancefilter = new Filter { PropertyName = jgGridParam.searchField, Operation = Op.Equals };
+                if (jgGridParam.searchField == "RollNo")
+                {
+                   // int.TryParse(jgGridParam.searchString, out rollno);
+                    instancefilter.PropertyName = "Contact.RollNo";
+                    instancefilter.Value = rollno;
+                }
+                else
+                {
+                    instancefilter.Value = jgGridParam.searchString;
+                }
+                filter.Add(instancefilter);
+            };
+            return filter;
+        }
         public async Task<int> TotalContacts(int subcriberId)
         {
             Expression<Func<SubscriberStandardContacts, bool>> where = s => s.SubscriberStandards.SubscriberId == subcriberId && s.Active;
@@ -97,6 +125,26 @@ namespace DataServiceLibrary
             return await msscRepository.SaveAsync();
         }
 
-       
+        public async Task<bool> IsUniqueRollNo(int subscriberId,string rollNo)
+        {
+            return
+                await
+                    msscRepository.AnyAsync(
+                        s => s.SubscriberStandards.SubscriberId == subscriberId && s.Contact.RollNo.Equals(rollNo));
+        }
+
+        public List<ContactViewModel> ProjectContactsFromDatatable(DataTable dt)
+        {
+           var result= dt.AsEnumerable().AsParallel().Select(dr => new ContactViewModel()
+            {
+                RollNo = dr["RollNo"].ToString(), 
+                Name = dr["Name"].ToString(),
+                Mobile = Convert.ToInt64(dr["Mobile"]),
+                BloodGroup = dr["Blood Group"].ToString(),
+                Class = dr["Class"].ToString(),
+                Section=dr["Section"].ToString()
+            }).ToList();
+            return result;
+        }
     }
 }

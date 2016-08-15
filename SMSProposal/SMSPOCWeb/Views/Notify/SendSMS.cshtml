@@ -14,14 +14,15 @@
         <h3 class="panel-title">Send SMS Form</h3>
     </div>
     <div class="panel-body">
-        <div id="smsview"> 
-                
-                    <span class="label label-info">Opening SMS <span class="badge" id="opensmscnt"></span></span>
-                
-                    <span class="label label-info">Available SMS <span class="badge" id="smsbalcnt"></span></span>
-                <hr />
+        <div class="row">
+            <div id="smsview col-md-12">
+
+                <span class="label label-info">Opening SMS <span class="badge" id="opensmscnt"></span></span>
+
+                <span class="label label-info col-lg-offset-1">Available SMS <span class="badge" id="smsbalcnt"></span></span>
             </div>
-            <div class="row clearfix">
+        </div>
+            <div class="row">
                 <div class="input-group col-lg-12">
                     <div class="panel panel-primary">
                         <div class="panel-heading">
@@ -35,17 +36,17 @@
             </div>
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="col-lg-2">
+                    <div class="col-sm-6 col-md-6 col-lg-2 col-xs-6">
                         <div class="input-group">
-                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#StudentModal" >Load Students</button>
+                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#StudentModal">Load Students</button>
                         </div>
                     </div>
-                    <div class="col-lg-10">
+                    <div class="col-sm-6 col-md-6 col-lg-2 col-xs-6">
                         <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#TemplateModal">Select Template</button>
-                        <div class="input-group">
-                            <span>Message Template</span>
-                            <select id="dropdown"></select>
-                        </div>
+                        @*<div class="input-group">
+                <span>Message Template</span>
+                <select id="dropdown"></select>
+            </div>*@
                     </div>
                 </div>
             </div>

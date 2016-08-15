@@ -3,10 +3,13 @@ using DataServiceLibrary;
 using SMSPOCWeb.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Excel;
 
 namespace SMSPOCWeb.Controllers
 {
@@ -24,21 +27,23 @@ namespace SMSPOCWeb.Controllers
         {
             return View();
         }
-        public async Task<JsonResult> Index(string sidx, string sort, int page, int rows)
+        public ActionResult UploadView()
+        {
+            return View("UploadStudent");
+        }
+        public async Task<JsonResult> Index(JgGridParam jgGridParam)
         {
             try
             {
-                var identity = (CustomIdentity)User.Identity;
-                sort = sort ?? "asc";
-                int pageIndex = Convert.ToInt32(page) - 1;
-                int pageSize = rows;
-                var contacts = await mcontactService.Contacts(identity.User.Id, pageIndex * pageSize, pageSize, sidx, sort.ToUpper() == "DESC");
+
+                var identity = (CustomIdentity)User.Identity; 
+                var contacts = await mcontactService.Contacts(identity.User.Id, jgGridParam);
                 int totalRecords = await mcontactService.TotalContacts(identity.User.Id);
-                var totalPages = (int)Math.Ceiling((float)totalRecords / (float)rows);
+                var totalPages = (int)Math.Ceiling((float)totalRecords / (float)jgGridParam.rows);
                 var jsonData = new
                 {
                     total = totalPages,
-                    page,
+                    jgGridParam.page,
                     records = totalRecords,
                     rows = contacts
                 };
@@ -161,6 +166,52 @@ namespace SMSPOCWeb.Controllers
         {
             var Sections = await mclassService.GetSections(subscriberStandardId);
             return Json(Sections, JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Upload(HttpPostedFileBase upload)
+        {
+            if (ModelState.IsValid)
+            {
+                if (upload != null && upload.ContentLength > 0)
+                {
+                    using (Stream stream = upload.InputStream)
+                    {
+                        IExcelDataReader reader = null;
+                        if (upload.FileName.EndsWith(".xls"))
+                        {
+                            reader = ExcelReaderFactory.CreateBinaryReader(stream);
+                        }
+                        else if (upload.FileName.EndsWith(".xlsx"))
+                        {
+                            reader = ExcelReaderFactory.CreateOpenXmlReader(stream);
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("File", "This file format is not supported");
+                            return View("UploadStudent");
+                        }
+                        reader.IsFirstRowAsColumnNames = true;
+                        DataSet result = reader.AsDataSet();
+                        reader.Close();
+                        var tupledsstatus=result.ValidateStudentTemplate();
+                        if (!tupledsstatus.Item1)
+                        {
+                            ModelState.AddModelError("Error",tupledsstatus.Item2);
+                            return View("UploadStudent");
+                        }
+                        var identity = (CustomIdentity) User.Identity;
+                        var classdicts = await mclassService.ClassDictionaries(identity.User.Id);
+                        var cvmresult = mcontactService.ProjectContactsFromDatatable(result.Tables[0]);
+                        return View("UploadStudent"); 
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("File", "Please Upload Your file");
+                }
+            }
+            return View("UploadStudent");
         }
     }
 }

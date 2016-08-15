@@ -1,0 +1,24 @@
+﻿
+@{
+    ViewBag.Title = "UploadStudent";
+}
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">Student List</h3>
+    </div>
+    <div class="panel-body">
+        <div id="grid" class="jqGrid">
+            @using (Html.BeginForm("Upload", "Contact", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                <div class="form‐group">
+                    <input type="file" id="dataFile" name="upload" />
+                    <input type="submit" value="Upload" class="btn btn-success" />
+                </div>
+            }
+            </div>
+        </div>
+    </div>
+

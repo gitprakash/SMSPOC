@@ -167,11 +167,11 @@ function ConstructJqGrid() {
         colNames: ['Id', 'RollNo', 'Name', 'Class', 'Section', 'Mobile'],
         colModel: [
               { name: 'Id', index: 'Id', key: true, hidden: true },
-              { name: 'RollNo', index: 'RollNo', width: 70, key: false, align: 'center' },
-              { name: 'Name', index: 'Name', width: 140, key: false, align: 'center' },
-              { name: 'Class', index: 'Class', width: 30, key: false, align: 'center' },
-              { name: 'Section', index: 'Section', width: 60, key: false, align: 'center' },
-              { name: 'Mobile', index: 'Mobile', width: 90, key: false, align: 'center' }
+              { name: 'RollNo', index: 'RollNo', width: 80, key: false, align: 'center'},
+              { name: 'Name', index: 'Name', width: 160, key: false, align: 'center'},
+              { name: 'Class', index: 'Class', width: 50, key: false, align: 'center'},
+              { name: 'Section', index: 'Section', width: 70, key: false, align: 'center'},
+              { name: 'Mobile', index: 'Mobile', width: 110, key: false, align: 'center'}
 
         ],
         rowNum: 10,
@@ -183,8 +183,9 @@ function ConstructJqGrid() {
         shrinkToFit: true,
         autowidth: true
     });
-    jQuery("#list").jqGrid('navGrid', '#pager', { edit: false, add: false, del: false, search: true });
-    jQuery("#list").jqGrid('filterToolbar', { stringResult: true, searchOnEnter: false });
+    jQuery("#list").jqGrid('navGrid', '#pager', { edit: false, add: false, del: false, search: false });
+   // jQuery("#list").jqGrid('filterToolbar', { searchOperators: true });
+    jQuery("#list").jqGrid('filterToolbar', { stringResult: true, searchOnEnter: false, searchOperators: true });
 
 }
 

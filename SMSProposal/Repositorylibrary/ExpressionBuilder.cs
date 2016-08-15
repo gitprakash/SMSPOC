@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SIRepository
+namespace Repositorylibrary
 {
     public static class ExpressionBuilder
     {
