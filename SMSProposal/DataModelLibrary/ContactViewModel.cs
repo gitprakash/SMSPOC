@@ -10,7 +10,7 @@
         
         public long Id { get; set; }
         [Required]
-        public int SubscriberStandardId { get; set; }
+        public long SubscriberStandardId { get; set; }
 
         public int? SubscriberStandardSectionId { get; set; }
 

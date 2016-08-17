@@ -16,7 +16,7 @@ namespace DataModelLibrary
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
         [Required]
-        public int SubscriberStandardsId { get; set; }
+        public long SubscriberStandardsId { get; set; }
         public virtual SubscriberStandards SubscriberStandards { get; set; }
         [Required]
         public long ContactId { get; set; }

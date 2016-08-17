@@ -35,6 +35,7 @@ namespace Repositorylibrary
             Expression<Func<TObject, bool>> match = null, List<Filter> filter = null);
 
         Task<int> AddRangeAsync(List<TObject> t);
+        Task<List<TObject>> AddRangeAsyncWithReturnAll(List<TObject> t);
         Task<int> SaveAsync();
 
 

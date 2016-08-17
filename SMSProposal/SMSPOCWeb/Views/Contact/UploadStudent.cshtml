@@ -1,4 +1,4 @@
-﻿
+﻿@using DataModelLibrary
 @{
     ViewBag.Title = "UploadStudent";
 }
@@ -19,6 +19,39 @@
                 </div>
             }
             </div>
+        @if (ViewBag.Class != null) {
+            var classlist = (List<SubscriberStandards>)ViewBag.Class;
+            foreach (var ss in classlist)
+            {
+                <div>
+                    <span class="text-success">Class Added : @ss.Standard.Name</span>
+                </div>
+            }
+        }
+        @if (ViewBag.newclasssectionlink != null)
+        {
+            var classlist = (List<Tuple<string,string>>)ViewBag.newclasssectionlink;
+            foreach (var ss in classlist)
+            {
+                <div>
+                    <span class="text-success">Class @ss.Item1 - @ss.Item2</span>
+                </div>
+            }
+        }
+        @if (ViewBag.Contacts != null)
+        {
+            var classlist = (List<ContactViewModel>)ViewBag.newclasssectionlink;
+            if (classlist.Count > 0)
+            {
+                    <span class="text-success"> Contact Created</span>
+            }
+            foreach (var ss in classlist)
+            {
+                <div>
+                    <span class="text-success"> @ss.Name -@ss.RollNo - @ss.Class -@ss.Section</span>
+                </div>
+            }
+        }
         </div>
     </div>
 

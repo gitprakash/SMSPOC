@@ -48,7 +48,7 @@ namespace DataServiceLibrary
                 else
                 {
                     return Tuple.Create(false,
-                        "Excel Input header format => RollNo	, Name,Class, Section ,	Mobile,Blood Group");
+                        "Excel Input header format => RollNo, Name,Class, Section ,	Mobile,Blood Group");
                 }
             }
             else
@@ -108,7 +108,7 @@ namespace DataServiceLibrary
         private static bool IsAllARequiredFieldsFilled(DataSet ds)
         {
             var emptyrowcheck = ds.Tables[0].AsEnumerable().SingleOrDefault(r => r["RollNo"] == DBNull.Value ||
-                                                                       r["Name"] == null || r["Class"] == DBNull.Value ||
+                                                                       r["Name"] == DBNull.Value || r["Class"] == DBNull.Value ||
                                                                        r["Mobile"] == DBNull.Value);
 
             if (emptyrowcheck != null)

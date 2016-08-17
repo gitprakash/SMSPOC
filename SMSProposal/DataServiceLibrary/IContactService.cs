@@ -17,7 +17,9 @@ namespace DataServiceLibrary
         Task<int> EditContact(ContactViewModel contactvm);
         Task<bool> IsUniqueMobile(long mobileno);
         Task<SubscriberStandardContacts> FindContact(long Id);
-        List<ContactViewModel> ProjectContactsFromDatatable(DataTable dt);
+        List<ContactViewModel> GetContactViewModels(DataTable dt);
+        Task<List<ContactViewModel>> CheckExcelBuilkRollNoExistsTask(int subscriberId, List<ContactViewModel> lstContactViewModels);
+        Task<List<ContactViewModel>> ExcelBulkUploadContact(int subscriberId, List<ContactViewModel> excellstContactViewModels);
         Task<int> SaveAsync();
     }
 }

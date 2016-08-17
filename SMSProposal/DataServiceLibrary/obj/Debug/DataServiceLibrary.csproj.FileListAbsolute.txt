@@ -25,3 +25,5 @@ E:\Github\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\EntityFramework.xml
 E:\Github\SMSPOC\SMSProposal\DataServiceLibrary\obj\Debug\DataServiceLibrary.csprojResolveAssemblyReference.cache
 E:\Github\SMSPOC\SMSProposal\DataServiceLibrary\obj\Debug\DataServiceLibrary.dll
 E:\Github\SMSPOC\SMSProposal\DataServiceLibrary\obj\Debug\DataServiceLibrary.pdb
+E:\Github\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\System.Net.Http.Formatting.dll
+E:\Github\SMSPOC\SMSProposal\DataServiceLibrary\bin\Debug\System.Net.Http.Formatting.xml

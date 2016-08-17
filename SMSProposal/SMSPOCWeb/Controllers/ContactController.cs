@@ -36,7 +36,7 @@ namespace SMSPOCWeb.Controllers
             try
             {
 
-                var identity = (CustomIdentity)User.Identity; 
+                var identity = (CustomIdentity)User.Identity;
                 var contacts = await mcontactService.Contacts(identity.User.Id, jgGridParam);
                 int totalRecords = await mcontactService.TotalContacts(identity.User.Id);
                 var totalPages = (int)Math.Ceiling((float)totalRecords / (float)jgGridParam.rows);
@@ -167,48 +167,96 @@ namespace SMSPOCWeb.Controllers
             var Sections = await mclassService.GetSections(subscriberStandardId);
             return Json(Sections, JsonRequestBehavior.AllowGet);
         }
+
+        private async Task<ActionResult> SaveBulkUpload(List<ContactViewModel> cvmresult)
+        {
+            var identity = (CustomIdentity)User.Identity;
+            var lstexistrollno = await mcontactService.CheckExcelBuilkRollNoExistsTask(identity.User.Id, cvmresult);
+            if (lstexistrollno.Count > 0)
+            {
+                lstexistrollno.ForEach(r =>
+                {
+                    if (!string.IsNullOrEmpty(r.Section))
+                    {
+                        ModelState.AddModelError("Error",
+                            string.Format(
+                                "Roll No {0} already exists in Class {1} Section {2}",
+                                r.RollNo, r.Class, r.Section));
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("Error",
+                            string.Format(
+                                "Roll No {0} already exists in  Class {1}",
+                                r.RollNo, r.Class));
+                    }
+                });
+                return View("UploadStudent");
+            }
+            //var
+            var newclasslstadded = await mclassService.AddBulkClassifNotExists(cvmresult, identity.User.Id);
+            ViewBag.Class = newclasslstadded;
+            var newsectionlist = await mclassService.AddBulkSectionsifNotExists(cvmresult, identity.User.Id);
+           // ViewBag.Section = newsectionlist;
+            var newclasssectionlink = await mclassService.AddBulkClassSectionLinkIfNotExists(cvmresult, identity.User.Id);
+            ViewBag.ClassSection = newclasssectionlink;
+           var contacts= await mcontactService.ExcelBulkUploadContact(identity.User.Id, cvmresult);
+            ViewBag.Contacts = contacts;
+            return View("UploadStudent");
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Upload(HttpPostedFileBase upload)
         {
             if (ModelState.IsValid)
             {
-                if (upload != null && upload.ContentLength > 0)
+                try
                 {
-                    using (Stream stream = upload.InputStream)
+                    if (upload != null && upload.ContentLength > 0)
                     {
-                        IExcelDataReader reader = null;
-                        if (upload.FileName.EndsWith(".xls"))
+                        using (Stream stream = upload.InputStream)
                         {
-                            reader = ExcelReaderFactory.CreateBinaryReader(stream);
+                            IExcelDataReader reader = null;
+                            if (upload.FileName.EndsWith(".xls"))
+                            {
+                                reader = ExcelReaderFactory.CreateBinaryReader(stream);
+                            }
+                            else if (upload.FileName.EndsWith(".xlsx"))
+                            {
+                                reader = ExcelReaderFactory.CreateOpenXmlReader(stream);
+                            }
+                            else
+                            {
+                                ModelState.AddModelError("File", "This file format is not supported");
+                                return View("UploadStudent");
+                            }
+                            reader.IsFirstRowAsColumnNames = true;
+                            DataSet result = reader.AsDataSet();
+                            reader.Close();
+                            var tupledsstatus = result.ValidateStudentTemplate();
+                            if (!tupledsstatus.Item1)
+                            {
+                                ModelState.AddModelError("Error", tupledsstatus.Item2);
+                                return View("UploadStudent");
+                            }
+                            var cvmresult = mcontactService.GetContactViewModels(result.Tables[0]);
+                            await SaveBulkUpload(cvmresult);
                         }
-                        else if (upload.FileName.EndsWith(".xlsx"))
-                        {
-                            reader = ExcelReaderFactory.CreateOpenXmlReader(stream);
-                        }
-                        else
-                        {
-                            ModelState.AddModelError("File", "This file format is not supported");
-                            return View("UploadStudent");
-                        }
-                        reader.IsFirstRowAsColumnNames = true;
-                        DataSet result = reader.AsDataSet();
-                        reader.Close();
-                        var tupledsstatus=result.ValidateStudentTemplate();
-                        if (!tupledsstatus.Item1)
-                        {
-                            ModelState.AddModelError("Error",tupledsstatus.Item2);
-                            return View("UploadStudent");
-                        }
-                        var identity = (CustomIdentity) User.Identity;
-                        var classdicts = await mclassService.ClassDictionaries(identity.User.Id);
-                        var cvmresult = mcontactService.ProjectContactsFromDatatable(result.Tables[0]);
-                        return View("UploadStudent"); 
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("File", "Please Upload Your file");
                     }
                 }
-                else
+                catch (Exception ex)
                 {
-                    ModelState.AddModelError("File", "Please Upload Your file");
+                    ModelState.AddModelError("Exception occured", ex.Message);
+                    if (ex.InnerException != null)
+                    {
+                        ModelState.AddModelError("Exception occured", ex.InnerException.Message);
+
+                    }
                 }
             }
             return View("UploadStudent");

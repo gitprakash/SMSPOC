@@ -90,6 +90,7 @@ namespace Repositorylibrary
         public async Task<ICollection<TResult>> FindAllAsync<TResult, Tkey>(Expression<Func<TObject, bool>> match,
             Expression<Func<TObject, TResult>> select, Expression<Func<TResult, Tkey>> sort)
         {
+            _context.Database.Log = (data => Debug.WriteLine("FindAllAsync took "+data));
             return await _context.Set<TObject>().Where(match).Select(select).OrderBy(sort).ToArrayAsync();
         }
 
@@ -116,6 +117,15 @@ namespace Repositorylibrary
             int result = await _context.SaveChangesAsync();
             _context.Configuration.AutoDetectChangesEnabled = true;
             return result;
+        }
+        public async Task<List<TObject>> AddRangeAsyncWithReturnAll(List<TObject> t)
+        {
+            _context.Configuration.AutoDetectChangesEnabled = false;
+            _context.Database.Log = (data => Debug.WriteLine(data));
+            _context.Set<TObject>().AddRange(t);
+            int result = await _context.SaveChangesAsync();
+            _context.Configuration.AutoDetectChangesEnabled = true;
+            return t;
         }
 
         public TObject Update(TObject updated, int key)

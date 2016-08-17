@@ -133,18 +133,107 @@ namespace DataServiceLibrary
                         s => s.SubscriberStandards.SubscriberId == subscriberId && s.Contact.RollNo.Equals(rollNo));
         }
 
-        public List<ContactViewModel> ProjectContactsFromDatatable(DataTable dt)
+        public List<ContactViewModel> GetContactViewModels(DataTable dt)
         {
            var result= dt.AsEnumerable().AsParallel().Select(dr => new ContactViewModel()
             {
-                RollNo = dr["RollNo"].ToString(), 
-                Name = dr["Name"].ToString(),
+                RollNo = dr["RollNo"].ToString().Trim(),
+                Name = dr["Name"].ToString().Trim(),
                 Mobile = Convert.ToInt64(dr["Mobile"]),
-                BloodGroup = dr["Blood Group"].ToString(),
-                Class = dr["Class"].ToString(),
-                Section=dr["Section"].ToString()
+                BloodGroup =  dr["Blood Group"]==DBNull.Value?string.Empty:dr["Blood Group"].ToString().Trim(),
+                Class = dr["Class"].ToString().Trim(),
+                Section = dr["Section"] == DBNull.Value ? string.Empty : dr["Section"].ToString().Trim()
             }).ToList();
             return result;
+        }
+
+        public async Task<List<ContactViewModel>> CheckExcelBuilkRollNoExistsTask(int subscriberId,List<ContactViewModel> lstContactViewModels)
+        {
+            var duprollnoresult=new List<ContactViewModel>();
+            var result = await GetSubscriberContact(subscriberId);
+            Stopwatch sw=new Stopwatch();
+            sw.Start();
+             lstContactViewModels.AsParallel().ForAll(
+                cvm =>
+                {
+                    if (result.Any(r => r.RollNo.Trim() == cvm.RollNo && r.Class.Trim() == cvm.Class && r.Section.Trim() == cvm.Section))
+                        duprollnoresult.Add(cvm);
+                }
+                );
+            Debug.WriteLine("IsRollNoExists took " +sw.ElapsedMilliseconds);
+            return duprollnoresult;
+        }
+        public async Task<List<ContactViewModel>> ExcelBulkUploadContact(int subscriberId, List<ContactViewModel> excellstContactViewModels)
+        {
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            var contacts= await ExcelBulkUpdateClassSectionTask(subscriberId, excellstContactViewModels);
+            var contactlist = contacts.AsParallel().Select(c => new SubscriberStandardContacts
+            {
+                Contact = new Contact
+                {
+                    Active = true,
+                    CreatedDate = DateTime.Now,
+                    Name = c.Name,
+                    BloodGroup = c.BloodGroup,
+                    Mobile = c.Mobile,
+                    RollNo = c.RollNo
+                },
+                Active = true,
+                SubscriberStandardsId = c.SubscriberStandardId,
+                SubscriberStandardSectionsId = c.SubscriberStandardSectionId,
+                CreatedAt = DateTime.Now
+            }).ToList();
+            Debug.WriteLine("ExcelBulkUpdateClassSectionTask took " + sw.ElapsedMilliseconds);
+            var result= await msscRepository.AddRangeAsyncWithReturnAll(contactlist);
+            return result.Where(r => r.Id > 0).Select(r => new ContactViewModel
+            {
+                Name = r.Contact.Name,
+                RollNo = r.Contact.RollNo,
+                Class = r.SubscriberStandards.Standard.Name,
+                Section = r.SubscriberStandardSections.SubscriberSection.Section.Name
+            }).ToList();
+        }
+
+        private async Task<List<ContactViewModel>> ExcelBulkUpdateClassSectionTask(int subscriberId, List<ContactViewModel> excellstContactViewModels)
+        {
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            var dbsscs = await GetSubscriberContact(subscriberId);
+            excellstContactViewModels.AsParallel().ForAll(
+                cvm =>
+                {
+                    var ssc =
+                        dbsscs.SingleOrDefault(
+                            r =>
+                                r.RollNo.Trim() == cvm.RollNo && r.Class.Trim() == cvm.Class &&
+                                r.Section.Trim() == cvm.Section);
+                    if (ssc != null)
+                    {
+                        cvm.SubscriberStandardId = ssc.SubscriberStandardId;
+                        cvm.SubscriberStandardSectionId = ssc.SubscriberStandardSectionId;
+                    }
+                });
+            Debug.WriteLine("ExcelBulkUpdateClassSectionTask took " + sw.ElapsedMilliseconds);
+            return excellstContactViewModels;
+        }
+
+        private async Task<List<ContactViewModel>> GetSubscriberContact(int subscriberId)
+        {
+            var result = await msscRepository.FindAllAsync(s => s.SubscriberStandards.SubscriberId == subscriberId,
+                s =>
+                    new ContactViewModel
+                    {
+                        RollNo = s.Contact.RollNo,
+                        Class = s.SubscriberStandards.Standard.Name,
+                        Section =
+                            s.SubscriberStandardSections == null
+                                ? string.Empty
+                                : s.SubscriberStandardSections.SubscriberSection.Section.Name,
+                        SubscriberStandardId = s.SubscriberStandardsId,
+                        SubscriberStandardSectionId = s.SubscriberStandardSectionsId,
+                    });
+            return result.ToList();
         }
     }
 }

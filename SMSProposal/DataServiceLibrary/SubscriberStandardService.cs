@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace DataServiceLibrary
 {
-    public class SubscriberStandardService:ISubscriberStandardService
+    public class SubscriberStandardService : ISubscriberStandardService
     {
         IGenericRepository<SubscriberStandards> mclassRepository;
         IGenericRepository<SubscriberSection> msubscribersectionRepository;
@@ -32,47 +33,38 @@ namespace DataServiceLibrary
         }
         public async Task<ICollection<SubscriberStandardSectionViewModel>> GetSections(int subscirberStandardId)
         {
-            Expression<Func<SubscriberStandardSections, SubscriberStandardSectionViewModel>> select = s => new SubscriberStandardSectionViewModel { SubscriberStandardId = s.SubscriberStandardsId, 
-                SubscriberStandardSectionId   = s.Id,SectionName = s.SubscriberSection.Section.Name };
+            Expression<Func<SubscriberStandardSections, SubscriberStandardSectionViewModel>> select = s => new SubscriberStandardSectionViewModel
+            {
+                SubscriberStandardId = s.SubscriberStandardsId,
+                SubscriberStandardSectionId = s.Id,
+                SectionName = s.SubscriberSection.Section.Name
+            };
             Expression<Func<SubscriberStandardSectionViewModel, string>> orderby = s => s.SectionName;
             return await msectionRepository.FindAllAsync(c => c.SubscriberStandardsId == subscirberStandardId && c.Active, select, orderby);
         }
 
-        public async Task<List<string>> ClassDictionaries(int subscriberId)
+        public async Task<List<string>> GetClassListTask(int subscriberId)
         {
             Expression<Func<SubscriberStandards, bool>> whereExpression = ss => ss.SubscriberId == subscriberId;
             var result = await mclassRepository.FindAllAsync(whereExpression, ss => ss.Standard.Name);
-           return  result.ToList();
+            return result.ToList();
         }
 
-        public async Task<List<string>> SectionDictionaries(int subscriberId)
+        public async Task<List<string>> GetSectionListTask(int subscriberId)
         {
             Expression<Func<SubscriberSection, bool>> whereExpression = ss => ss.SubscriberId == subscriberId;
             var result = await msubscribersectionRepository.FindAllAsync(whereExpression, ss => ss.Section.Name);
             return result.ToList();
         }
 
-        public async Task AddClassifNotExists(DataTable dt, int subscriberId)
+        public async Task<List<SubscriberStandards>> AddBulkClassifNotExists(List<ContactViewModel> lstContactViewModels, int subscriberId)
         {
-            var excelclasslist = dt.AsEnumerable().Select(c => c["Class"].ToString()).Distinct().ToList();
-            var dbclass = await ClassDictionaries(subscriberId);
-            var newclass = excelclasslist.Where(n=> dbclass.Contains(n) == false).AsParallel().ToList();
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            var excelclasslist = lstContactViewModels.Select(c => c.Class.Trim()).Distinct().ToList();
+            var dbclass = await GetClassListTask(subscriberId);
+            var newclass = excelclasslist.Where(n => dbclass.Contains(n) == false).AsParallel().ToList();
             var newdbclasslist = newclass.Select(c => new SubscriberStandards
-            {
-                SubscriberId = subscriberId,
-                Standard = new Standard { Name=c },Active = true, CreatedAt = DateTime.Now, Guid = Guid.NewGuid()
-            }).AsParallel().ToList();
-            if (newdbclasslist.Count > 0)
-            {
-                await mclassRepository.AddRangeAsync(newdbclasslist);
-            }
-        }
-        public async Task AddSectionsifNotExists(DataTable dt, int subscriberId)
-        {
-            var excelsectionlist = dt.AsEnumerable().Select(c => c["Section"].ToString()).Distinct().ToList();
-            var dbsections = await SectionDictionaries(subscriberId);
-            var newclass = excelsectionlist.Where(n => dbsections.Contains(n) == false).AsParallel().ToList();
-            var newdbsectionlist = newclass.Select(c => new SubscriberStandards
             {
                 SubscriberId = subscriberId,
                 Standard = new Standard { Name = c },
@@ -80,20 +72,51 @@ namespace DataServiceLibrary
                 CreatedAt = DateTime.Now,
                 Guid = Guid.NewGuid()
             }).AsParallel().ToList();
+            if (newdbclasslist.Count > 0)
+            {
+                await mclassRepository.AddRangeAsync(newdbclasslist);
+            }
+            Debug.WriteLine("AddBulkClassifNotExists took " + sw.ElapsedMilliseconds);
+            return newdbclasslist;
+        }
+        public async Task<List<SubscriberSection>> AddBulkSectionsifNotExists(List<ContactViewModel> lstContactViewModels, int subscriberId)
+        {
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            var excelsectionlist = lstContactViewModels.Where(c=>c.Section!=string.Empty).Select(c => c.Section).Distinct().ToList();
+            var dbsections = await GetSectionListTask(subscriberId);
+            var newclass = excelsectionlist.Where(n => dbsections.Contains(n) == false).AsParallel().ToList();
+            var newdbsectionlist = newclass.Select(c => new SubscriberSection
+            {
+                SubscriberId = subscriberId,
+                Section = new Section { Name = c },
+                Active = true,
+                CreatedAt = DateTime.Now,
+                Guid = Guid.NewGuid()
+            }).AsParallel().ToList();
             if (newdbsectionlist.Count > 0)
             {
-                await mclassRepository.AddRangeAsync(newdbsectionlist);
+                await msubscribersectionRepository.AddRangeAsync(newdbsectionlist);
             }
+            Debug.WriteLine("AddBulkSectionsifNotExists took " + sw.ElapsedMilliseconds);
+
+            return newdbsectionlist;
         }
 
-        public async Task AddClassSectionLinkIfNotExists(DataTable dt,int subscriberId)
+        public async Task<List<Tuple<string,string>>> AddBulkClassSectionLinkIfNotExists(List<ContactViewModel> lstContactViewModels, int subscriberId)
         {
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
             var uniqueclasssectionlst =
-                dt.AsEnumerable().Where(c => c["Class"] != DBNull.Value && c["Section"] != DBNull.Value)
-                    .Distinct()
-                    .Select(d => new {Class = d["Class"].ToString(), SectionName = d["Section"].ToString()})
-                    .ToList();
-            //uniqueclasssectionlst.ForEach(cs=>cs);
+                lstContactViewModels
+                .Where(c => c.Class != string.Empty && c.Section != string.Empty)
+                .Select(c => 
+                new
+                {
+                    Class = c.Class,
+                    Section = c.Section
+                })
+                .Distinct();
             var dbclasssectionlst =
                 await msectionRepository.FindAllAsync(s => s.SubscriberStandards.SubscriberId == subscriberId,
                     s =>
@@ -103,9 +126,38 @@ namespace DataServiceLibrary
                             SectionName = s.SubscriberSection.Section.Name
                         });
 
-            var newclasssection= uniqueclasssectionlst.Where(c => dbclasssectionlst.Contains(c) == false).AsParallel().ToList();
-
+            var filternewclasssection = uniqueclasssectionlst
+                .Where(c => dbclasssectionlst
+                .Any(dbcs => dbcs.Class == c.Class && dbcs.SectionName == c.Section) == false)
+                .AsParallel()
+                .ToList();
+            if (filternewclasssection.Count > 0)
+            {
+                //Getclass subscriberStandard Id
+                var dbclass = await mclassRepository.FindAllAsync(c => c.SubscriberId == subscriberId, c => new { Id = c.Id, Name = c.Standard.Name });
+                var classdictionary = dbclass.ToDictionary(c => c.Name, c => c.Id);
+                //Getclass subscriberStandard Id
+                var dbsection = await msubscribersectionRepository.FindAllAsync(
+                    s => s.SubscriberId == subscriberId,
+                    s => new
+                    {
+                        Id = s.Id,
+                        Name = s.Section.Name
+                    });
+                var dbsectiondictionary = dbsection.ToDictionary(s => s.Name, s => s.Id);
+                //construct class , section link
+                var classsections = filternewclasssection.Select(
+                    cs => new SubscriberStandardSections
+                    {
+                        Active = true,
+                        CreatedAt = DateTime.Now,
+                        SubscriberSectionId = dbsectiondictionary[cs.Section],
+                        SubscriberStandardsId = classdictionary[cs.Class]
+                    }).ToList();
+                await msectionRepository.AddRangeAsync(classsections);
+            }
+            Debug.WriteLine("AddBulkClassSectionLinkIfNotExists took " + sw.ElapsedMilliseconds);
+            return filternewclasssection.Select(s=>Tuple.Create(s.Class,s.Section)).ToList();
         }
-
     }
 }
