@@ -83,7 +83,7 @@ namespace DataServiceLibrary
         {
             Stopwatch sw = new Stopwatch();
             sw.Start();
-            var excelsectionlist = lstContactViewModels.Where(c=>c.Section!=string.Empty).Select(c => c.Section).Distinct().ToList();
+            var excelsectionlist = lstContactViewModels.Where(c => c.Section != string.Empty).Select(c => c.Section).Distinct().ToList();
             var dbsections = await GetSectionListTask(subscriberId);
             var newclass = excelsectionlist.Where(n => dbsections.Contains(n) == false).AsParallel().ToList();
             var newdbsectionlist = newclass.Select(c => new SubscriberSection
@@ -103,29 +103,26 @@ namespace DataServiceLibrary
             return newdbsectionlist;
         }
 
-        public async Task<List<Tuple<string,string>>> AddBulkClassSectionLinkIfNotExists(List<ContactViewModel> lstContactViewModels, int subscriberId)
+        public async Task<List<Tuple<string, string>>> AddBulkClassSectionLinkIfNotExists(List<ContactViewModel> lstContactViewModels, int subscriberId)
         {
             Stopwatch sw = new Stopwatch();
             sw.Start();
             var uniqueclasssectionlst =
                 lstContactViewModels
                 .Where(c => c.Class != string.Empty && c.Section != string.Empty)
-                .Select(c => 
+                .Select(c =>
                 new
                 {
                     Class = c.Class,
                     Section = c.Section
                 })
                 .Distinct();
-            var dbclasssectionlst =
-                await msectionRepository.FindAllAsync(s => s.SubscriberStandards.SubscriberId == subscriberId,
-                    s =>
+            var dbclasssectionlst = await GetClassSectionListTask(subscriberId, s =>
                         new
                         {
                             Class = s.SubscriberStandards.Standard.Name,
                             SectionName = s.SubscriberSection.Section.Name
                         });
-
             var filternewclasssection = uniqueclasssectionlst
                 .Where(c => dbclasssectionlst
                 .Any(dbcs => dbcs.Class == c.Class && dbcs.SectionName == c.Section) == false)
@@ -134,17 +131,9 @@ namespace DataServiceLibrary
             if (filternewclasssection.Count > 0)
             {
                 //Getclass subscriberStandard Id
-                var dbclass = await mclassRepository.FindAllAsync(c => c.SubscriberId == subscriberId, c => new { Id = c.Id, Name = c.Standard.Name });
-                var classdictionary = dbclass.ToDictionary(c => c.Name, c => c.Id);
+                var classdictionary = await GetClassDictionary(subscriberId);
                 //Getclass subscriberStandard Id
-                var dbsection = await msubscribersectionRepository.FindAllAsync(
-                    s => s.SubscriberId == subscriberId,
-                    s => new
-                    {
-                        Id = s.Id,
-                        Name = s.Section.Name
-                    });
-                var dbsectiondictionary = dbsection.ToDictionary(s => s.Name, s => s.Id);
+                var dbsectiondictionary = await GetSectionDictionary(subscriberId);
                 //construct class , section link
                 var classsections = filternewclasssection.Select(
                     cs => new SubscriberStandardSections
@@ -157,7 +146,71 @@ namespace DataServiceLibrary
                 await msectionRepository.AddRangeAsync(classsections);
             }
             Debug.WriteLine("AddBulkClassSectionLinkIfNotExists took " + sw.ElapsedMilliseconds);
-            return filternewclasssection.Select(s=>Tuple.Create(s.Class,s.Section)).ToList();
+            return filternewclasssection.Select(s => Tuple.Create(s.Class, s.Section)).ToList();
         }
+
+        private async Task<Dictionary<string, long>> GetSectionDictionary(int subscriberId)
+        {
+            var dbsection = await msubscribersectionRepository.FindAllAsync(
+                s => s.SubscriberId == subscriberId,
+                s => new
+                {
+                    Id = s.Id,
+                    Name = s.Section.Name
+                });
+            var dbsectiondictionary = dbsection.ToDictionary(s => s.Name, s => s.Id);
+            return dbsectiondictionary;
+        }
+
+        private async Task<Dictionary<string, long>> GetClassDictionary(int subscriberId)
+        {
+            var dbclass = await mclassRepository.FindAllAsync(c => c.SubscriberId == subscriberId,
+                c => new
+                {
+                    Id = c.Id,
+                    Name = c.Standard.Name
+                });
+            var classdictionary = dbclass.ToDictionary(c => c.Name, c => c.Id);
+            return classdictionary;
+        }
+        
+        private async Task<ICollection<TSelect>> GetClassSectionListTask<TSelect>(int subscriberId, Expression<Func<SubscriberStandardSections, TSelect>> select)
+        {
+            return await msectionRepository.FindAllAsync(
+                 c => c.SubscriberStandards.SubscriberId == subscriberId,
+                select);
+        }
+
+        public  async Task<List<ContactViewModel>> ExcelBulkUpdateClassSectionTask(int subscriberId, List<ContactViewModel> excellstContactViewModels)
+        {
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            var classdict = await GetClassDictionary(subscriberId);
+            var dbsscs = await  GetClassSectionListTask(subscriberId,
+                c => new
+                {
+                    Id = c.Id,
+                    Class = c.SubscriberStandards.Standard.Name,
+                    Section = c.SubscriberSection.Section.Name,
+                }); 
+            excellstContactViewModels.AsParallel().ForAll(
+                cvm =>
+                {
+                    var ssc =
+                        dbsscs.SingleOrDefault(
+                            r =>
+                                r.Class.Trim() == cvm.Class &&
+                                r.Section.Trim() == cvm.Section);
+                    if (ssc != null)
+                    {
+                        cvm.SubscriberStandardSectionId = ssc.Id;
+                    }
+                    cvm.SubscriberStandardId = classdict[cvm.Class];
+                });
+            Debug.WriteLine("ExcelBulkUpdateClassSectionTask took " + sw.ElapsedMilliseconds);
+            return excellstContactViewModels;
+        }
+
+       
     }
 }

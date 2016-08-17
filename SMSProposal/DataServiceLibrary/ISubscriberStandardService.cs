@@ -15,5 +15,6 @@ namespace DataServiceLibrary
         Task<List<SubscriberSection>> AddBulkSectionsifNotExists(List<ContactViewModel> lstContactViewModels, int subscriberId);
         Task<List<SubscriberStandards>> AddBulkClassifNotExists(List<ContactViewModel> lstContactViewModels, int subscriberId);
         Task<List<Tuple<string, string>>> AddBulkClassSectionLinkIfNotExists(List<ContactViewModel> lstContactViewModels, int subscriberId);
+        Task<List<ContactViewModel>> ExcelBulkUpdateClassSectionTask(int subscriberId, List<ContactViewModel> excellstContactViewModels);
     }
 }

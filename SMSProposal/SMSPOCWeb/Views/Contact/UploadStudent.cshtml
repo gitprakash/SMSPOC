@@ -34,13 +34,13 @@
             foreach (var ss in classlist)
             {
                 <div>
-                    <span class="text-success">Class @ss.Item1 - @ss.Item2</span>
+                    <span class="text-success">Class @ss.Item1 - Section @ss.Item2</span>
                 </div>
             }
         }
         @if (ViewBag.Contacts != null)
         {
-            var classlist = (List<ContactViewModel>)ViewBag.newclasssectionlink;
+            var classlist = (List<ContactViewModel>)ViewBag.Contacts;
             if (classlist.Count > 0)
             {
                     <span class="text-success"> Contact Created</span>

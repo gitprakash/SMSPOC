@@ -197,9 +197,9 @@ namespace SMSPOCWeb.Controllers
             var newclasslstadded = await mclassService.AddBulkClassifNotExists(cvmresult, identity.User.Id);
             ViewBag.Class = newclasslstadded;
             var newsectionlist = await mclassService.AddBulkSectionsifNotExists(cvmresult, identity.User.Id);
-           // ViewBag.Section = newsectionlist;
             var newclasssectionlink = await mclassService.AddBulkClassSectionLinkIfNotExists(cvmresult, identity.User.Id);
             ViewBag.ClassSection = newclasssectionlink;
+            var updateclasssectionlink = await mclassService.ExcelBulkUpdateClassSectionTask(identity.User.Id, cvmresult);
            var contacts= await mcontactService.ExcelBulkUploadContact(identity.User.Id, cvmresult);
             ViewBag.Contacts = contacts;
             return View("UploadStudent");

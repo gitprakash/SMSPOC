@@ -167,8 +167,7 @@ namespace DataServiceLibrary
         {
             Stopwatch sw = new Stopwatch();
             sw.Start();
-            var contacts= await ExcelBulkUpdateClassSectionTask(subscriberId, excellstContactViewModels);
-            var contactlist = contacts.AsParallel().Select(c => new SubscriberStandardContacts
+            var contactlist = excellstContactViewModels.AsParallel().Select(c => new SubscriberStandardContacts
             {
                 Contact = new Contact
                 {
@@ -194,30 +193,6 @@ namespace DataServiceLibrary
                 Section = r.SubscriberStandardSections.SubscriberSection.Section.Name
             }).ToList();
         }
-
-        private async Task<List<ContactViewModel>> ExcelBulkUpdateClassSectionTask(int subscriberId, List<ContactViewModel> excellstContactViewModels)
-        {
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-            var dbsscs = await GetSubscriberContact(subscriberId);
-            excellstContactViewModels.AsParallel().ForAll(
-                cvm =>
-                {
-                    var ssc =
-                        dbsscs.SingleOrDefault(
-                            r =>
-                                r.RollNo.Trim() == cvm.RollNo && r.Class.Trim() == cvm.Class &&
-                                r.Section.Trim() == cvm.Section);
-                    if (ssc != null)
-                    {
-                        cvm.SubscriberStandardId = ssc.SubscriberStandardId;
-                        cvm.SubscriberStandardSectionId = ssc.SubscriberStandardSectionId;
-                    }
-                });
-            Debug.WriteLine("ExcelBulkUpdateClassSectionTask took " + sw.ElapsedMilliseconds);
-            return excellstContactViewModels;
-        }
-
         private async Task<List<ContactViewModel>> GetSubscriberContact(int subscriberId)
         {
             var result = await msscRepository.FindAllAsync(s => s.SubscriberStandards.SubscriberId == subscriberId,
@@ -236,4 +211,5 @@ namespace DataServiceLibrary
             return result.ToList();
         }
     }
+
 }
