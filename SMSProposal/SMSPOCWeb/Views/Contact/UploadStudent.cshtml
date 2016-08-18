@@ -9,12 +9,12 @@
     </div>
     <div class="panel-body">
         <div id="grid" class="jqGrid">
-            @using (Html.BeginForm("Upload", "Contact", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+            @using (Html.BeginForm("Upload", "Contact", null, FormMethod.Post, new { enctype = "multipart/form-data",@class="form form-inline" }))
             {
                 @Html.AntiForgeryToken()
                 @Html.ValidationSummary(false, "", new { @class = "text-danger" })
                 <div class="form‐group">
-                    <input type="file" id="dataFile" name="upload" />
+                    <input type="file" id="dataFile" name="upload" class="form-control" />
                     <input type="submit" value="Upload" class="btn btn-success" />
                 </div>
             }
@@ -28,9 +28,9 @@
                 </div>
             }
         }
-        @if (ViewBag.newclasssectionlink != null)
+        @if (ViewBag.ClassSection != null)
         {
-            var classlist = (List<Tuple<string,string>>)ViewBag.newclasssectionlink;
+            var classlist = (List<Tuple<string,string>>)ViewBag.ClassSection;
             foreach (var ss in classlist)
             {
                 <div>
@@ -48,7 +48,7 @@
             foreach (var ss in classlist)
             {
                 <div>
-                    <span class="text-success"> @ss.Name -@ss.RollNo - @ss.Class -@ss.Section</span>
+                    <span class="text-success"> @ss.Name -@ss.RollNo-@ss.Mobile</span>
                 </div>
             }
         }

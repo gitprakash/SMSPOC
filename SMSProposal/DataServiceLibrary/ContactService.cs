@@ -33,7 +33,7 @@ namespace DataServiceLibrary
             Expression<Func<SubscriberStandardContacts, ContactViewModel>> select = s => new ContactViewModel
             {
                 Section = s.SubscriberStandardSections.SubscriberSection.Section.Name,
-                Class = s.SubscriberStandards.Standard.Name, 
+                Class = s.SubscriberStandards.Standard.Name,
                 Name = s.Contact.Name,
                 BloodGroup = s.Contact.BloodGroup,
                 Mobile = s.Contact.Mobile,
@@ -41,7 +41,7 @@ namespace DataServiceLibrary
                 Id = s.Id,
                 SubscriberStandardId = s.SubscriberStandardsId,
                 SubscriberStandardSectionId = s.SubscriberStandardSectionsId,
-                Status=s.Active?"Active":"InActive"
+                Status = s.Active ? "Active" : "InActive"
             };
             return await msscRepository.GetPagedResult(pageSize * pageIndex, pageSize, ordercolumn, desc, select, where, filter);
         }
@@ -54,7 +54,7 @@ namespace DataServiceLibrary
                 Filter instancefilter = new Filter { PropertyName = jgGridParam.searchField, Operation = Op.Equals };
                 if (jgGridParam.searchField == "RollNo")
                 {
-                   // int.TryParse(jgGridParam.searchString, out rollno);
+                    // int.TryParse(jgGridParam.searchString, out rollno);
                     instancefilter.PropertyName = "Contact.RollNo";
                     instancefilter.Value = rollno;
                 }
@@ -125,7 +125,7 @@ namespace DataServiceLibrary
             return await msscRepository.SaveAsync();
         }
 
-        public async Task<bool> IsUniqueRollNo(int subscriberId,string rollNo)
+        public async Task<bool> IsUniqueRollNo(int subscriberId, string rollNo)
         {
             return
                 await
@@ -135,32 +135,32 @@ namespace DataServiceLibrary
 
         public List<ContactViewModel> GetContactViewModels(DataTable dt)
         {
-           var result= dt.AsEnumerable().AsParallel().Select(dr => new ContactViewModel()
+            var result = dt.AsEnumerable().AsParallel().Select(dr => new ContactViewModel()
             {
                 RollNo = dr["RollNo"].ToString().Trim(),
                 Name = dr["Name"].ToString().Trim(),
                 Mobile = Convert.ToInt64(dr["Mobile"]),
-                BloodGroup =  dr["Blood Group"]==DBNull.Value?string.Empty:dr["Blood Group"].ToString().Trim(),
+                BloodGroup = dr["Blood Group"] == DBNull.Value ? string.Empty : dr["Blood Group"].ToString().Trim(),
                 Class = dr["Class"].ToString().Trim(),
                 Section = dr["Section"] == DBNull.Value ? string.Empty : dr["Section"].ToString().Trim()
             }).ToList();
             return result;
         }
 
-        public async Task<List<ContactViewModel>> CheckExcelBuilkRollNoExistsTask(int subscriberId,List<ContactViewModel> lstContactViewModels)
+        public async Task<List<ContactViewModel>> CheckExcelBuilkRollNoExistsTask(int subscriberId, List<ContactViewModel> lstContactViewModels)
         {
-            var duprollnoresult=new List<ContactViewModel>();
+            var duprollnoresult = new List<ContactViewModel>();
             var result = await GetSubscriberContact(subscriberId);
-            Stopwatch sw=new Stopwatch();
+            Stopwatch sw = new Stopwatch();
             sw.Start();
-             lstContactViewModels.AsParallel().ForAll(
-                cvm =>
-                {
-                    if (result.Any(r => r.RollNo.Trim() == cvm.RollNo && r.Class.Trim() == cvm.Class && r.Section.Trim() == cvm.Section))
-                        duprollnoresult.Add(cvm);
-                }
-                );
-            Debug.WriteLine("IsRollNoExists took " +sw.ElapsedMilliseconds);
+            lstContactViewModels.AsParallel().ForAll(
+               cvm =>
+               {
+                   if (result.Any(r => r.RollNo.Trim() == cvm.RollNo && r.Class.Trim() == cvm.Class && r.Section.Trim() == cvm.Section))
+                       duprollnoresult.Add(cvm);
+               }
+               );
+            Debug.WriteLine("IsRollNoExists took " + sw.ElapsedMilliseconds);
             return duprollnoresult;
         }
         public async Task<List<ContactViewModel>> ExcelBulkUploadContact(int subscriberId, List<ContactViewModel> excellstContactViewModels)
@@ -184,13 +184,12 @@ namespace DataServiceLibrary
                 CreatedAt = DateTime.Now
             }).ToList();
             Debug.WriteLine("ExcelBulkUpdateClassSectionTask took " + sw.ElapsedMilliseconds);
-            var result= await msscRepository.AddRangeAsyncWithReturnAll(contactlist);
+            var result = await msscRepository.AddRangeAsyncWithReturnAll(contactlist);
             return result.Where(r => r.Id > 0).Select(r => new ContactViewModel
             {
                 Name = r.Contact.Name,
-                RollNo = r.Contact.RollNo,
-                Class = r.SubscriberStandards.Standard.Name,
-                Section = r.SubscriberStandardSections.SubscriberSection.Section.Name
+                RollNo = r.Contact.RollNo ,
+                Mobile=r.Contact.Mobile
             }).ToList();
         }
         private async Task<List<ContactViewModel>> GetSubscriberContact(int subscriberId)

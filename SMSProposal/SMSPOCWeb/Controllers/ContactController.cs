@@ -178,14 +178,14 @@ namespace SMSPOCWeb.Controllers
                 {
                     if (!string.IsNullOrEmpty(r.Section))
                     {
-                        ModelState.AddModelError("Error",
-                            string.Format(
+                        ModelState.AddModelError("Exception occured"+r.RollNo, string.Format(
                                 "Roll No {0} already exists in Class {1} Section {2}",
                                 r.RollNo, r.Class, r.Section));
+                       
                     }
                     else
                     {
-                        ModelState.AddModelError("Error",
+                        ModelState.AddModelError("Error"+ r.RollNo,
                             string.Format(
                                 "Roll No {0} already exists in  Class {1}",
                                 r.RollNo, r.Class));
@@ -228,8 +228,7 @@ namespace SMSPOCWeb.Controllers
                             }
                             else
                             {
-                                ModelState.AddModelError("File", "This file format is not supported");
-                                return View("UploadStudent");
+                                throw new Exception("This file format is not supported");
                             }
                             reader.IsFirstRowAsColumnNames = true;
                             DataSet result = reader.AsDataSet();
@@ -237,8 +236,7 @@ namespace SMSPOCWeb.Controllers
                             var tupledsstatus = result.ValidateStudentTemplate();
                             if (!tupledsstatus.Item1)
                             {
-                                ModelState.AddModelError("Error", tupledsstatus.Item2);
-                                return View("UploadStudent");
+                                throw new Exception( tupledsstatus.Item2);
                             }
                             var cvmresult = mcontactService.GetContactViewModels(result.Tables[0]);
                             await SaveBulkUpload(cvmresult);
@@ -246,7 +244,7 @@ namespace SMSPOCWeb.Controllers
                     }
                     else
                     {
-                        ModelState.AddModelError("File", "Please Upload Your file");
+                       throw new Exception("Please Upload Your file");
                     }
                 }
                 catch (Exception ex)
@@ -257,6 +255,7 @@ namespace SMSPOCWeb.Controllers
                         ModelState.AddModelError("Exception occured", ex.InnerException.Message);
 
                     }
+                    return View("UploadStudent");
                 }
             }
             return View("UploadStudent");
