@@ -11,7 +11,7 @@
     </div>
     <div class="panel-body">
         <div id="grid" class="jqGrid">
-            @using (Html.BeginForm("", "", null, FormMethod.Post, 
+            @using (Html.BeginForm("", "", null, FormMethod.Post,
                 new { Id = "bulkuploadstudentform", name = "bulkuploadstudentform", enctype = "multipart/form-data", @class = "form form-inline" }))
             {
                 @Html.AntiForgeryToken()
@@ -20,43 +20,11 @@
                     <input type="file" id="dataFile" name="upload" class="form-control" />
                     <input type="button" value="Upload" data-toggle="modal" data-target="#StudentModal" class="btn btn-success" />
                 </div>
+               
             }
-            </div>
-        @if (ViewBag.Class != null) {
-            var classlist = (List<SubscriberStandards>)ViewBag.Class;
-            foreach (var ss in classlist)
-            {
-                <div>
-                    <span class="text-success">Class Added : @ss.Standard.Name</span>
-                </div>
-            }
-        }
-        @if (ViewBag.ClassSection != null)
-        {
-            var classlist = (List<Tuple<string,string>>)ViewBag.ClassSection;
-            foreach (var ss in classlist)
-            {
-                <div>
-                    <span class="text-success">Class @ss.Item1 - Section @ss.Item2</span>
-                </div>
-            }
-        }
-        @if (ViewBag.Contacts != null)
-        {
-            var classlist = (List<ContactViewModel>)ViewBag.Contacts;
-            if (classlist.Count > 0)
-            {
-                    <span class="text-success"> Contact Created</span>
-            }
-            foreach (var ss in classlist)
-            {
-                <div>
-                    <span class="text-success"> @ss.Name -@ss.RollNo-@ss.Mobile</span>
-                </div>
-            }
-        }
-        </div>
+        </div> 
     </div>
+</div>
 <div class="modal " id="StudentModal" tabindex="-1" role="dialog" aria-labelledby="StudentModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -66,15 +34,11 @@
             </div>
             <div class="modal-body ativa-scroll">
                 Are you sure want to upload ?
-                @*<div id="dialog-div">
-
-                    <div id="grid" class="jqGrid">
-
-                        <table id="list"></table>
-                        <div id="pager" style="text-align: center;"> </div>
+                <div class="row">
+                    <div class="container">
+                        <div class="col-md-12 col-sm-12"  id="ErrorResultArea"></div>
                     </div>
-                </div>*@
-
+                </div> 
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>

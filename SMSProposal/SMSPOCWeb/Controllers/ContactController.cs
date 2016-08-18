@@ -168,110 +168,89 @@ namespace SMSPOCWeb.Controllers
             return Json(Sections, JsonRequestBehavior.AllowGet);
         }
 
-        private async Task<ActionResult> SaveBulkUpload(List<ContactViewModel> cvmresult)
+        
+        private ErrorModal GetErrorModal(string errormsg, string errordesc)
         {
-            var identity = (CustomIdentity)User.Identity;
-            var lstexistrollno = await mcontactService.CheckExcelBuilkRollNoExistsTask(identity.User.Id, cvmresult);
-            if (lstexistrollno.Count > 0)
+            return new ErrorModal
             {
-                lstexistrollno.ForEach(r =>
-                {
-                    if (!string.IsNullOrEmpty(r.Section))
-                    {
-                        ModelState.AddModelError("Exception occured"+r.RollNo, string.Format(
-                                "Roll No {0} already exists in Class {1} Section {2}",
-                                r.RollNo, r.Class, r.Section));
-                       
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("Error"+ r.RollNo,
-                            string.Format(
-                                "Roll No {0} already exists in  Class {1}",
-                                r.RollNo, r.Class));
-                    }
-                });
-                return View("UploadStudent");
-            }
-            //var
-            var newclasslstadded = await mclassService.AddBulkClassifNotExists(cvmresult, identity.User.Id);
-            ViewBag.Class = newclasslstadded;
-            var newsectionlist = await mclassService.AddBulkSectionsifNotExists(cvmresult, identity.User.Id);
-            var newclasssectionlink = await mclassService.AddBulkClassSectionLinkIfNotExists(cvmresult, identity.User.Id);
-            ViewBag.ClassSection = newclasssectionlink;
-            var updateclasssectionlink = await mclassService.ExcelBulkUpdateClassSectionTask(identity.User.Id, cvmresult);
-           var contacts= await mcontactService.ExcelBulkUploadContact(identity.User.Id, cvmresult);
-            ViewBag.Contacts = contacts;
-            return View("UploadStudent");
+                ErrorMessage = errormsg,
+                ErrorDescription = errordesc
+            };
         }
-
+        public JsonResult GetJsonErrorResult(string errormsg, string errordesc)
+        {
+            var jsonresult = new
+            {
+                Status = "error",
+                error = new List<ErrorModal>
+                                    {
+                                        GetErrorModal(errormsg,errordesc)
+                                    }
+            };
+            return Json(jsonresult, JsonRequestBehavior.AllowGet);
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Upload(HttpPostedFileBase upload)
+        public async Task<JsonResult> Upload(HttpPostedFileBase upload)
         {
-            if (ModelState.IsValid)
+
+            try
             {
-                try
+                if (upload != null && upload.ContentLength > 0)
                 {
-                    if (upload != null && upload.ContentLength > 0)
+                    using (Stream stream = upload.InputStream)
                     {
-                        using (Stream stream = upload.InputStream)
+                        IExcelDataReader reader = null;
+                        if (upload.FileName.EndsWith(".xls"))
                         {
-                            IExcelDataReader reader = null;
-                            if (upload.FileName.EndsWith(".xls"))
-                            {
-                                reader = ExcelReaderFactory.CreateBinaryReader(stream);
-                            }
-                            else if (upload.FileName.EndsWith(".xlsx"))
-                            {
-                                reader = ExcelReaderFactory.CreateOpenXmlReader(stream);
-                            }
-                            else
-                            {
-                                var jsonresult = new
-                                {
-                                    Status = "error",
-                                    error = new List<ErrorModal>
-                                    {
-                                        new ErrorModal{
-                                         ErrorMessage = "File format issue",
-                                        ErrorDescription = "This file format is not supported, it should be xls , xlsx"
-                                        }
-                                    }
-                                };
-                                return Json(jsonresult, JsonRequestBehavior.AllowGet);
-                            }
-                            reader.IsFirstRowAsColumnNames = true;
-                            DataSet result = reader.AsDataSet();
-                            reader.Close();
-                            var tupledsstatus = result.ValidateStudentTemplate();
-                            if (!tupledsstatus.Item1)
-                            {
-                                var jsonresult = new { Status = "error", error = tupledsstatus.Item2.ToArray() };
-                                return Json(jsonresult, JsonRequestBehavior.AllowGet);
-                               // throw new Exception( tupledsstatus.Item2);
-                            }
-                            var cvmresult = mcontactService.GetContactViewModels(result.Tables[0]);
-                            await SaveBulkUpload(cvmresult);
+                            reader = ExcelReaderFactory.CreateBinaryReader(stream);
                         }
-                    }
-                    else
-                    {
-                       throw new Exception("Please Upload Your file");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    ModelState.AddModelError("Exception occured", ex.Message);
-                    if (ex.InnerException != null)
-                    {
-                        ModelState.AddModelError("Exception occured", ex.InnerException.Message);
+                        else if (upload.FileName.EndsWith(".xlsx"))
+                        {
+                            reader = ExcelReaderFactory.CreateOpenXmlReader(stream);
+                        }
+                        else
+                        {
+                            return GetJsonErrorResult("File format issue", "This file format is not supported, it should be xls , xlsx");
+                        }
+                        reader.IsFirstRowAsColumnNames = true;
+                        DataSet result = reader.AsDataSet();
+                        reader.Close();
+                        var tupledsstatus = result.ValidateStudentTemplate();
+                        if (!tupledsstatus.Item1)
+                        {
+                            return Json(new { Status = "error", error = tupledsstatus.Item2.ToArray() }, JsonRequestBehavior.AllowGet);
+                        }
+                        var cvmresult = mcontactService.GetContactViewModels(result.Tables[0]);
+                        var identity = (CustomIdentity)User.Identity;
+                        var lstexistrollno = await mcontactService.CheckExcelBuilkRollNoExistsTask(identity.User.Id, cvmresult);
+                        if (lstexistrollno.Count > 0)
+                        {
+                            return Json(new { Status = "error", error = lstexistrollno.ToArray() }, JsonRequestBehavior.AllowGet);
+                        }
+                        //var
+                        var classadded = await mclassService.AddBulkClassifNotExists(cvmresult, identity.User.Id);
+                        var classbulksection = await mclassService.AddBulkSectionsifNotExists(cvmresult, identity.User.Id);
+                        var classsectionlink = await mclassService.AddBulkClassSectionLinkIfNotExists(cvmresult, identity.User.Id);
+                        await mclassService.ExcelBulkUpdateClassSectionTask(identity.User.Id, cvmresult);
+                        var contacts = await mcontactService.ExcelBulkUploadContact(identity.User.Id, cvmresult);
+                        ViewBag.Contacts = contacts;
+                        var jsonresult = new { Status = "success", result = contacts };
+                        return Json(jsonresult, JsonRequestBehavior.AllowGet);
 
                     }
-                    return View("UploadStudent");
                 }
+                else
+                {
+                    return GetJsonErrorResult("File not found", "Please upload your file");
+                }
+
             }
-            return View("UploadStudent");
+            catch (Exception ex)
+            {
+                return GetJsonErrorResult("Exception occured", ex.Message);
+
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using DataModelLibrary;
 using Repositorylibrary;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
@@ -147,9 +148,9 @@ namespace DataServiceLibrary
             return result;
         }
 
-        public async Task<List<ContactViewModel>> CheckExcelBuilkRollNoExistsTask(int subscriberId, List<ContactViewModel> lstContactViewModels)
+        public async Task<ConcurrentBag<ErrorModal>> CheckExcelBuilkRollNoExistsTask(int subscriberId, List<ContactViewModel> lstContactViewModels)
         {
-            var duprollnoresult = new List<ContactViewModel>();
+            var errorlist = new ConcurrentBag<ErrorModal>();
             var result = await GetSubscriberContact(subscriberId);
             Stopwatch sw = new Stopwatch();
             sw.Start();
@@ -157,11 +158,33 @@ namespace DataServiceLibrary
                cvm =>
                {
                    if (result.Any(r => r.RollNo.Trim() == cvm.RollNo && r.Class.Trim() == cvm.Class && r.Section.Trim() == cvm.Section))
-                       duprollnoresult.Add(cvm);
+                   {
+                       if (!string.IsNullOrEmpty(cvm.Section))
+                       {
+                           errorlist.Add(new ErrorModal
+                           {
+                               ErrorMessage = "Duplicate found in Roll No",
+                               ErrorDescription = string.Format(
+                                   "Roll No {0} already exists in Class {1} Section {2}",
+                                   cvm.RollNo, cvm.Class, cvm.Section)
+                           });
+
+                       }
+                       else
+                       {
+                           errorlist.Add(new ErrorModal
+                           {
+                               ErrorMessage = "Duplicate found in Roll No",
+                               ErrorDescription = string.Format(
+                                  "Roll No {0} already exists in Class {1}",
+                                  cvm.RollNo, cvm.Class)
+                           });
+                       }
+                   }
                }
                );
             Debug.WriteLine("IsRollNoExists took " + sw.ElapsedMilliseconds);
-            return duprollnoresult;
+            return errorlist;
         }
         public async Task<List<ContactViewModel>> ExcelBulkUploadContact(int subscriberId, List<ContactViewModel> excellstContactViewModels)
         {

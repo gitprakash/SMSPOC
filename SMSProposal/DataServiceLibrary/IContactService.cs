@@ -1,11 +1,8 @@
 ﻿using DataModelLibrary;
-using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-
+using System.Collections.Concurrent;
 namespace DataServiceLibrary
 {
     public interface IContactService
@@ -18,7 +15,7 @@ namespace DataServiceLibrary
         Task<bool> IsUniqueMobile(long mobileno);
         Task<SubscriberStandardContacts> FindContact(long Id);
         List<ContactViewModel> GetContactViewModels(DataTable dt);
-        Task<List<ContactViewModel>> CheckExcelBuilkRollNoExistsTask(int subscriberId, List<ContactViewModel> lstContactViewModels);
+        Task<ConcurrentBag<ErrorModal>> CheckExcelBuilkRollNoExistsTask(int subscriberId, List<ContactViewModel> lstContactViewModels);
         Task<List<ContactViewModel>> ExcelBulkUploadContact(int subscriberId, List<ContactViewModel> excellstContactViewModels);
         Task<int> SaveAsync();
     }
