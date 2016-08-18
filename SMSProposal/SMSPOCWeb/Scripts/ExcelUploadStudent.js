@@ -13,7 +13,10 @@
             processData: false,
             type: 'POST',
             success: function (data,status) {
-                debugger;
+                if (data.Status === 'error' && data.error)
+                {
+                    alert('exception occured' + data.error);
+                }
             },
             error: function (e, details, xhr)
             {

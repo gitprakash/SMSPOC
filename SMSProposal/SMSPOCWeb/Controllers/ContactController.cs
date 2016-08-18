@@ -228,7 +228,18 @@ namespace SMSPOCWeb.Controllers
                             }
                             else
                             {
-                                throw new Exception("This file format is not supported");
+                                var jsonresult = new
+                                {
+                                    Status = "error",
+                                    error = new List<ErrorModal>
+                                    {
+                                        new ErrorModal{
+                                         ErrorMessage = "File format issue",
+                                        ErrorDescription = "This file format is not supported, it should be xls , xlsx"
+                                        }
+                                    }
+                                };
+                                return Json(jsonresult, JsonRequestBehavior.AllowGet);
                             }
                             reader.IsFirstRowAsColumnNames = true;
                             DataSet result = reader.AsDataSet();
@@ -236,6 +247,8 @@ namespace SMSPOCWeb.Controllers
                             var tupledsstatus = result.ValidateStudentTemplate();
                             if (!tupledsstatus.Item1)
                             {
+                                var jsonresult = new { Status = "error", error = tupledsstatus.Item2.ToArray() };
+                                return Json(jsonresult, JsonRequestBehavior.AllowGet);
                                // throw new Exception( tupledsstatus.Item2);
                             }
                             var cvmresult = mcontactService.GetContactViewModels(result.Tables[0]);
