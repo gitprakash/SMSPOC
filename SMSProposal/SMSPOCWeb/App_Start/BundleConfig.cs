@@ -44,7 +44,9 @@ namespace SMSPOCWeb
             bundles.Add(new ScriptBundle("~/bundles/MessageHistory").Include(
             "~/Scripts/MessageHistory.js")
             );
-
+            bundles.Add(new ScriptBundle("~/bundles/ExcelUploadStudent").Include(
+          "~/Scripts/ExcelUploadStudent.js")
+          );
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at http://modernizr.com to pick only the tests you need.

@@ -236,7 +236,7 @@ namespace SMSPOCWeb.Controllers
                             var tupledsstatus = result.ValidateStudentTemplate();
                             if (!tupledsstatus.Item1)
                             {
-                                throw new Exception( tupledsstatus.Item2);
+                               // throw new Exception( tupledsstatus.Item2);
                             }
                             var cvmresult = mcontactService.GetContactViewModels(result.Tables[0]);
                             await SaveBulkUpload(cvmresult);

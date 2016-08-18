@@ -47,9 +47,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountService.cs" />
+    <Compile Include="ConcurrentBagExtension.cs" />
     <Compile Include="ConfigUtility.cs" />
     <Compile Include="ContactService.cs" />
     <Compile Include="DataSetutility.cs" />
+    <Compile Include="ErrorModal.cs" />
     <Compile Include="ExternalMessageServiceAPI.cs" />
     <Compile Include="IAccountService.cs" />
     <Compile Include="IContactService.cs" />
