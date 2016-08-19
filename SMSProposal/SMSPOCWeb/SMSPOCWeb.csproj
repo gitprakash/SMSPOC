@@ -188,6 +188,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\BulkUploadStudentJsonModel.cs" />
     <Compile Include="Models\CustomIdentity.cs" />
     <Compile Include="Models\CustomPrincipal.cs" />
     <Compile Include="Models\LoginViewModel.cs" />

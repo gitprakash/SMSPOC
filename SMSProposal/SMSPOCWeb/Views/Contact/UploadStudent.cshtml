@@ -18,7 +18,7 @@
                 @Html.ValidationSummary(false, "", new { @class = "text-danger" })
                 <div class="form‐group">
                     <input type="file" id="dataFile" name="upload" class="form-control" />
-                    <input type="button" value="Upload" data-toggle="modal" data-target="#StudentModal" class="btn btn-success" />
+                    <input type="button" value="Upload" id="btnupload" data-toggle="modal" data-target="#StudentModal" class="btn btn-success" />
                 </div>
                
             }
@@ -32,11 +32,16 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="StudentModalLabel">Upload Confirm</h4>
             </div>
-            <div class="modal-body ativa-scroll">
+            <div class="modal-body resize-scroll">
                 Are you sure want to upload ?
                 <div class="row">
                     <div class="container">
                         <div class="col-md-12 col-sm-12"  id="ErrorResultArea"></div>
+                    </div>
+                </div> 
+                <div class="row">
+                    <div class="container">
+                        <div class="col-md-12 col-sm-12" id="SuccessResultArea"></div>
                     </div>
                 </div> 
             </div>

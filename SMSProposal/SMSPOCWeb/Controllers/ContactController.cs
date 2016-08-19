@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Excel;
+using System.Collections.Concurrent;
+using System.Web.Script.Serialization;
 
 namespace SMSPOCWeb.Controllers
 {
@@ -168,7 +170,7 @@ namespace SMSPOCWeb.Controllers
             return Json(Sections, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         private ErrorModal GetErrorModal(string errormsg, string errordesc)
         {
             return new ErrorModal
@@ -189,67 +191,111 @@ namespace SMSPOCWeb.Controllers
             };
             return Json(jsonresult, JsonRequestBehavior.AllowGet);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<JsonResult> Upload(HttpPostedFileBase upload)
+        public async Task<BulkUploadStudentJsonModel> ValidateExcelFile(HttpPostedFileBase upload)
         {
-
+            var errorlist = new ConcurrentBag<ErrorModal>();
+            var cvmresult = new List<ContactViewModel>();
             try
             {
                 if (upload != null && upload.ContentLength > 0)
                 {
-                    using (Stream stream = upload.InputStream)
+                    if (upload.FileName.EndsWith(".xls") || upload.FileName.EndsWith(".xlsx"))
                     {
-                        IExcelDataReader reader = null;
-                        if (upload.FileName.EndsWith(".xls"))
-                        {
-                            reader = ExcelReaderFactory.CreateBinaryReader(stream);
-                        }
-                        else if (upload.FileName.EndsWith(".xlsx"))
-                        {
-                            reader = ExcelReaderFactory.CreateOpenXmlReader(stream);
-                        }
-                        else
-                        {
-                            return GetJsonErrorResult("File format issue", "This file format is not supported, it should be xls , xlsx");
-                        }
-                        reader.IsFirstRowAsColumnNames = true;
-                        DataSet result = reader.AsDataSet();
-                        reader.Close();
+                        var result = GetDataSetfromExcel(upload);
                         var tupledsstatus = result.ValidateStudentTemplate();
                         if (!tupledsstatus.Item1)
                         {
-                            return Json(new { Status = "error", error = tupledsstatus.Item2.ToArray() }, JsonRequestBehavior.AllowGet);
+                            errorlist.AddRange(tupledsstatus.Item2);
                         }
-                        var cvmresult = mcontactService.GetContactViewModels(result.Tables[0]);
+                        cvmresult = mcontactService.GetContactViewModels(result.Tables[0]);
                         var identity = (CustomIdentity)User.Identity;
                         var lstexistrollno = await mcontactService.CheckExcelBuilkRollNoExistsTask(identity.User.Id, cvmresult);
                         if (lstexistrollno.Count > 0)
                         {
-                            return Json(new { Status = "error", error = lstexistrollno.ToArray() }, JsonRequestBehavior.AllowGet);
+                            errorlist.AddRange(lstexistrollno);
                         }
-                        //var
-                        var classadded = await mclassService.AddBulkClassifNotExists(cvmresult, identity.User.Id);
-                        var classbulksection = await mclassService.AddBulkSectionsifNotExists(cvmresult, identity.User.Id);
-                        var classsectionlink = await mclassService.AddBulkClassSectionLinkIfNotExists(cvmresult, identity.User.Id);
-                        await mclassService.ExcelBulkUpdateClassSectionTask(identity.User.Id, cvmresult);
-                        var contacts = await mcontactService.ExcelBulkUploadContact(identity.User.Id, cvmresult);
-                        ViewBag.Contacts = contacts;
-                        var jsonresult = new { Status = "success", result = contacts };
-                        return Json(jsonresult, JsonRequestBehavior.AllowGet);
-
+                    }
+                    else {
+                        var errormodal = GetErrorModal("File format issue", "This file format is not supported, it should be xls , xlsx");
+                        errorlist.Add(errormodal);
                     }
                 }
                 else
                 {
-                    return GetJsonErrorResult("File not found", "Please upload your file");
+                    var errormodal = GetErrorModal("Problem with input file ", "Please upload valid file");
+                    errorlist.Add(errormodal);
                 }
-
             }
             catch (Exception ex)
             {
-                return GetJsonErrorResult("Exception occured", ex.Message);
+                var errormodal = GetErrorModal("Exception occured ", ex.Message);
+                errorlist.Add(errormodal);
+            }
+            return (new BulkUploadStudentJsonModel
+            {
+                Status = (errorlist.Count == 0) ? true : false,
+                SuccessResult = (errorlist.Count == 0) ? cvmresult : new List<ContactViewModel>(),
+                ErrorResult = errorlist
+            });
+        }
+        private DataSet GetDataSetfromExcel(HttpPostedFileBase upload)
+        {
+            using (Stream stream = upload.InputStream)
+            {
+                IExcelDataReader reader = null;
+                if (upload.FileName.EndsWith(".xls"))
+                {
+                    reader = ExcelReaderFactory.CreateBinaryReader(stream);
+                }
+                else if (upload.FileName.EndsWith(".xlsx"))
+                {
+                    reader = ExcelReaderFactory.CreateOpenXmlReader(stream);
+                }
+                reader.IsFirstRowAsColumnNames = true;
+                DataSet result = reader.AsDataSet();
+                reader.Close();
+                return result;
+            }
+        }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> SaveExcelFile(HttpPostedFileBase upload)
+        {
+            try
+            {
+                var validatefielresult = await ValidateExcelFile(upload);
+                if (validatefielresult.Status)
+                {
+                    var cvmresult = validatefielresult.SuccessResult;
+                    var identity = (CustomIdentity)User.Identity; 
+                    var classadded = await mclassService.AddBulkClassifNotExists(cvmresult, identity.User.Id);
+                    var classbulksection = await mclassService.AddBulkSectionsifNotExists(cvmresult, identity.User.Id);
+                    var classsectionlink = await mclassService.AddBulkClassSectionLinkIfNotExists(cvmresult, identity.User.Id);
+                    await mclassService.ExcelBulkUpdateClassSectionTask(identity.User.Id, cvmresult);
+                    var contacts = await mcontactService.ExcelBulkUploadContact(identity.User.Id, cvmresult);
+                    var jsonresult = new { Status = "success", result = contacts };
+                    return Json(new BulkUploadStudentJsonModel
+                    {
+                        Status = true,
+                        SuccessResult = contacts
+                    }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                { 
+                    return Json(validatefielresult, JsonRequestBehavior.AllowGet);
+                } 
+            }
+            catch (Exception ex)
+            {
+                return Json(new BulkUploadStudentJsonModel
+                {
+                    Status = false,
+                    ErrorResult = new ConcurrentBag<ErrorModal>() { new ErrorModal { ErrorMessage = "Exception occured", ErrorDescription = ex.Message } }
+                }, JsonRequestBehavior.AllowGet);
             }
         }
     }
