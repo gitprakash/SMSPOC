@@ -206,9 +206,9 @@ namespace SMSPOCWeb.Controllers
                     {
                         var result = GetDataSetfromExcel(upload);
                         var tupledsstatus = result.ValidateStudentTemplate();
-                        if (!tupledsstatus.Item1)
+                        if (tupledsstatus.Count()>0)
                         {
-                            errorlist.AddRange(tupledsstatus.Item2);
+                            errorlist.AddRange(tupledsstatus);
                         }
                         cvmresult = mcontactService.GetContactViewModels(result.Tables[0]);
                         var identity = (CustomIdentity)User.Identity;

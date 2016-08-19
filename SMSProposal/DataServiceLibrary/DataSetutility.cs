@@ -11,7 +11,7 @@ namespace DataServiceLibrary
 {
     public static class DataSetutility
     {
-        public static Tuple<bool, ConcurrentBag<ErrorModal>> ValidateStudentTemplate(this DataSet ds)
+        public static  ConcurrentBag<ErrorModal> ValidateStudentTemplate(this DataSet ds)
         {
             ConcurrentBag<ErrorModal> errorlist = new ConcurrentBag<ErrorModal>();
             if (ds != null && ds.Tables.Count > 0)
@@ -55,7 +55,7 @@ namespace DataServiceLibrary
             {
                 errorlist.Add(GetErrorModal("Invalid Excel file", "Excel sheet is empty"));
             }
-            return Tuple.Create(true, errorlist);
+            return errorlist;
         }
 
         private static ErrorModal GetErrorModal(string errormsg,string errdescr)
