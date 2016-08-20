@@ -29,6 +29,8 @@ namespace Repositorylibrary
         Task<int> DeleteAsync(TObject t);
         int Count();
         Task<int> CountAsync(Expression<Func<TObject, bool>> match = null);
+        Task<int> CountAsync(string where);
+
         Task<TResult[]> ToArrayAsync<TResult>(Expression<Func<TObject, TResult>> select);
         IQueryable<TObject> GetAllLazyLoad(Expression<Func<TObject, bool>> filter, params Expression<Func<TObject, object>>[] children);
 

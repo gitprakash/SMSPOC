@@ -9,7 +9,7 @@ namespace DataServiceLibrary
     {
         Task<IEnumerable<ContactViewModel>> Contacts(int subcriberId, JgGridParam jgGridParam);
         Task<bool> IsUniqueRollNo(int subscriberId, string rollNo);
-        Task<int> TotalContacts(int subcriberId);
+        Task<int> TotalContacts(int subcriberId, JgGridParam jgGridParam);
         Task<Contact> AddContact(ContactViewModel contact);
         Task<int> EditContact(ContactViewModel contactvm);
         Task<bool> IsUniqueMobile(long mobileno);

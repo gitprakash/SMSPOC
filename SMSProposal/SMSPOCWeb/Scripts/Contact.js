@@ -26,14 +26,14 @@ $(document).ready(function myfunction() {
                { name: 'Id', index: 'Id', key: true, hidden: true },
               {
                   name: 'RollNo', index: 'RollNo', width: 40, key: false, editable: true, align: 'center',
-                  editrules: { required: true }
+                  editrules: { required: true }, searchoptions: { sopt: ['eq', 'ne'] }
               },
               {
                   name: 'Name', index: 'Name', width: 70, key: false, editable: true, align: 'center',
-                  editoptions: { size: 100, minlength: 2 }, editrules: { required: true }
+                  editoptions: { size: 100, minlength: 2 }, editrules: { required: true }, searchoptions: { sopt: ['eq', 'ne'] }
               },
               {
-                  name: 'Class', index: 'Class', width: 30, key: false, editable: false, align: 'center', editrules: { required: false }
+                  name: 'Class', index: 'Class', width: 30, key: false, editable: false, align: 'center', editrules: { required: false }, searchoptions: { sopt: ['eq', 'ne'] }
               },
               {
                   name: 'SubscriberStandardId', index: 'SubscriberStandardId', width: 30, key: false, hidden: true, editable: true, editrules: { required: true, edithidden: true },
@@ -45,13 +45,12 @@ $(document).ready(function myfunction() {
                       },
                       dataEvents: [
                            { type: 'change', fn: function (e) { changeSectionlist($(e.target).val(), e.target); } }
-                          // { type: 'keyup', fn: function (e) { $(e.target).trigger('change'); } }
                       ]
                   }
               },
               {
                   name: 'Section', index: 'Section', width: 30, key: false, editable: false, align: 'center',
-                  edittype: 'select'
+                  edittype: 'select', searchoptions: { sopt: ['eq', 'ne'] }
               },
               {
                   name: 'SubscriberStandardSectionId', index: 'SubscriberStandardSectionId', width: 30, key: false, hidden: true,
@@ -60,11 +59,11 @@ $(document).ready(function myfunction() {
               },
               {
                   name: 'Mobile', index: 'Mobile', width: 70, key: false, editable: true, align: 'center',
-                  editrules: { required: true, custom: true, custom_func: mobilenovalidation }
+                  editrules: { required: true, custom: true, custom_func: mobilenovalidation },searchoptions:{sopt:['eq','ne']}
               },
-              { name: 'BloodGroup', index: 'BloodGroup', width: 30, key: false, editable: true, align: 'center' },
+              { name: 'BloodGroup', index: 'BloodGroup', width: 30, key: false, editable: true, align: 'center', searchoptions: { sopt: ['eq', 'ne'] } },
 
-             { name: 'Status', index: 'Status', width: 30, key: false, editable: true, align: 'center', edittype: 'checkbox', editoptions: { value: "Active:InActive" } }
+             { name: 'Status', index: 'Status', width: 30, key: false, editable: true, align: 'center',search:false, edittype: 'checkbox', editoptions: { value: "Active:InActive" } }
 
 
         ],
@@ -77,7 +76,9 @@ $(document).ready(function myfunction() {
         shrinkToFit: true
     });
 
-    jQuery("#list").jqGrid('navGrid', '#pager', { edit: true, edittitle: 'Edit Student', add: true, addtitle: 'Add Student', del: true, deltitle: 'Delete Student', refresh: false },
+    jQuery("#list").jqGrid('navGrid', '#pager', {
+        edit: true, edittitle: 'Edit Student', add: true, addtitle: 'Add Student', del: true, deltitle: 'Delete Student', refresh: false
+    },
         {
             width: 400,
             zIndex: 100,
@@ -141,6 +142,11 @@ $(document).ready(function myfunction() {
                }
            }
 
+       },
+       {
+           closeOnEscape: true,
+           closeAfterSearch: true,
+           closeAfterReset: true
        }
 
         );

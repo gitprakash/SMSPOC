@@ -40,7 +40,7 @@ namespace SMSPOCWeb.Controllers
 
                 var identity = (CustomIdentity)User.Identity;
                 var contacts = await mcontactService.Contacts(identity.User.Id, jgGridParam);
-                int totalRecords = await mcontactService.TotalContacts(identity.User.Id);
+                int totalRecords = await mcontactService.TotalContacts(identity.User.Id, jgGridParam);
                 var totalPages = (int)Math.Ceiling((float)totalRecords / (float)jgGridParam.rows);
                 var jsonData = new
                 {

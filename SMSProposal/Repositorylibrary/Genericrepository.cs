@@ -194,6 +194,11 @@ namespace Repositorylibrary
                 return await _context.Set<TObject>().CountAsync();
 
         }
+        public async Task<int> CountAsync(string where)
+        {
+                return await _context.Set<TObject>().Where(where).CountAsync();
+
+        }
 
         public async Task<bool> AnyAsync(Expression<Func<TObject, bool>> match)
         {
