@@ -26,3 +26,5 @@ E:\Github\SMSPOC\SMSProposal\Repositorylibrary\bin\Debug\Microsoft.Practices.Ent
 E:\Github\SMSPOC\SMSProposal\Repositorylibrary\obj\Debug\Repositorylibrary.csprojResolveAssemblyReference.cache
 E:\Github\SMSPOC\SMSProposal\Repositorylibrary\obj\Debug\Repositorylibrary.dll
 E:\Github\SMSPOC\SMSProposal\Repositorylibrary\obj\Debug\Repositorylibrary.pdb
+E:\Github\SMSPOC\SMSProposal\Repositorylibrary\bin\Debug\DynamicLINQ.dll
+E:\Github\SMSPOC\SMSProposal\Repositorylibrary\bin\Debug\System.Linq.Dynamic.dll

@@ -15,7 +15,7 @@
     </div>
     <div class="panel-body">
         <div class="row">
-            <div id="smsview col-md-12">
+            <div id="smsview" class="col-sm-offset-2 col-md-offset-2 col-lg-offset-2">
 
                 <span class="label label-info">Opening SMS <span class="badge" id="opensmscnt"></span></span>
 
@@ -65,10 +65,10 @@
         <div class="modal " id="StudentModal" tabindex="-1" role="dialog" aria-labelledby="StudentModalLabel">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    @*<div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         <h4 class="modal-title" id="StudentModalLabel">Select Student</h4>
-                    </div>
+                    </div>*@
                     <div class="modal-body ativa-scroll">
                         <div id="dialog-div">
 
@@ -87,11 +87,8 @@
                 </div>
             </div>
         </div>
-
             <div id="dialog-div">
-
                 <div id="grid" class="jqGrid">
-
                     <table id="list"></table>
                     <div id="pager" style="text-align: center;"> </div>
                 </div>

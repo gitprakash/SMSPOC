@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-
+using System.Linq.Dynamic;
 
 namespace Repositorylibrary
 {
@@ -25,18 +25,19 @@ namespace Repositorylibrary
         public virtual IQueryable<TObject> GetAllLazyLoad(Expression<Func<TObject, bool>> filter, params Expression<Func<TObject, object>>[] children)
         {
             children.ToList().ForEach(x => _context.Set<TObject>().Include(x).Load());
+            //_context.Set<TObject>().Where()
             return _context.Set<TObject>();
         }
         public async Task<ICollection<TObject>> GetAllAsync()
         {
             return await _context.Set<TObject>().AsNoTracking().ToListAsync();
         }
-        public async Task<ICollection<TObject>> GetPagedResult(int skip, int take, string ordercolumn, bool asc, Expression<Func<TObject, bool>> match = null, 
+        public async Task<ICollection<TObject>> GetPagedResult(int skip, int take, string ordercolumn, bool asc, Expression<Func<TObject, bool>> match = null,
             List<Filter> filter = null)
         {
             IQueryable<TObject> query = _context.Set<TObject>().AsNoTracking();
             Expression<Func<TObject, bool>> deleg = ExpressionBuilder.GetExpression<TObject>(filter);
-                query = filter!=null? filter.Count>0 ? query.Where(deleg):query:query;
+            query = filter != null ? filter.Count > 0 ? query.Where(deleg) : query : query;
             query = match != null ? query.Where(match) : query;
             return await query.OrderByAscDsc(ordercolumn, asc).Skip(skip).Take(take).AsNoTracking().ToListAsync();
         }
@@ -47,8 +48,20 @@ namespace Repositorylibrary
             Expression<Func<TObject, bool>> deleg = ExpressionBuilder.GetExpression<TObject>(filter);
             query = filter != null ? filter.Count > 0 ? query.Where(deleg) : query : query;
             query = match != null ? query.Where(match) : query;
+            _context.Database.Log = (data => Debug.WriteLine("GetPagedResult Filter dynamic took " + data));
             return await query.Select(project).OrderByAscDsc(ordercolumn, desc).Skip(skip).Take(take).ToListAsync();
         }
+
+        public async Task<ICollection<TResult>> GetPagedResult<TResult>(int skip, int take, string ordercolumn, bool desc,
+            Expression<Func<TObject, TResult>> project, string wherestr)
+        {
+
+            IQueryable<TObject> query = _context.Set<TObject>().AsNoTracking();
+            query = query.Where(wherestr);
+            _context.Database.Log = (data => Debug.WriteLine("GetPagedResult Filter dynamic took " + data));
+            return await query.Select(project).OrderByAscDsc(ordercolumn, desc).Skip(skip).Take(take).ToListAsync();
+        }
+
 
         public TObject Get(int id)
         {
@@ -90,7 +103,7 @@ namespace Repositorylibrary
         public async Task<ICollection<TResult>> FindAllAsync<TResult, Tkey>(Expression<Func<TObject, bool>> match,
             Expression<Func<TObject, TResult>> select, Expression<Func<TResult, Tkey>> sort)
         {
-            _context.Database.Log = (data => Debug.WriteLine("FindAllAsync took "+data));
+            _context.Database.Log = (data => Debug.WriteLine("FindAllAsync took " + data));
             return await _context.Set<TObject>().Where(match).Select(select).OrderBy(sort).ToArrayAsync();
         }
 

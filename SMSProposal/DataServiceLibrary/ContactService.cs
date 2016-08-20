@@ -22,6 +22,29 @@ namespace DataServiceLibrary
             msscRepository = sscRepository;
 
         }
+
+        public static Dictionary<string, string> ContactsearchFielddictionary()
+        {
+            var dict = new Dictionary<string, string>();
+            dict.Add("RollNo", "Contact.RollNO");
+            dict.Add("Name", "Contact.Name");
+            dict.Add("Mobile", "Contact.Mobile");
+            dict.Add("Class", "SubscriberStandards.Standards.Name");
+            dict.Add("Section", "SubscriberStandardSections.SubscriberSection.Section.Name");
+            return dict;
+        }
+
+        public static Dictionary<string, string> ContactsearchOperationdictionary()
+        {
+            var dict = new Dictionary<string, string>();
+            dict.Add("eq", "=");//'ne','lt','le','gt','ge','bw','bn','in','ni','ew','en','cn','nc'
+            dict.Add("ne", "!=");
+            dict.Add("le", "<");
+            dict.Add("ge", ">");
+            dict.Add("cn", "Like");
+            return dict;
+        }
+
         public async Task<IEnumerable<ContactViewModel>> Contacts(int subcriberId, JgGridParam jgGridParam)
         {
             int pageIndex = Convert.ToInt32(jgGridParam.page) - 1;
@@ -29,8 +52,7 @@ namespace DataServiceLibrary
             string sort = jgGridParam.sord ?? "asc";
             string ordercolumn = jgGridParam.sidx;
             bool desc = sort.ToUpper() == "ASC";
-            var filter = GetFilter(jgGridParam);
-            Expression<Func<SubscriberStandardContacts, bool>> where = s => s.SubscriberStandards.SubscriberId == subcriberId;
+            string where = "SubscriberStandards.SubscriberId =" + subcriberId;
             Expression<Func<SubscriberStandardContacts, ContactViewModel>> select = s => new ContactViewModel
             {
                 Section = s.SubscriberStandardSections.SubscriberSection.Section.Name,
@@ -44,7 +66,7 @@ namespace DataServiceLibrary
                 SubscriberStandardSectionId = s.SubscriberStandardSectionsId,
                 Status = s.Active ? "Active" : "InActive"
             };
-            return await msscRepository.GetPagedResult(pageSize * pageIndex, pageSize, ordercolumn, desc, select, where, filter);
+             return await msscRepository.GetPagedResult(pageSize * pageIndex, pageSize, ordercolumn, desc, select, where);
         }
         private static List<Filter> GetFilter(JgGridParam jgGridParam)
         {
@@ -66,7 +88,7 @@ namespace DataServiceLibrary
                 filter.Add(instancefilter);
             };
             return filter;
-        }
+        }*/
         public async Task<int> TotalContacts(int subcriberId)
         {
             Expression<Func<SubscriberStandardContacts, bool>> where = s => s.SubscriberStandards.SubscriberId == subcriberId && s.Active;

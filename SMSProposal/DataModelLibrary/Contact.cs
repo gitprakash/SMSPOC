@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataModelLibrary
+namespace DataModelLibrary 
 {
     [Table("Contact")]
     public partial class Contact

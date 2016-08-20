@@ -31,8 +31,12 @@ namespace Repositorylibrary
         Task<int> CountAsync(Expression<Func<TObject, bool>> match = null);
         Task<TResult[]> ToArrayAsync<TResult>(Expression<Func<TObject, TResult>> select);
         IQueryable<TObject> GetAllLazyLoad(Expression<Func<TObject, bool>> filter, params Expression<Func<TObject, object>>[] children);
+
         Task<ICollection<TResult>> GetPagedResult<TResult>(int skip, int take, string ordercolumn, bool desc, Expression<Func<TObject, TResult>> project,
             Expression<Func<TObject, bool>> match = null, List<Filter> filter = null);
+
+        Task<ICollection<TResult>> GetPagedResult<TResult>(int skip, int take, string ordercolumn, bool desc, Expression<Func<TObject, TResult>> project,
+            string wherestr);
 
         Task<int> AddRangeAsync(List<TObject> t);
         Task<List<TObject>> AddRangeAsyncWithReturnAll(List<TObject> t);
