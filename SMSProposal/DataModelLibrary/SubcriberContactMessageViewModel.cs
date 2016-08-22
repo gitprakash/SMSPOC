@@ -18,5 +18,6 @@ namespace DataModelLibrary
         public string Message { get; set; }
         public string Status { get; set; }
         public DateTime SentDateTime { get; set; }
+        public string MessageError { get; set; }
     }
 }

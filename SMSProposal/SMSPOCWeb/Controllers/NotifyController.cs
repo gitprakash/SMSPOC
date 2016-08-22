@@ -29,6 +29,7 @@ namespace SMSPOCWeb.Controllers
             try
             {
                  var identity = (CustomIdentity)User.Identity;
+                var msgstatusviewmodel = new List<SubcriberContactMessageViewModel>();
                  if (messageViewModel != null && messagecount >= 1 && !string.IsNullOrEmpty(message))
                  {
                      if (ModelState.IsValid)
@@ -37,14 +38,14 @@ namespace SMSPOCWeb.Controllers
                          {
                              throw new Exception("Insufficient Message Balance, Contact Administator to update Your Package");
                          }
-                         await m_messageService.SendMessage(messageViewModel, message, messagecount,identity.User.Id);
+                         msgstatusviewmodel =  await m_messageService.SendMessage(messageViewModel, message, messagecount,identity.User.Id);
                      }
                      else
                      {
                          string messages = GetModelStateError();
                          throw new Exception(messages);
                      }
-                     var jsonresult = new { Status = "success", JsonRequestBehavior.AllowGet };
+                     var jsonresult = new {SuccessResult= msgstatusviewmodel, Status = "success", JsonRequestBehavior.AllowGet };
                      return Json(jsonresult, JsonRequestBehavior.AllowGet);
                  }
                  else

@@ -24,7 +24,8 @@ namespace DataServiceLibrary
             msubscriberMessageBalance = subscriberMessageBalance;
             msubscriberMessageBalanceHistory = subscriberMessageBalanceHistory;
         }
-        public async Task SendMessage(List<MessageViewModel> messageViewModel, string message, int messagecount, int SubscriberId)
+        public async Task<List<SubcriberContactMessageViewModel>> SendMessage(List<MessageViewModel> messageViewModel, string message, 
+            int messagecount, int SubscriberId)
         {
             ExternalMessageServiceAPI smsserviceAPI = new ExternalMessageServiceAPI();
             var apiformaturl = Apiformaturl();
@@ -39,10 +40,12 @@ namespace DataServiceLibrary
                 catch (Exception ex)
                 {
                     smvm.SentStatus = false;
+                    smvm.MessageError = ex.Message;
                 }
                 smvm.SentTime = DateTime.Now;
             }
-            await LogAllMessage(messageViewModel, message, messagecount, SubscriberId);
+           var logmsgrestult= await LogAllMessage(messageViewModel, message, messagecount, SubscriberId);
+            return logmsgrestult;
         }
 
         private static string Apiformaturl()
@@ -52,7 +55,8 @@ namespace DataServiceLibrary
             return apiformaturl;
         }
 
-        public async Task<bool> LogAllMessage(List<MessageViewModel> messageViewModel, string message, int messagecount, int SubscriberId)
+        public async Task<List<SubcriberContactMessageViewModel>> LogAllMessage(List<MessageViewModel> messageViewModel, string message,
+            int messagecount, int SubscriberId)
         {
             bool result = false;
             var subcribermessage = CreateMessage(message, messagecount);
@@ -64,16 +68,22 @@ namespace DataServiceLibrary
                                        Guid = Guid.NewGuid(),
                                        Message = subcribermessage,
                                        MessageStatus = mvm.SentStatus ? MessageStatusEnum.Sent : MessageStatusEnum.NotSent,
-                                       SubscriberStandardContactsId = mvm.Id
+                                       SubscriberStandardContactsId = mvm.Id,
+                                       MessageError = mvm.SentStatus == false ? new MessageError
+                                       {
+                                           Guid = Guid.NewGuid(),
+                                           CreatedAt = DateTime.Now,
+                                           Text = mvm.MessageError
+                                       } : null
                                    }).AsParallel().ToList();
 
-            int dbresult = await subcribermessageRepository.AddRangeAsync(lstsubsribedmsg);
+            var dbresult = await subcribermessageRepository.AddRangeAsyncWithReturnAll(lstsubsribedmsg);
             if (messageViewModel.Any(mvm => mvm.SentStatus == true))
             {
                 await UpdateMessageBalance(messageViewModel, messagecount, SubscriberId);
             }
-            result = dbresult > 0;
-            return result;
+            var returnresult = dbresult.Select(scm=>GetContactMessageFunProjection(scm)).ToList();
+            return returnresult;
         }
 
         private static Message CreateMessage(string message, int messagecount)
@@ -119,23 +129,42 @@ namespace DataServiceLibrary
             string sort = jgGridParam.sord ?? "asc";
             string ordercolumn = jgGridParam.sidx;
             bool desc = sort.ToUpper() == "DESC";
-            Expression<Func<SubscriberContactMessage, SubcriberContactMessageViewModel>> project =
-                scm => new SubcriberContactMessageViewModel
-                {
-                    Id = scm.Guid,
-                    Message = scm.Message.Text,
-                    Name = scm.SubscriberContact.Contact.Name,
-                    Section = scm.SubscriberContact.SubscriberStandardSections.SubscriberSection.Section.Name,
-                    SentDateTime = scm.CreatedAt,
-                    MobileNo = scm.SubscriberContact.Contact.Mobile,
-                    Status = ((MessageStatusEnum)scm.MessageStatus).ToString(),
-                    Class = scm.SubscriberContact.SubscriberStandards.Standard.Name,
-                    RollNo = scm.SubscriberContact.Contact.RollNo
-                };
+            Expression<Func<SubscriberContactMessage, SubcriberContactMessageViewModel>> project = GetContactMessagProjection();
             return await subcribermessageRepository.GetPagedResult(pageSize * pageIndex, pageSize, ordercolumn, desc, project,
                   sc => sc.SubscriberContact.SubscriberStandards.SubscriberId == subcriberId);
         }
 
+        private static Expression<Func<SubscriberContactMessage, SubcriberContactMessageViewModel>> GetContactMessagProjection()
+        {
+            return scm => new SubcriberContactMessageViewModel
+            {
+                Id = scm.Guid,
+                Message = scm.Message.Text,
+                Name = scm.SubscriberContact.Contact.Name,
+                Section = scm.SubscriberContact.SubscriberStandardSections.SubscriberSection.Section.Name,
+                SentDateTime = scm.CreatedAt,
+                MobileNo = scm.SubscriberContact.Contact.Mobile,
+                Status = ((MessageStatusEnum)scm.MessageStatus).ToString(),
+                Class = scm.SubscriberContact.SubscriberStandards.Standard.Name,
+                RollNo = scm.SubscriberContact.Contact.RollNo
+            };
+        }
+        private static  SubcriberContactMessageViewModel GetContactMessageFunProjection(SubscriberContactMessage scm)
+        {
+            return new SubcriberContactMessageViewModel
+            {
+                Id = scm.Guid,
+                Message = scm.Message.Text,
+                Name = scm.SubscriberContact.Contact.Name,
+                Section = scm.SubscriberContact.SubscriberStandardSections.SubscriberSection.Section.Name,
+                SentDateTime = scm.CreatedAt,
+                MobileNo = scm.SubscriberContact.Contact.Mobile,
+                Status = ((MessageStatusEnum)scm.MessageStatus).ToString(),
+                Class = scm.SubscriberContact.SubscriberStandards.Standard.Name,
+                RollNo = scm.SubscriberContact.Contact.RollNo,
+                MessageError = scm.MessageStatus == MessageStatusEnum.NotSent ? scm.MessageError.Text : ""
+            };
+        }
         public async Task<int> TotalMessageHistory(int subscriberId)
         {
             return await subcribermessageRepository.CountAsync(
@@ -166,7 +195,7 @@ namespace DataServiceLibrary
         public async Task<Tuple<long, long>> GetMessageBalance(int subscriberId)
         {
             var messagebal = await msubscriberMessageBalance.FindAsync(mb => mb.SubcriberId == subscriberId);
-            return Tuple.Create(messagebal.OpeningCount,messagebal.RemainingCount);
+            return Tuple.Create(messagebal.OpeningCount, messagebal.RemainingCount);
         }
 
 

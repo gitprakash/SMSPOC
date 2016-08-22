@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseEntity.cs" />
+    <Compile Include="MessageError.cs" />
     <Compile Include="SectionViewModel.cs" />
     <Compile Include="ClassViewModel.cs" />
     <Compile Include="Contact.cs" />

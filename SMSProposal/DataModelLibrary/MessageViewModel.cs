@@ -9,7 +9,7 @@ namespace DataModelLibrary
 {
     public class MessageViewModel
     {
-        [Required]
+        [Required] 
         public long Id { get; set; }
        
         public string Name { get; set; }
@@ -25,5 +25,7 @@ namespace DataModelLibrary
         public bool SentStatus { get; set; }
 
         public DateTime? SentTime { get; set; }
+
+        public string MessageError { get; set; }
     }
 }

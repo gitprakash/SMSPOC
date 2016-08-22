@@ -19,5 +19,8 @@ namespace DataModelLibrary
         public long MessageId { get; set; }
         [Required]
         public MessageStatusEnum MessageStatus { get; set; }
+        public long? MessageErrorId { get; set; }
+        public MessageError MessageError { get; set; }
+
     }
 }

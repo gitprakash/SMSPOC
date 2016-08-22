@@ -59,10 +59,15 @@ $(document).ready(function () {
 var selectedcontactarray = [];
 $(function () {
 
-    $('#btnstudentconfirm').on('click', function (e) {
+    $('#btnsendconfirm').on('click', function (e) {
         var $btn = $(this).button('loading')
         // business logic...
-        $("#bulkuploadstudentform").submit();
+        if (validatemesssageinputs()) {
+            SendMessageAjaxRequest();
+        }
+        else {
+            $("#btnsendconfirm").button('reset');
+        }
     });
     $('#dropdown').change(function () {
         $('#txtsms').val($(this).val());
@@ -70,44 +75,11 @@ $(function () {
     });
     $('#submitMyForm')
         .click(function () {
-        //    var $btn = $(this).button('loading')
+            $('#ErrorResultArea').empty();
+            $('#SuccessResultArea').empty();
+            $("#btnsendconfirm").button('reset');
+            $('#ConfirmModal').modal('show');
             $("#errormsg").html('');
-            if (selectedcontactarray.length === 0) {
-
-                showAlert("Please select a contact", "danger", 10000);
-
-                return false;
-            }
-            else if ($('#txtsms').val().trim().length === 0) {
-                showAlert("Please enter some message", "danger", 10000);
-                return false;
-            }
-
-
-            else {
-                var count = GetSMSMessageCount($('#txtsms').val().trim());
-                showDisableLayer();
-                //$('#submitMyForm').adda
-                $.ajax({
-                    type: 'Post',
-                    url: '/Notify/SendMessage',
-                    data: { messageViewModel: selectedcontactarray, Message: $('#txtsms').val().trim(), messagecount: count.messages },
-                    success: function (data) {
-                        hideDisableLayer();
-                        if (data.Status === 'success' || data.Status === 'successwithnoinsertion') {
-                            showAlert("Data Processed, please check Sent history for status", "success");
-                             LoadSubscriberSMS(fnsuccess,false);
-                        }
-                        if (data.Status === 'error') {
-                            showAlert("Error Occured "+data.error, "danger");
-                        }
-                    },
-                    error: function (data, error) {
-                        hideDisableLayer();
-                        alert('problem in sending message template details' + data);
-                    }
-                });
-            }
         });
 
     $.ajax({
@@ -126,9 +98,45 @@ $(function () {
     });
 
 
-    LoadSubscriberSMS(fnsuccess, false);
+    var validatemesssageinputs = function ()
+    {
+        var status=true;
+        if (selectedcontactarray.length === 0) {
+            $("<div class='label-danger'>Please select a contact</div>").appendTo("#ErrorResultArea");
+            status=false;
+        }
+        else if ($('#txtsms').val().trim().length === 0) {
+            $("<div class='label-danger'>Message cannot be blank</div>").appendTo("#ErrorResultArea");
+            status=false;
 
-
+        }
+        return status;
+    }
+    var SendMessageAjaxRequest=function()
+    {
+        var count = GetSMSMessageCount($('#txtsms').val().trim()); 
+        $.ajax({
+            type: 'Post',
+            url: '/Notify/SendMessage',
+            data: { messageViewModel: selectedcontactarray, Message: $('#txtsms').val().trim(), messagecount: count.messages },
+            success: function (data) {
+                //hideDisableLayer();
+                if (data.Status === 'success' || data.Status === 'successwithnoinsertion') {
+                    // showAlert("Data Processed, please check Sent history for status", "success");
+                    //BuildMessageSuccesstable(data);
+                    LoadSubscriberSMS(fnsuccess, false);ss
+                    $("#btnsendconfirm").button('reset');
+                }
+                if (data.Status === 'error') {
+                    $("<div class='danger'>Error Occured " + data.error+"</div>").appendTo("#ErrorResultArea");
+                }
+            },
+            error: function (data, error) {
+                //hideDisableLayer();
+                $("<div class='danger'>problem in sending message" + data + "</div>").appendTo("#ErrorResultArea");
+            }
+        });
+    }
     $('#ContactList').on('click', '.close', function () {
         var id = $(this).attr('contactid');
         $('#' + id).remove();
