@@ -29,6 +29,7 @@ namespace DataServiceLibrary
             dict.Add("RollNo", "Contact.RollNo");
             dict.Add("Name", "Contact.Name");
             dict.Add("Mobile", "Contact.Mobile");
+            dict.Add("BloodGroup", "Contact.BloodGroup");
             dict.Add("Class", "SubscriberStandards.Standard.Name");
             dict.Add("Section", "SubscriberStandardSections.SubscriberSection.Section.Name");
             return dict;
@@ -47,9 +48,9 @@ namespace DataServiceLibrary
         public static string getcolumnstr(JgGridParam jgGridParam)
         {
             string searhfield = ContactsearchFielddictionary()[jgGridParam.searchField];
-            var intarr = new string[] {"Mobile","Class"};
+            var intarr = new string[] {"Mobile"};
             string searchop = ContactsearchOperationdictionary()[jgGridParam.searchOper];
-            return (searhfield + searchop +'"'+jgGridParam.searchString+'"');
+            return (searhfield + searchop + (intarr.Contains(jgGridParam.searchField) ? jgGridParam.searchString : ('"' + jgGridParam.searchString + '"')));
         }
 
         public async Task<IEnumerable<ContactViewModel>> Contacts(int subcriberId, JgGridParam jgGridParam)

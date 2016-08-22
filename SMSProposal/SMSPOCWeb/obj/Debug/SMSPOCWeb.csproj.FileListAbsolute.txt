@@ -126,3 +126,4 @@ E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\obj\Debug\SMSPOCWeb.pdb
 C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\SMSPOCWeb\bin\Excel.dll
 C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\SMSPOCWeb\bin\ICSharpCode.SharpZipLib.dll
 E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\System.Linq.Dynamic.dll
+C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\SMSPOCWeb\bin\System.Linq.Dynamic.dll

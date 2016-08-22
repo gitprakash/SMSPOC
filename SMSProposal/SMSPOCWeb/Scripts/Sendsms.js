@@ -14,9 +14,8 @@
         }
     }
 }
-//$(document).ready(ajustamodal);
-//$(window).resize(ajustamodal);
-function ajustamodal() {
+
+function adjustamodal() {
     var altura = $(window).height() - 205; //value corresponding to the modal heading + footer
     $(".ativa-scroll").css({ "height": altura, "overflow-y": "auto" });
 }
@@ -25,7 +24,7 @@ $(window).resize(function () {
     var outerwidth = $('#grid').width();
     $('#list').setGridWidth(outerwidth); // setGridWidth method sets a new width to the grid dynamically
     //modal height scrollbar
-    ajustamodal();
+    adjustamodal();
 });
 
 function GetSMSMessageCount(value) {
@@ -54,18 +53,24 @@ $(document).ready(function () {
         // do something...
         ProcessSelectedStudent();
     })
-    ajustamodal();
+   // adjustamodal();
 });
 
 var selectedcontactarray = [];
 $(function () {
 
+    $('#btnstudentconfirm').on('click', function (e) {
+        var $btn = $(this).button('loading')
+        // business logic...
+        $("#bulkuploadstudentform").submit();
+    });
     $('#dropdown').change(function () {
         $('#txtsms').val($(this).val());
         $('#txtsms').keyup();
     });
     $('#submitMyForm')
         .click(function () {
+        //    var $btn = $(this).button('loading')
             $("#errormsg").html('');
             if (selectedcontactarray.length === 0) {
 
@@ -186,7 +191,7 @@ function ConstructJqGrid() {
     jQuery("#list").jqGrid('navGrid', '#pager', { edit: false, add: false, del: false, search: false });
    // jQuery("#list").jqGrid('filterToolbar', { searchOperators: true });
     jQuery("#list").jqGrid('filterToolbar', { stringResult: true, searchOnEnter: false, searchOperators: true });
-
+    adjustamodal();
 }
 
 function showAlert(message, type, closeDelay) {

@@ -28,3 +28,5 @@ E:\Github\SMSPOC\SMSProposal\Repositorylibrary\obj\Debug\Repositorylibrary.dll
 E:\Github\SMSPOC\SMSProposal\Repositorylibrary\obj\Debug\Repositorylibrary.pdb
 E:\Github\SMSPOC\SMSProposal\Repositorylibrary\bin\Debug\DynamicLINQ.dll
 E:\Github\SMSPOC\SMSProposal\Repositorylibrary\bin\Debug\System.Linq.Dynamic.dll
+C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\Repositorylibrary\bin\Debug\DynamicLINQ.dll
+C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\Repositorylibrary\bin\Debug\System.Linq.Dynamic.dll

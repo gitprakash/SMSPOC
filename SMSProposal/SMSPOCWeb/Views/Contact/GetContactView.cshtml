@@ -2,20 +2,22 @@
 @{
     ViewBag.Title = "GetContactView";
 }
-
-<div class="panel panel-primary">
-<div class="panel-heading">
-    <h3 class="panel-title">Contact List</h3>
+<div style="height:600px;overflow-y:scroll">
+    <table id="list"></table>
+    <div id="pager"></div>
 </div>
-<div class="panel-body">
-    <div id="grid" class="jqGrid">
-        <table id="list"></table>
-        <div id="pager">
+    @*<div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Student List</h3>
         </div>
-    </div>
-</div>
+        <div class="panel-body" >
+            <div id="grid" class="jqGrid">
+
                 </div>
+            </div>
+        </div>
+                        </div>*@
 
 
-@Scripts.Render("~/bundles/jqgrid")
-@Scripts.Render("~/bundles/Contact")
+    @Scripts.Render("~/bundles/jqgrid")
+    @Scripts.Render("~/bundles/Contact")
