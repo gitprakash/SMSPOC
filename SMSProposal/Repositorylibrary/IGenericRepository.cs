@@ -42,6 +42,7 @@ namespace Repositorylibrary
 
         Task<int> AddRangeAsync(List<TObject> t);
         Task<List<TObject>> AddRangeAsyncWithReturnAll(List<TObject> t);
+        IEnumerable<TObject> AddRangeAsyncWithtransaction(List<TObject> t);
         Task<int> SaveAsync();
 
 

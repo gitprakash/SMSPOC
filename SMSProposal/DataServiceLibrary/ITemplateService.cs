@@ -9,7 +9,7 @@ namespace DataServiceLibrary
 {
     public interface ITemplateService
     {
-        Task<ICollection<TemplateViewModel>> GetPagedTemplates(int subcriberId, int skip, int pagesize, string ordercolumn, bool desc);
+        Task<ICollection<TemplateViewModel>> GetPagedTemplates(int subcriberId, JgGridParam jgGridParam);
         Task<ICollection<TemplateViewModel>> GetTemplates(int subcriberId);
         Task<int> TotalTemplates(int subcriberId);
         Task<SubscriberTemplate> FindTemplate(int subcriberId,long templateId=0, string templatename=null);

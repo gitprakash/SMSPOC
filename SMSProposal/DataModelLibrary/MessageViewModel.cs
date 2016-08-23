@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataModelLibrary
+namespace DataModelLibrary 
 {
     public class MessageViewModel
     {

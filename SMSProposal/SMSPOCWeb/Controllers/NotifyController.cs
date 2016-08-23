@@ -29,7 +29,7 @@ namespace SMSPOCWeb.Controllers
             try
             {
                  var identity = (CustomIdentity)User.Identity;
-                var msgstatusviewmodel = new List<SubcriberContactMessageViewModel>();
+                 var msgstatusviewmodel = new List<MessageViewModel>();
                  if (messageViewModel != null && messagecount >= 1 && !string.IsNullOrEmpty(message))
                  {
                      if (ModelState.IsValid)
@@ -45,7 +45,7 @@ namespace SMSPOCWeb.Controllers
                          string messages = GetModelStateError();
                          throw new Exception(messages);
                      }
-                     var jsonresult = new {SuccessResult= msgstatusviewmodel, Status = "success", JsonRequestBehavior.AllowGet };
+                     var jsonresult = new {SuccessResult= msgstatusviewmodel, Status = true, JsonRequestBehavior.AllowGet };
                      return Json(jsonresult, JsonRequestBehavior.AllowGet);
                  }
                  else
@@ -56,7 +56,7 @@ namespace SMSPOCWeb.Controllers
             }
             catch (Exception ex)
             {
-                var result = new { Status = "error", error = ex.Message };
+                var result = new { Status = false, ErrorResult = ex.GetBaseException().Message };
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }

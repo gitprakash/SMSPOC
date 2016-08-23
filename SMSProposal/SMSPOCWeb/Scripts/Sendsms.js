@@ -15,16 +15,16 @@
     }
 }
 
-function adjustamodal() {
+function adjustamodal(cntrolid) {
     var altura = $(window).height() - 205; //value corresponding to the modal heading + footer
-    $(".ativa-scroll").css({ "height": altura, "overflow-y": "auto" });
+    $("#" + cntrolid).css({ "height": altura, "overflow-y": "auto" });
 }
 
 $(window).resize(function () {
     var outerwidth = $('#grid').width();
     $('#list').setGridWidth(outerwidth); // setGridWidth method sets a new width to the grid dynamically
     //modal height scrollbar
-    adjustamodal();
+    adjustamodal("divmodalstudentlist");
 });
 
 function GetSMSMessageCount(value) {
@@ -47,20 +47,36 @@ $(document).ready(function () {
 
     $('#StudentModal').on('show.bs.modal', function (e) {
         // do something...
-        ConstructJqGrid();
+        ConstructStudentJqGrid();
+    })
+    $('#TemplateModal').on('show.bs.modal', function (e) {
+        // do something...
+        $(this).find('.modal-dialog').addClass('modal-lg')
+
+        ConstructTemplateJqGrid();
     })
     $('#btnstudentconfirm').on('click', function (e) {
         // do something...
         ProcessSelectedStudent();
     })
+    $('#btntemplateconfirm').on('click', function (e) {
+        // do something...
+        ProcessSelectedTemplate();
+    })
+    LoadSubscriberSMS(fnsuccess, true);
    // adjustamodal();
 });
 
 var selectedcontactarray = [];
 $(function () {
 
-    $('#btnsendconfirm').on('click', function (e) {
-        var $btn = $(this).button('loading')
+    $("#btnclear").on('click', function () {
+        $("#ContactList").empty();
+        $("#txtsms").val("");
+    });
+
+    $('#btnsendconfirm').on('click', function (e) { 
+        var $btn = $(this).button('loading');
         // business logic...
         if (validatemesssageinputs()) {
             SendMessageAjaxRequest();
@@ -75,27 +91,15 @@ $(function () {
     });
     $('#submitMyForm')
         .click(function () {
+            $("#divmodalmessage").removeAttr('style');
             $('#ErrorResultArea').empty();
             $('#SuccessResultArea').empty();
             $("#btnsendconfirm").button('reset');
+            $('#ConfirmModal').modal({ backdrop: 'static', keyboard: false })
             $('#ConfirmModal').modal('show');
             $("#errormsg").html('');
         });
-
-    $.ajax({
-        type: 'Get',
-        url: '/Template/GetTemplates',
-        success: function (data) {
-            helpers.buildDropdown(
-                    data,
-                    $('#dropdown'),
-                    'Select an option'
-                );
-        },
-        error: function (data) {
-            alert('problem in retrieving message template details');
-        }
-    });
+    
 
 
     var validatemesssageinputs = function ()
@@ -114,25 +118,23 @@ $(function () {
     }
     var SendMessageAjaxRequest=function()
     {
+       
         var count = GetSMSMessageCount($('#txtsms').val().trim()); 
         $.ajax({
             type: 'Post',
             url: '/Notify/SendMessage',
             data: { messageViewModel: selectedcontactarray, Message: $('#txtsms').val().trim(), messagecount: count.messages },
             success: function (data) {
-                //hideDisableLayer();
-                if (data.Status === 'success' || data.Status === 'successwithnoinsertion') {
-                    // showAlert("Data Processed, please check Sent history for status", "success");
-                    //BuildMessageSuccesstable(data);
-                    LoadSubscriberSMS(fnsuccess, false);ss
+                if (data.Status===true ) {
+                    buildsuccesstable(data.SuccessResult);
+                    LoadSubscriberSMS(fnsuccess, false);
                     $("#btnsendconfirm").button('reset');
                 }
-                if (data.Status === 'error') {
-                    $("<div class='danger'>Error Occured " + data.error+"</div>").appendTo("#ErrorResultArea");
+                if (data.Status === false) {
+                    $("<div class='danger'>Error Occured " + data.ErrorResult+"</div>").appendTo("#ErrorResultArea");
                 }
             },
             error: function (data, error) {
-                //hideDisableLayer();
                 $("<div class='danger'>problem in sending message" + data + "</div>").appendTo("#ErrorResultArea");
             }
         });
@@ -167,9 +169,37 @@ function CreateLinks() {
 }
 
 
+function ConstructTemplateJqGrid() {
+    $('#templatelist').jqGrid({
+        caption: "Template Details",
+        url: '/Template/Index',
+        datatype: "json",
+        contentType: "application/json; charset-utf-8",
+        mtype: 'GET',
+        sortname: "Name",
+        colNames: ['Id', 'Name', 'Description'],
+        colModel: [
+              { name: 'Id', index: 'Id', key: true, hidden: true },
+              { name: 'Name', index: 'Name', width: 220, key: false, align: 'center' },
+              { name: 'Description', index: 'Description', width: 520, key: false, align: 'center' },
 
+        ],
+        rowNum: 10,
+        rowList: [10, 20, 50, 100],
+        viewrecords: true,
+        pager: jQuery("#templatepager"),
+        multiselect: true,
+        gridview: true,
+        shrinkToFit: true,
+        autowidth: true
+    });
+    jQuery("#templatelist").jqGrid('navGrid', '#templatepager', { edit: false, add: false, del: false, search: false });
+    // jQuery("#list").jqGrid('filterToolbar', { searchOperators: true });
+    jQuery("#templatelist").jqGrid('filterToolbar', { stringResult: true, searchOnEnter: false, searchOperators: true });
+   // adjustamodal("divmodalstudentlist");
+}
 
-function ConstructJqGrid() {
+function ConstructStudentJqGrid() {
     $('#list').jqGrid({
         caption: "Student Details",
         url: '/Contact/Index',
@@ -199,8 +229,30 @@ function ConstructJqGrid() {
     jQuery("#list").jqGrid('navGrid', '#pager', { edit: false, add: false, del: false, search: false });
    // jQuery("#list").jqGrid('filterToolbar', { searchOperators: true });
     jQuery("#list").jqGrid('filterToolbar', { stringResult: true, searchOnEnter: false, searchOperators: true });
-    adjustamodal();
+    adjustamodal("divmodalstudentlist");
 }
+
+var buildsuccesstable = function (data) {
+    //Crate table html tag
+    $("<button class='btn btn-primary active pull-right'>Message Processed to Send <span class='badge label-primary pull-right'> " + data.length + " </span></button>").appendTo("#SuccessResultArea");
+    var table = $("<table id=successtable  class='table table-hour table-bordered table-responsive'></table>").appendTo("#SuccessResultArea");
+    //Create table header row
+    var rowHeader = $("<tr class='info'></tr>").appendTo(table);
+    $("<th></th>").text("RollNo").appendTo(rowHeader);
+    $("<th></th").text("Name").appendTo(rowHeader);
+    $("<th></th").text("MobileNo").appendTo(rowHeader);
+    $("<th></th").text("Message Status").appendTo(rowHeader);
+    $.each(data, function (i, value) {
+        //Create new row for each record
+        var textclass = (value.SentStatus == true ? "text-success" : "text-danger");
+        var row = $("<tr class=" + textclass + "></tr>").appendTo(table);
+        $("<td></td>").text(value.RollNo).appendTo(row);
+        $("<td></td>").text(value.Name).appendTo(row);
+        $("<td></td>").text(value.Mobile).appendTo(row);
+        $("<td></td>").text(value.SentStatus == true ? "Sent" : "Not Sent" + value.MessageError).appendTo(row);
+    });
+    adjustamodal("divmodalmessage");
+};
 
 function showAlert(message, type, closeDelay) {
     $("#alerts-container").empty();
@@ -242,6 +294,22 @@ function fnsuccess(data) {
       $("#opensmscnt").html(data.Openingsms);
      $("#smsbalcnt").html(data.balancesms);
 }
+var ProcessSelectedTemplate = function () {
+    var ids = $("#templatelist").jqGrid('getGridParam', 'selarrrow');
+    if (ids.length > 0) {  
+        $.each(ids,
+            function (i, rowid) {
+                var Message = $('#templatelist').jqGrid('getCell', rowid, 'Message');
+                var Description = $('#templatelist').jqGrid('getCell', rowid, 'Description');
+                $('#txtsms').val(Description);
+                $('#txtsms').keyup();
+            }); 
+        $('#TemplateModal').modal('hide')
+    } else {
+        alert('please select a atleast one template');
+        return false;
+    }
+};
 var ProcessSelectedStudent = function () {
     var ids = $("#list").jqGrid('getGridParam', 'selarrrow');
     if (ids.length > 0) {

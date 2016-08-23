@@ -45,8 +45,8 @@ namespace Repositorylibrary
             Expression<Func<TObject, bool>> match = null, List<Filter> filter = null)
         {
             IQueryable<TObject> query = _context.Set<TObject>().AsNoTracking();
-            Expression<Func<TObject, bool>> deleg = ExpressionBuilder.GetExpression<TObject>(filter);
-            query = filter != null ? filter.Count > 0 ? query.Where(deleg) : query : query;
+            //Expression<Func<TObject, bool>> deleg = ExpressionBuilder.GetExpression<TObject>(filter);
+            //query = filter != null ? filter.Count > 0 ? query.Where(deleg) : query : query;
             query = match != null ? query.Where(match) : query;
             _context.Database.Log = (data => Debug.WriteLine("GetPagedResult Filter dynamic took " + data));
             return await query.Select(project).OrderByAscDsc(ordercolumn, desc).Skip(skip).Take(take).ToListAsync();
@@ -141,6 +141,13 @@ namespace Repositorylibrary
             return t;
         }
 
+        public IEnumerable<TObject>  AddRangeAsyncWithtransaction (List<TObject> t)
+        { 
+            _context.Database.Log = (data => Debug.WriteLine(data));
+          return  _context.Set<TObject>().AddRange(t);
+         
+        }
+
         public TObject Update(TObject updated, int key)
         {
             if (updated == null)
@@ -211,6 +218,7 @@ namespace Repositorylibrary
 
         public async Task<int> SaveAsync()
         {
+            Debug.WriteLine("SaveAsync DB Call");
             _context.Database.Log = (qury) => { Debug.WriteLine(qury); };
             return await _context.SaveChangesAsync();
         }

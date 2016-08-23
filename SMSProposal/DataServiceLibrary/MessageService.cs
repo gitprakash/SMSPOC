@@ -24,7 +24,7 @@ namespace DataServiceLibrary
             msubscriberMessageBalance = subscriberMessageBalance;
             msubscriberMessageBalanceHistory = subscriberMessageBalanceHistory;
         }
-        public async Task<List<SubcriberContactMessageViewModel>> SendMessage(List<MessageViewModel> messageViewModel, string message, 
+        public async Task<List<MessageViewModel>> SendMessage(List<MessageViewModel> messageViewModel, string message, 
             int messagecount, int SubscriberId)
         {
             ExternalMessageServiceAPI smsserviceAPI = new ExternalMessageServiceAPI();
@@ -55,10 +55,9 @@ namespace DataServiceLibrary
             return apiformaturl;
         }
 
-        public async Task<List<SubcriberContactMessageViewModel>> LogAllMessage(List<MessageViewModel> messageViewModel, string message,
+        public async Task<List<MessageViewModel>> LogAllMessage(List<MessageViewModel> messageViewModel, string message,
             int messagecount, int SubscriberId)
-        {
-            bool result = false;
+        { 
             var subcribermessage = CreateMessage(message, messagecount);
             List<SubscriberContactMessage> lstmessages = new List<SubscriberContactMessage>();
             var lstsubsribedmsg = (from mvm in messageViewModel
@@ -77,13 +76,16 @@ namespace DataServiceLibrary
                                        } : null
                                    }).AsParallel().ToList();
 
-            var dbresult = await subcribermessageRepository.AddRangeAsyncWithReturnAll(lstsubsribedmsg);
+            subcribermessageRepository.AddRangeAsyncWithtransaction(lstsubsribedmsg);
             if (messageViewModel.Any(mvm => mvm.SentStatus == true))
             {
-                await UpdateMessageBalance(messageViewModel, messagecount, SubscriberId);
+               int dbupdated= await UpdateMessageBalance(messageViewModel, messagecount, SubscriberId);
+               if (dbupdated <= 0)
+                   throw new Exception("Problem in update Message balance");
             }
-            var returnresult = dbresult.Select(scm=>GetContactMessageFunProjection(scm)).ToList();
-            return returnresult;
+            //whole commit ,log msg into db and update msg balance details.
+            await subcribermessageRepository.SaveAsync(); 
+            return messageViewModel;
         }
 
         private static Message CreateMessage(string message, int messagecount)

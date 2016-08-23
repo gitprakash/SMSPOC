@@ -26,14 +26,20 @@ namespace DataServiceLibrary
                     Id = st.Id,
                     Name = st.Templates.Name,
                     Description = st.Templates.Description,
+                    CreatedAt=st.CreatedAt,
                 };
             Expression<Func<TemplateViewModel, string>> orderby = st => st.Name;
 
             return await mtemplateRepository.FindAllAsync(match:where, select:select,sort:orderby);
         }
 
-        public async Task<ICollection<TemplateViewModel>> GetPagedTemplates(int subcriberId, int skip, int pagesize, string ordercolumn, bool desc)
+        public async Task<ICollection<TemplateViewModel>> GetPagedTemplates(int subcriberId, JgGridParam jgGridParam)
         {
+            int pageIndex = Convert.ToInt32(jgGridParam.page) - 1;
+            int pageSize = jgGridParam.rows;
+            string sort = jgGridParam.sord ?? "asc";
+            string ordercolumn = jgGridParam.sidx;
+            bool desc = sort.ToUpper() == "ASC";
             Expression<Func<SubscriberTemplate, bool>> where = st => st.SubscriberId == subcriberId;
             Expression<Func<SubscriberTemplate, TemplateViewModel>> select = st =>
                 new TemplateViewModel
@@ -42,7 +48,7 @@ namespace DataServiceLibrary
                     Status = st.Active?"Active":"InActive"
                    
                 };
-            return await mtemplateRepository.GetPagedResult(skip, pagesize, ordercolumn, desc, select, where);
+            return await mtemplateRepository.GetPagedResult(pageSize * pageIndex, pageSize, ordercolumn, desc, select, where);
         }
 
         public async Task<int> TotalTemplates(int subcriberId)

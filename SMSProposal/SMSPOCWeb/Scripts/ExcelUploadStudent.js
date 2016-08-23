@@ -93,7 +93,7 @@ $(document).ready(function () {
                 }
             },
             error: function (e, details, xhr) {
-                debugger;
+                
             }
         });
     });
@@ -117,7 +117,7 @@ $(document).ready(function () {
     var buildsuccesstable = function (data) {
         //Crate table html tag
         $("<button class='btn btn-primary active pull-right'>Students Added <span class='badge label-primary pull-right'> " + data.length + " </span></button>").appendTo("#SuccessResultArea");
-        var table = $("<table id=successtable  class='table tabe-hour table-bordered table-responsive'></table>").appendTo("#SuccessResultArea");
+        var table = $("<table id=successtable  class='table table-hour table-bordered table-responsive'></table>").appendTo("#SuccessResultArea");
         //Create table header row
         var rowHeader = $("<tr class='info'></tr>").appendTo(table);
         $("<th></th>").text("RollNo").appendTo(rowHeader);

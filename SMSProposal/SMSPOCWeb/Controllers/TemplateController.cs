@@ -25,26 +25,26 @@ namespace SMSPOCWeb.Controllers
             return View();
         }
 
-        public async Task<JsonResult> GetTemplates()
-        {
-            var identity = (CustomIdentity)User.Identity;
-            var alltemplate = await mtemplateService.GetTemplates(identity.User.Id);
-            return Json(alltemplate, JsonRequestBehavior.AllowGet);
-        }
+        //public async Task<JsonResult> GetTemplates()
+        //{
+        //    var identity = (CustomIdentity)User.Identity;
+        //    var alltemplate = await mtemplateService.GetTemplates(identity.User.Id);
+        //    return Json(alltemplate, JsonRequestBehavior.AllowGet);
+        //}
 
-        public async Task<JsonResult> Index(string sidx, string sort, int page, int rows)
+        public async Task<JsonResult> Index(JgGridParam jgGridParam)
         {
             var identity = (CustomIdentity)User.Identity;
-            sort = sort ?? "asc";
-            int pageIndex = Convert.ToInt32(page) - 1;
-            int pageSize = rows;
-            var contacts = await mtemplateService.GetPagedTemplates(identity.User.Id, pageIndex * pageSize, pageSize, sidx, sort.ToUpper() == "DESC");
+           // sort = jgGridParam.sort ?? "asc";
+           // int pageIndex = Convert.ToInt32(jgGridParam.page) - 1;
+            //int pageSize = jgGridParam.rows;
+            var contacts = await mtemplateService.GetPagedTemplates(identity.User.Id, jgGridParam);
             int totalRecords = await mtemplateService.TotalTemplates(identity.User.Id);
-            var totalPages = (int)Math.Ceiling((float)totalRecords / (float)rows);
+            var totalPages = (int)Math.Ceiling((float)totalRecords / (float)jgGridParam.rows);
             var jsonData = new
             {
                 total = totalPages,
-                page,
+                jgGridParam.page,
                 records = totalRecords,
                 rows = contacts
             };
