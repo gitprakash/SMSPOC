@@ -22,6 +22,7 @@
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
     <TypeScriptToolsVersion>1.0</TypeScriptToolsVersion>
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -442,6 +443,8 @@
     <Content Include="Scripts\free-jqGrid\i18n\grid.locale-bg.min.map" />
     <Content Include="Scripts\free-jqGrid\i18n\grid.locale-ar.min.map" />
     <Content Include="Content\ui.jqgrid.min.css.map" />
+    <Content Include="backup\Error Code.pdf" />
+    <Content Include="backup\HTTP API Documentation.pdf" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

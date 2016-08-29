@@ -12,7 +12,7 @@ $(window).resize(function () {
 $(document).ready(function myfunction() {
 
     //loading template drodown
-
+    $("#btnexportExcel").hide();
 
     $('#list').jqGrid({
         caption: "Student Details",
@@ -73,7 +73,11 @@ $(document).ready(function myfunction() {
         viewrecords: true,
         pager: jQuery("#pager"),
         autowidth: true,
-        shrinkToFit: true
+        shrinkToFit: true,
+        gridComplete: function ()
+        {
+            $("#btnexportExcel").show();
+        }
     });
 
     jQuery("#list").jqGrid('navGrid', '#pager', {

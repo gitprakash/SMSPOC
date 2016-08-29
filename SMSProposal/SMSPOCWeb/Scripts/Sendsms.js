@@ -47,12 +47,12 @@ $(document).ready(function () {
 
     $('#StudentModal').on('show.bs.modal', function (e) {
         // do something...
+        $(this).find('.modal-dialog').addClass('modal-lg')
         ConstructStudentJqGrid();
     })
     $('#TemplateModal').on('show.bs.modal', function (e) {
         // do something...
         $(this).find('.modal-dialog').addClass('modal-lg')
-
         ConstructTemplateJqGrid();
     })
     $('#btnstudentconfirm').on('click', function (e) {
@@ -64,7 +64,7 @@ $(document).ready(function () {
         ProcessSelectedTemplate();
     })
     LoadSubscriberSMS(fnsuccess, true);
-   // adjustamodal();
+    // adjustamodal();
 });
 
 var selectedcontactarray = [];
@@ -75,15 +75,10 @@ $(function () {
         $("#txtsms").val("");
     });
 
-    $('#btnsendconfirm').on('click', function (e) { 
+    $('#btnsendconfirm').on('click', function (e) {
         var $btn = $(this).button('loading');
-        // business logic...
-        if (validatemesssageinputs()) {
-            SendMessageAjaxRequest();
-        }
-        else {
-            $("#btnsendconfirm").button('reset');
-        }
+        // business logic... 
+        SendMessageAjaxRequest();
     });
     $('#dropdown').change(function () {
         $('#txtsms').val($(this).val());
@@ -97,41 +92,42 @@ $(function () {
             $("#btnsendconfirm").button('reset');
             $('#ConfirmModal').modal({ backdrop: 'static', keyboard: false })
             $('#ConfirmModal').modal('show');
-            $("#errormsg").html('');
+            if (validatemesssageinputs()) {
+                $("#divuploadconfirm").show();
+            }
+            else {
+                $("#divuploadconfirm").hide();
+            }
+
         });
-    
 
-
-    var validatemesssageinputs = function ()
-    {
-        var status=true;
+    var validatemesssageinputs = function () {
+        var status = true;
         if (selectedcontactarray.length === 0) {
             $("<div class='label-danger'>Please select a contact</div>").appendTo("#ErrorResultArea");
-            status=false;
+            status = false;
         }
-        else if ($('#txtsms').val().trim().length === 0) {
+        if ($('#txtsms').val().trim().length === 0) {
             $("<div class='label-danger'>Message cannot be blank</div>").appendTo("#ErrorResultArea");
-            status=false;
+            status = false;
 
         }
         return status;
     }
-    var SendMessageAjaxRequest=function()
-    {
-       
-        var count = GetSMSMessageCount($('#txtsms').val().trim()); 
+    var SendMessageAjaxRequest = function () {
+        var count = GetSMSMessageCount($('#txtsms').val().trim());
         $.ajax({
             type: 'Post',
             url: '/Notify/SendMessage',
             data: { messageViewModel: selectedcontactarray, Message: $('#txtsms').val().trim(), messagecount: count.messages },
             success: function (data) {
-                if (data.Status===true ) {
+                if (data.Status === true) {
                     buildsuccesstable(data.SuccessResult);
                     LoadSubscriberSMS(fnsuccess, false);
                     $("#btnsendconfirm").button('reset');
                 }
                 if (data.Status === false) {
-                    $("<div class='danger'>Error Occured " + data.ErrorResult+"</div>").appendTo("#ErrorResultArea");
+                    $("<div class='danger'>Error Occured " + data.ErrorResult + "</div>").appendTo("#ErrorResultArea");
                 }
             },
             error: function (data, error) {
@@ -196,7 +192,7 @@ function ConstructTemplateJqGrid() {
     jQuery("#templatelist").jqGrid('navGrid', '#templatepager', { edit: false, add: false, del: false, search: false });
     // jQuery("#list").jqGrid('filterToolbar', { searchOperators: true });
     jQuery("#templatelist").jqGrid('filterToolbar', { stringResult: true, searchOnEnter: false, searchOperators: true });
-   // adjustamodal("divmodalstudentlist");
+    // adjustamodal("divmodalstudentlist");
 }
 
 function ConstructStudentJqGrid() {
@@ -210,25 +206,37 @@ function ConstructStudentJqGrid() {
         colNames: ['Id', 'RollNo', 'Name', 'Class', 'Section', 'Mobile'],
         colModel: [
               { name: 'Id', index: 'Id', key: true, hidden: true },
-              { name: 'RollNo', index: 'RollNo', width: 80, key: false, align: 'center'},
-              { name: 'Name', index: 'Name', width: 160, key: false, align: 'center'},
-              { name: 'Class', index: 'Class', width: 50, key: false, align: 'center'},
-              { name: 'Section', index: 'Section', width: 70, key: false, align: 'center'},
-              { name: 'Mobile', index: 'Mobile', width: 110, key: false, align: 'center'}
+              { name: 'RollNo', index: 'RollNo', width: 100, key: false, align: 'center', searchoptions: { sopt: ['eq'] } },
+              { name: 'Name', index: 'Name', width: 200, key: false, align: 'center', searchoptions: { sopt: ['eq'] } },
+              { name: 'Class', index: 'Class', width: 70, key: false, align: 'center', searchoptions: { sopt: ['eq'] } },
+              { name: 'Section', index: 'Section', width: 100, key: false, align: 'center', searchoptions: { sopt: ['eq'] } },
+              { name: 'Mobile', index: 'Mobile', width: 180, key: false, align: 'center', searchoptions: { sopt: ['eq'] } }
 
         ],
-        rowNum: 10,
-        rowList: [10, 20, 50, 100],
+        rowNum: 15,
+        rowList: [10, 15, 20, 50, 100],
         viewrecords: true,
-        pager: jQuery("#pager"), 
+        pager: jQuery("#pager"),
         multiselect: true,
         gridview: true,
         shrinkToFit: true,
         autowidth: true
     });
-    jQuery("#list").jqGrid('navGrid', '#pager', { edit: false, add: false, del: false, search: false });
-   // jQuery("#list").jqGrid('filterToolbar', { searchOperators: true });
-    jQuery("#list").jqGrid('filterToolbar', { stringResult: true, searchOnEnter: false, searchOperators: true });
+    jQuery("#list").jqGrid('navGrid', '#pager', { edit: false, add: false, del: false, search: true }, {}, {}, {},
+{
+    multipleSearch: false, closeAfterSearch: true, closeAfterReset: true,
+    onClose: function () {
+        var ofilter = $("#list").getGridParam("postData");
+        //for (var i = 0; i < ofilter.rules.length; i++) {
+        //    alert(ofilter.rules[i].field); //- field name 
+        //    alert(ofilter.rules[i].data); //- value   
+        //    alert(ofilter.rules[i].op); //- which operation performed  
+        //}
+        return true; // return true to close the search grid
+    }
+});
+    // jQuery("#list").jqGrid('filterToolbar', { searchOperators: true });
+    //jQuery("#list").jqGrid('filterToolbar', { stringResult: true, searchOnEnter: false, searchOperators: true });
     adjustamodal("divmodalstudentlist");
 }
 
@@ -252,61 +260,32 @@ var buildsuccesstable = function (data) {
         $("<td></td>").text(value.SentStatus == true ? "Sent" : "Not Sent" + value.MessageError).appendTo(row);
     });
     adjustamodal("divmodalmessage");
-};
-
-function showAlert(message, type, closeDelay) {
-    $("#alerts-container").empty();
-    if ($("#alerts-container").length === 0) {
-        // alerts-container does not exist, create it
-        $("body")
-            .append($('<div id="alerts-container" style="position: fixed;width: 50%; left: 25%; top: 10%;">'));
-    }
-
-    // default to alert-info; other options include success, warning, danger
-    type = type || "info";
-
-    // create the alert div
-    var alert = $('<div class="alert alert-' + type + ' fade in">')
-        .append(
-            $('<button type="button" class="close" data-dismiss="alert">')
-            .append("&times;")
-        )
-        .append(message);
-
-    // add the alert div to top of alerts-container, use append() to add to bottom
-    $("#alerts-container").prepend(alert);
-
-    // if closeDelay was passed - set a timeout to close the alert
-    if (closeDelay)
-        window.setTimeout(function () { alert.alert("close") }, closeDelay);
-}
-var showDisableLayer = function () {
-    $('<div id="loading" style="position:fixed; z-index: 2147483647; top:0; left:0; background-color: white; opacity:0.0;filter:alpha(opacity=0);"></div>').appendTo(document.body);
-    $("#loading").height($(document).height());
-    $("#loading").width($(document).width());
-};
-
-var hideDisableLayer = function () {
-    $("#loading").remove();
+    $("#divuploadconfirm").hide();
 };
 
 function fnsuccess(data) {
-      $("#opensmscnt").html(data.Openingsms);
-     $("#smsbalcnt").html(data.balancesms);
+    $("#opensmscnt").html(data.Openingsms);
+    $("#smsbalcnt").html(data.balancesms);
 }
 var ProcessSelectedTemplate = function () {
     var ids = $("#templatelist").jqGrid('getGridParam', 'selarrrow');
-    if (ids.length > 0) {  
+    var selectedtemplate = ids.length;
+    if (selectedtemplate === 1) {
         $.each(ids,
             function (i, rowid) {
                 var Message = $('#templatelist').jqGrid('getCell', rowid, 'Message');
                 var Description = $('#templatelist').jqGrid('getCell', rowid, 'Description');
                 $('#txtsms').val(Description);
                 $('#txtsms').keyup();
-            }); 
+            });
         $('#TemplateModal').modal('hide')
-    } else {
+    }
+    else if (selectedtemplate === 0) {
         alert('please select a atleast one template');
+        return false;
+    }
+    else if (selectedtemplate > 1) {
+        alert('please select only one template');
         return false;
     }
 };

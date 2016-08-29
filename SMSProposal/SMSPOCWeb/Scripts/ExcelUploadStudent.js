@@ -54,18 +54,22 @@ $(document).ready(function () {
         var $el = $('#dataFile').val().trim();
         if ($el === "") {
             $("<div class='alert-danger'>Please select File</div>").appendTo("#divmodalvalidate");
+            $('#bsmodalinputfile').modal({ backdrop: 'static', keyboard: false })
             $("#bsmodalinputfile").modal('show');
         }
         else if (!IsExcelFile($el)) {
             $("<div class='alert-danger'>Please select a excell file (xls,xlsx)</div>").appendTo("#divmodalvalidate");
+            $('#bsmodalinputfile').modal({ backdrop: 'static', keyboard: false })
             $("#bsmodalinputfile").modal('show');
+
         }
         else {
             $(".resize-scroll").removeAttr('style');
             $("#ErrorResultArea").empty();
             $("#SuccessResultArea").empty();
             $("#btnstudentconfirm").show();
-            $("#divuploadconfirm").show(); 
+            $("#divuploadconfirm").show();
+            $('#StudentModal').modal({ backdrop: 'static', keyboard: false })
             $('#StudentModal').modal('show');
         }
     });

@@ -16,7 +16,40 @@ subscriber sms details
 
 contact student
 
-dnd status registration
+pending task
+1.Registration email
+1.sent history filter export
+2.Message status by using report link
+3.subscriber sms manage.
+4.subscriber 
+
+
+
+client registration
+
+org name
+serder iD -options ED-ABCDEF
+file upload - org govt certificate 
+
+
+get reg details -> send to service provider -> registration
+		get back sender ID
+		
+		ad min panel
+		--> send to service provider 
+		
+		
+activate user.
+		- customer assign to serderid - 
+		- set sms count 
+		- send mail - " serderid assigned"
+		
+mail.cusortservices.com
+		mohan@cusortservices.com
+Cusort@123#
+smtp - 25 /26 
+
+
 
 
 //sendsmsbackup
