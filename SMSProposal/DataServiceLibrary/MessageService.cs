@@ -24,18 +24,50 @@ namespace DataServiceLibrary
             msubscriberMessageBalance = subscriberMessageBalance;
             msubscriberMessageBalanceHistory = subscriberMessageBalanceHistory;
         }
+
+        
+
         public async Task<List<MessageViewModel>> SendMessage(List<MessageViewModel> messageViewModel, string message, 
             int messagecount, int SubscriberId)
         {
             ExternalMessageServiceAPI smsserviceAPI = new ExternalMessageServiceAPI();
-            var apiformaturl = Apiformaturl();
+            var msgsubmiturl = ExternalMessageServiceAPI.SubmitMessageApiformaturl();
+            var msgStatusurl = ExternalMessageServiceAPI.GetMessageDeliveryReportUrl();
+
             foreach (var smvm in messageViewModel)
             {
                 try
                 {
-                    apiformaturl = string.Format(apiformaturl, smvm.Mobile, message);
-                    string tuplemsgstatus = await smsserviceAPI.SendMessage(apiformaturl);
-                    smvm.SentStatus = true;
+                    System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+                    sw.Start();
+                    System.Diagnostics.Debug.WriteLine(string.Format("message starting to submit on {0} to mobile {1} ", DateTime.Now, smvm.Mobile));
+                    string tempmsgsubmiturl = string.Format(msgsubmiturl, smvm.Mobile, message);
+                    string submitid = await smsserviceAPI.SubmitMessage(tempmsgsubmiturl);
+                    System.Diagnostics.Debug.WriteLine(string.Format("Got message submit response on {0} to mobile {1} and submitid {2}", sw.ElapsedMilliseconds,
+                       smvm.Mobile, submitid));
+                    var status = smsserviceAPI.IsMessageSubmitted(submitid);
+                    if (!status)
+                    {
+                        smvm.SentStatus = false;
+                        smvm.MessageError = submitid;
+                    }
+                    else
+                    {
+                        string tempmsgStatusurl = string.Format(msgStatusurl, submitid);
+                        System.Diagnostics.Debug.WriteLine(string.Format("starting to get delivery status on {0} to mobile {1} ", sw.ElapsedMilliseconds, smvm.Mobile));
+                        var deliverystatusid = await smsserviceAPI.GetMessageStatus(tempmsgStatusurl);
+                        System.Diagnostics.Debug.WriteLine(string.Format("Got delivery response on {0} to mobile {1} and deliveryid {2} ",
+                            sw.ElapsedMilliseconds, smvm.Mobile, deliverystatusid));
+                        if (deliverystatusid == "DELIVRD" || deliverystatusid == "0")
+                        {
+                            smvm.SentStatus = true;
+                        }
+                        else {
+                            smvm.SentStatus = false;
+                            smvm.MessageError = deliverystatusid;
+                        }
+                    }
+                  
                 }
                 catch (Exception ex)
                 {
@@ -48,13 +80,7 @@ namespace DataServiceLibrary
             return logmsgrestult;
         }
 
-        private static string Apiformaturl()
-        {
-            string apiformaturl = ConfigUtility.GetAPIConfigvalue();
-            apiformaturl = apiformaturl + "&dest_mobileno={0}&message={1}&response=Y";
-            return apiformaturl;
-        }
-
+        
         public async Task<List<MessageViewModel>> LogAllMessage(List<MessageViewModel> messageViewModel, string message,
             int messagecount, int SubscriberId)
         { 
@@ -175,12 +201,12 @@ namespace DataServiceLibrary
         public async Task<int> ResendMessage(int subscriberId, Guid messageId)
         {
             var smvm = await subcribermessageRepository.FindAsync(sm => sm.Guid == messageId);
-            var apiformaturl = Apiformaturl();
+            var apiformaturl = ExternalMessageServiceAPI.SubmitMessageApiformaturl();
             ExternalMessageServiceAPI smsserviceAPI = new ExternalMessageServiceAPI();
             try
             {
                 apiformaturl = string.Format(apiformaturl, smvm.SubscriberContact.Contact.Mobile, smvm.Message.Text);
-                string tuplemsgstatus = await smsserviceAPI.SendMessage(apiformaturl);
+                string tuplemsgstatus = await smsserviceAPI.SubmitMessage(apiformaturl);
                 smvm.MessageStatus = MessageStatusEnum.Sent;
             }
             catch (Exception ex)

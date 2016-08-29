@@ -204,6 +204,11 @@
     <Content Include="App_Data\POCDB_log.ldf">
       <DependentUpon>POCDB.mdf</DependentUpon>
     </Content>
+    <Content Include="backup\Source Code\.NET.TXT" />
+    <Content Include="backup\Source Code\Java Code.txt" />
+    <Content Include="backup\Source Code\json.txt" />
+    <Content Include="backup\Source Code\PHP CODE.txt" />
+    <Content Include="backup\Source Code\V B 6.0.txt" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Image\Edit.PNG" />
@@ -443,8 +448,9 @@
     <Content Include="Scripts\free-jqGrid\i18n\grid.locale-bg.min.map" />
     <Content Include="Scripts\free-jqGrid\i18n\grid.locale-ar.min.map" />
     <Content Include="Content\ui.jqgrid.min.css.map" />
-    <Content Include="backup\Error Code.pdf" />
-    <Content Include="backup\HTTP API Documentation.pdf" />
+    <Content Include="backup\API\Error Code.pdf" />
+    <Content Include="backup\API\HTTP API Documentation.pdf" />
+    <Content Include="backup\Source Code\XML_API text messaging%29 SMS2.pdf" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
