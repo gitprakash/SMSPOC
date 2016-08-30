@@ -27,25 +27,20 @@ namespace DataServiceLibrary
 
         
 
-        public async Task<List<MessageViewModel>> SubmitMessage(List<MessageViewModel> messageViewModel, string message, int SubscriberId)
+        public async Task<List<MessageViewModel>> SubmitMessageToServiceAPI(List<MessageViewModel> messageViewModel, string message, int SubscriberId)
         {
             ExternalMessageServiceAPI smsserviceAPI = new ExternalMessageServiceAPI();
             var msgsubmiturl = ExternalMessageServiceAPI.SubmitMessageApiformaturl(); 
             foreach (var smvm in messageViewModel)
             {
                 try 
-                {
-                    System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-                    sw.Start();
-                    System.Diagnostics.Debug.WriteLine(string.Format("message starting to submit on {0} to mobile {1} ", DateTime.Now, smvm.Mobile));
+                { 
                     string tempmsgsubmiturl = string.Format(msgsubmiturl, smvm.Mobile, message);
                     smvm.Submittrequesttime = DateTime.Now;
                     string submitid = await smsserviceAPI.SubmitMessage(tempmsgsubmiturl);
-                    smvm.Submittresponsetime = DateTime.Now;
-                    System.Diagnostics.Debug.WriteLine(string.Format("Got message submit response on {0} to mobile {1} and submitid {2}", sw.ElapsedMilliseconds,
-                       smvm.Mobile, submitid));
+                    smvm.Submittresponsetime = DateTime.Now; 
                     var status = smsserviceAPI.IsMessageSubmitted(submitid);
-                    smvm.IsMessageSubmitted = (!status);
+                    smvm.IsMessageSubmitted = (status);
                     smvm.SubmitId = submitid; 
                 }
                 catch (Exception ex)
@@ -58,8 +53,7 @@ namespace DataServiceLibrary
            return messageViewModel;
         }
 
-        public async Task<List<MessageViewModel>> GetMessageStatus(List<MessageViewModel> messageViewModel, string message,
-          int messagecount, int SubscriberId)
+        public async Task<List<MessageViewModel>> GetMessageStatusFromAPI(List<MessageViewModel> messageViewModel)
         {
             ExternalMessageServiceAPI smsserviceAPI = new ExternalMessageServiceAPI();
             var msgStatusurl = ExternalMessageServiceAPI.GetMessageDeliveryReportUrl();
@@ -70,12 +64,9 @@ namespace DataServiceLibrary
                     System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
                     sw.Start();
                     string tempmsgStatusurl = string.Format(msgStatusurl, smvm.SubmitId);
-                    System.Diagnostics.Debug.WriteLine(string.Format("starting to get delivery status on {0} to mobile {1} ", sw.ElapsedMilliseconds, smvm.Mobile));
                     smvm.DeliveryRequestedtime = DateTime.Now;
                     var deliverystatusid = await smsserviceAPI.GetMessageStatus(tempmsgStatusurl);
                     smvm.DeliveryResponsetime = DateTime.Now; 
-                    System.Diagnostics.Debug.WriteLine(string.Format("Got delivery response on {0} to mobile {1} and deliveryid {2} ",
-                        sw.ElapsedMilliseconds, smvm.Mobile, deliverystatusid));
                     smvm.IsMessageDelivered = deliverystatusid == "DELIVRD" ? true :false;
                     smvm.DeliveryId = deliverystatusid; 
                 }
@@ -86,12 +77,11 @@ namespace DataServiceLibrary
                     smvm.MessageError = ex.Message;
                 } 
             }
-            var logmsgrestult = await LogAllMessage(messageViewModel, message, messagecount, SubscriberId);
-            return logmsgrestult;
+            return messageViewModel; 
         }
 
 
-        public async Task<List<MessageViewModel>> LogAllMessage(List<MessageViewModel> messageViewModel, string message,
+        public async Task<List<MessageViewModel>> LogAllMessageToDB(List<MessageViewModel> messageViewModel, string message,
             int messagecount, int SubscriberId)
         { 
             var subcribermessage = CreateMessage(message, messagecount);
@@ -119,13 +109,12 @@ namespace DataServiceLibrary
                                        } : null
                                    }).AsParallel().ToList();
             subcribermessageRepository.AddRangeAsyncWithtransaction(lstsubsribedmsg);
-            if (messageViewModel.Any(mvm => mvm.IsMessageDelivered == true))
+            if (messageViewModel.Any(mvm => mvm.IsMessageSubmitted == true))
             {
                int dbupdated= await UpdateMessageBalance(messageViewModel, messagecount, SubscriberId);
                if (dbupdated <= 0)
                    throw new Exception("Problem in update Message balance");
-            }
-            //whole commit ,log msg into db and update msg balance details.
+            } 
             await subcribermessageRepository.SaveAsync(); 
             return messageViewModel;
         }
@@ -144,7 +133,7 @@ namespace DataServiceLibrary
 
         public async Task<int> UpdateMessageBalance(List<MessageViewModel> messageViewModel, int messagecount, int subscriberId)
         {
-            int sentmsgcount = messageViewModel.Count(mvm => mvm.IsMessageDelivered == true);
+            int sentmsgcount = messageViewModel.Count(mvm => mvm.IsMessageSubmitted == true);
             sentmsgcount = sentmsgcount * messagecount;
             return await UpdateSubscirberMessageBalance(subscriberId, sentmsgcount);
         }

@@ -38,9 +38,9 @@ namespace SMSPOCWeb.Controllers
                          {
                              throw new Exception("Insufficient Message Balance, Contact Administator to update Your Package");
                          }
-                        msgstatusviewmodel =  await m_messageService.SubmitMessage(messageViewModel, message,identity.User.Id);
-                        msgstatusviewmodel = await m_messageService.GetMessageStatus(messageViewModel, message, messagecount, identity.User.Id);
-
+                        msgstatusviewmodel =  await m_messageService.SubmitMessageToServiceAPI(messageViewModel, message,identity.User.Id);
+                        msgstatusviewmodel = await m_messageService.GetMessageStatusFromAPI(messageViewModel);
+                        msgstatusviewmodel = await m_messageService.LogAllMessageToDB(messageViewModel, message, messagecount, identity.User.Id);
                     }
                     else
                      {

@@ -55,6 +55,11 @@ $(document).ready(function () {
         $(this).find('.modal-dialog').addClass('modal-lg')
         ConstructTemplateJqGrid();
     })
+ 
+$('#ConfirmModal').on('show.bs.modal', function (e) {
+    // do something...
+    $(this).find('.modal-dialog').addClass('modal-lg');
+});
     $('#btnstudentconfirm').on('click', function (e) {
         // do something...
         ProcessSelectedStudent();
@@ -241,7 +246,9 @@ function ConstructStudentJqGrid() {
 }
 
 var buildsuccesstable = function (data) {
+    
     //Crate table html tag
+    var EnableDeliverybutton = false;
     $("<button class='btn btn-primary active pull-right'>Message Processed to Send <span class='badge label-primary pull-right'> " + data.length + " </span></button>").appendTo("#SuccessResultArea");
     var table = $("<table id=successtable  class='table table-hour table-bordered table-responsive'></table>").appendTo("#SuccessResultArea");
     //Create table header row
@@ -249,16 +256,32 @@ var buildsuccesstable = function (data) {
     $("<th></th>").text("RollNo").appendTo(rowHeader);
     $("<th></th").text("Name").appendTo(rowHeader);
     $("<th></th").text("MobileNo").appendTo(rowHeader);
-    $("<th></th").text("Message Status").appendTo(rowHeader);
+    $("<th></th").text("Message Send").appendTo(rowHeader);
+    $("<th></th").text("Send Time").appendTo(rowHeader);
+    $("<th></th").text("Delivery Status").appendTo(rowHeader);
+    $("<th></th").text("Delivery Time").appendTo(rowHeader);
     $.each(data, function (i, value) {
         //Create new row for each record
-        var textclass = (value.SentStatus == true ? "text-success" : "text-danger");
+        if (value.DeliveryId && !EnableDeliverybutton) {
+            if (value.DeliveryId.toUpperCase() === "PENDING") {
+                EnableDeliverybutton = true;
+            }
+        }
+        var textclass = (value.IsMessageSubmitted == true ? "text-success" : "text-danger");
         var row = $("<tr class=" + textclass + "></tr>").appendTo(table);
         $("<td></td>").text(value.RollNo).appendTo(row);
         $("<td></td>").text(value.Name).appendTo(row);
         $("<td></td>").text(value.Mobile).appendTo(row);
-        $("<td></td>").text(value.SentStatus == true ? "Sent" : "Not Sent" + value.MessageError).appendTo(row);
+        $("<td></td>").text(value.IsMessageSubmitted == true ? "Submitted" : value.SubmitId).appendTo(row);
+        $("<td></td>").text(moment(value.Submittresponsetime).format("DD/MM/YYYY h:mm:ss a")).appendTo(row); 
+        $("<td></td>").text(value.IsMessageDelivered == true ? "Delivered" : value.DeliveryId).appendTo(row);
+        $("<td></td>").text(moment(value.DeliveryResponsetime).format("DD/MM/YYYY h:mm:ss a")).appendTo(row);
     });
+    if (EnableDeliverybutton)
+    {
+        $("<button class='btn btn-info active pull-right'>Delivery Status </button>").appendTo("#SuccessResultArea");
+
+    }
     adjustamodal("divmodalmessage");
     $("#divuploadconfirm").hide();
 };
