@@ -19,7 +19,7 @@ $(document).ready(function myfunction() {
         contentType: "application/json; charset-utf-8",
         mtype: 'GET',
         sortname: "SentDateTime",
-        colNames: ['Id', 'RollNo', 'Name', 'Class', 'Section', 'Message', 'MobileNo', 'Status', 'SentDateTime'],
+        colNames: ['Id', 'RollNo', 'Name', 'Class', 'Section', 'Message', 'MobileNo', 'Status'],
         colModel: [
                { name: 'Id', index: 'Id', key: true, hidden: true },
               {
@@ -45,15 +45,15 @@ $(document).ready(function myfunction() {
                    key: false
                },
                 { name: 'Status', index: 'Status', width: 20, key: false, align: 'center' }
-                 ,
-                    {
-                        name: 'SentDateTime',
-                        index: 'SentDateTime',
-                        formatter: 'date',
-                        formatoptions: { srcformat: "ISO8601Long", newformat: "d/m/Y h:i:s A" },
-                        width: 30,
-                        key: false
-                    }
+                 //,
+                 //   {
+                 //       name: 'SentDateTime',
+                 //       index: 'SentDateTime',
+                 //       formatter: 'date',
+                 //       formatoptions: { srcformat: "ISO8601Long", newformat: "d/m/Y h:i:s A" },
+                 //       width: 30,
+                 //       key: false
+                 //   }
         ],
         rowNum: 20,
         rowList: [10, 20, 30],

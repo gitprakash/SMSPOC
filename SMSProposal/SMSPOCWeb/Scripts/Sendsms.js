@@ -279,7 +279,7 @@ var buildsuccesstable = function (data) {
     });
     if (EnableDeliverybutton)
     {
-        $("<button class='btn btn-info active pull-right'>Delivery Status </button>").appendTo("#SuccessResultArea");
+        $("<a class='btn btn-info active pull-right' href='/Notify/GetMessageHistoryView'>Delivery Status </a>").appendTo("#SuccessResultArea");
 
     }
     adjustamodal("divmodalmessage");

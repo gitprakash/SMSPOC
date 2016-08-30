@@ -21,7 +21,7 @@ namespace DataModelLibrary
         public MessageStatusEnum MessageStatus { get; set; }
         public long? MessageErrorId { get; set; }
         public MessageError MessageError { get; set; }
-        public string SubmitmitId { get; set; }
+        public string SubmitId { get; set; }
         public string DeliveryId  { get; set; }
         public DateTime? Submittrequesttime { get; set; }
         public DateTime? Submittresponsetime { get; set; } 

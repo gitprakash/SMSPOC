@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataModelLibrary
+namespace DataModelLibrary 
 {
     public class SubcriberContactMessageViewModel
     {
         public Guid Id { get; set; }
-      //  public Guid SubscriberContactGuid { get; set; }
+        public long SubscriberContactId { get; set; }
         public string RollNo { get; set; }
         public string Name { get; set; }
         public string Class { get; set; }
@@ -19,5 +19,7 @@ namespace DataModelLibrary
         public string Status { get; set; }
         public DateTime SentDateTime { get; set; }
         public string MessageError { get; set; }
+        public string SubmitId { get; set; } 
+        public string DeliveryId { get; set; }
     }
 }

@@ -61,8 +61,6 @@ namespace DataServiceLibrary
             {
                 try 
                 {
-                    System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-                    sw.Start();
                     string tempmsgStatusurl = string.Format(msgStatusurl, smvm.SubmitId);
                     smvm.DeliveryRequestedtime = DateTime.Now;
                     var deliverystatusid = await smsserviceAPI.GetMessageStatus(tempmsgStatusurl);
@@ -92,10 +90,9 @@ namespace DataServiceLibrary
                                        CreatedAt = DateTime.Now,
                                        Guid = Guid.NewGuid(),
                                        Message = subcribermessage,
-                                       MessageStatus = mvm.IsMessageDelivered ? MessageStatusEnum.Delivered :
-                                       mvm.DeliveryId == "PENDING" ? MessageStatusEnum.Pending : MessageStatusEnum.NotSent,
+                                       MessageStatus = mvm.IsMessageDelivered ? MessageStatusEnum.Delivered : mvm.DeliveryId == "PENDING" ? MessageStatusEnum.Pending : MessageStatusEnum.NotSent,
                                        SubscriberStandardContactsId = mvm.Id,
-                                       SubmitmitId = mvm.SubmitId,
+                                       SubmitId = mvm.SubmitId,
                                        DeliveryId = mvm.DeliveryId,
                                        Submittrequesttime = mvm.Submittrequesttime,
                                        Submittresponsetime = mvm.Submittresponsetime,
@@ -160,15 +157,52 @@ namespace DataServiceLibrary
             string sort = jgGridParam.sord ?? "asc";
             string ordercolumn = jgGridParam.sidx;
             bool desc = sort.ToUpper() == "DESC";
-            Expression<Func<SubscriberContactMessage, SubcriberContactMessageViewModel>> project = GetContactMessagProjection();
-            return await subcribermessageRepository.GetPagedResult(pageSize * pageIndex, pageSize, ordercolumn, desc, project,
+            Expression<Func<SubscriberContactMessage, SubcriberContactMessageViewModel>> project = GetContactMessagProjection(); 
+            var result= await subcribermessageRepository.GetPagedResult(pageSize * pageIndex, pageSize, ordercolumn, desc, project,
                   sc => sc.SubscriberContact.SubscriberStandards.SubscriberId == subcriberId);
+            await UpdatePendingMessageDeliveryStatusFromSMSAPI(result);
+            return result;
         }
+
+        private  async Task UpdatePendingMessageDeliveryStatusFromSMSAPI(ICollection<SubcriberContactMessageViewModel> result)
+        {
+            var pendingstatusfilter = result.Where(scm => scm.Status.ToUpper() == "PENDING").ToList();
+            if (pendingstatusfilter.Count() > 0)
+            {
+                ExternalMessageServiceAPI smsserviceAPI = new ExternalMessageServiceAPI();
+                var msgStatusurl = ExternalMessageServiceAPI.GetMessageDeliveryReportUrl();
+                foreach (var smvm in pendingstatusfilter)
+                {
+                    string tempmsgStatusurl = string.Format(msgStatusurl, smvm.SubmitId);
+                    var deliverystatusid = await smsserviceAPI.GetMessageStatus(tempmsgStatusurl);
+                    var updateresult = result.SingleOrDefault(r => r.SubscriberContactId == smvm.SubscriberContactId);
+                    updateresult.DeliveryId = updateresult != null ? deliverystatusid : updateresult.DeliveryId;
+                    updateresult.Status = deliverystatusid.Contains("DELIVRD") ? (MessageStatusEnum.Delivered).ToString() : deliverystatusid;
+                }
+                await UpdateMessageDeliveryStatusToDB(pendingstatusfilter);
+            }
+        }
+        private async Task  UpdateMessageDeliveryStatusToDB(IEnumerable<SubcriberContactMessageViewModel> result)
+        {
+            foreach (var scmv in result)
+            {
+               var dbscm= await subcribermessageRepository.FindAsync(scm => scm.Id == scmv.SubscriberContactId);
+               if (dbscm != null)
+               {
+                   dbscm.DeliveryId = scmv.DeliveryId;
+                   dbscm.MessageStatus = scmv.DeliveryId.Contains("DELIVRD") ? MessageStatusEnum.Delivered : dbscm.MessageStatus;
+               } 
+            }
+            await subcribermessageRepository.SaveAsync();
+        }
+
+
 
         private static Expression<Func<SubscriberContactMessage, SubcriberContactMessageViewModel>> GetContactMessagProjection()
         {
             return scm => new SubcriberContactMessageViewModel
             {
+                SubscriberContactId=scm.Id,
                 Id = scm.Guid,
                 Message = scm.Message.Text,
                 Name = scm.SubscriberContact.Contact.Name,
@@ -177,7 +211,9 @@ namespace DataServiceLibrary
                 MobileNo = scm.SubscriberContact.Contact.Mobile,
                 Status = ((MessageStatusEnum)scm.MessageStatus).ToString(),
                 Class = scm.SubscriberContact.SubscriberStandards.Standard.Name,
-                RollNo = scm.SubscriberContact.Contact.RollNo
+                RollNo = scm.SubscriberContact.Contact.RollNo,
+                SubmitId = scm.SubmitId,
+                DeliveryId = scm.DeliveryId,
             };
         }
         private static  SubcriberContactMessageViewModel GetContactMessageFunProjection(SubscriberContactMessage scm)
@@ -193,6 +229,8 @@ namespace DataServiceLibrary
                 Status = ((MessageStatusEnum)scm.MessageStatus).ToString(),
                 Class = scm.SubscriberContact.SubscriberStandards.Standard.Name,
                 RollNo = scm.SubscriberContact.Contact.RollNo,
+                SubmitId=scm.SubmitId,
+                DeliveryId=scm.DeliveryId,
                 MessageError = scm.MessageStatus == MessageStatusEnum.NotSent ? scm.MessageError.Text : ""
             };
         }
