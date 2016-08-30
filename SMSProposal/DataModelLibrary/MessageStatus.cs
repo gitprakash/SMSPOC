@@ -23,6 +23,7 @@ namespace DataModelLibrary
         Sent = 1,
        [Display(Name = "Not Sent")]
         NotSent = 2,
-        NotDelivered = 3,
+        Pending = 3, 
+        Delivered =4,
     }
 }

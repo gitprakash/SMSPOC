@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace DataModelLibrary 
 {
-    public class MessageViewModel
+    public class MessageViewModel 
     {
         [Required] 
-        public long Id { get; set; }
+        public long Id { get; set; } 
        
         public string Name { get; set; }
         [Required]
@@ -22,10 +22,21 @@ namespace DataModelLibrary
 
         public string RollNo { get; set; }
 
-        public bool SentStatus { get; set; }
+        public DateTime? Submittrequesttime { get; set; }
+        public DateTime? Submittresponsetime { get; set; }
 
-        public DateTime? SentTime { get; set; }
+        public DateTime? DeliveryRequestedtime { get; set; }
+        public DateTime? DeliveryResponsetime { get; set; }
+
 
         public string MessageError { get; set; }
+
+        public string SubmitId { get; set; }
+
+        public string DeliveryId { get; set; }
+
+        public bool IsMessageSubmitted { get; set; }
+
+        public bool IsMessageDelivered { get; set; }
     }
 }

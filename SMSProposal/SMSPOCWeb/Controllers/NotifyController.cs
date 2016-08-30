@@ -38,9 +38,11 @@ namespace SMSPOCWeb.Controllers
                          {
                              throw new Exception("Insufficient Message Balance, Contact Administator to update Your Package");
                          }
-                         msgstatusviewmodel =  await m_messageService.SendMessage(messageViewModel, message, messagecount,identity.User.Id);
-                     }
-                     else
+                        msgstatusviewmodel =  await m_messageService.SubmitMessage(messageViewModel, message,identity.User.Id);
+                        msgstatusviewmodel = await m_messageService.GetMessageStatus(messageViewModel, message, messagecount, identity.User.Id);
+
+                    }
+                    else
                      {
                          string messages = GetModelStateError();
                          throw new Exception(messages);
@@ -81,7 +83,7 @@ namespace SMSPOCWeb.Controllers
                 var jsonData = new
                 {
                     total = totalPages,
-                    jgGridParam.page,
+                    jgGridParam.page, 
                     records = totalRecords,
                     rows = messages
                 };

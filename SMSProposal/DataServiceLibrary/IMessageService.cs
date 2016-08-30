@@ -7,11 +7,12 @@ using DataModelLibrary;
 
 namespace DataServiceLibrary
 {
-    public interface IMessageService
+    public interface IMessageService  
     {
         Task<bool> CheckMessageBalance(int mvmcnt, int messagecount, int subscriberId);
         Task<int> ResendMessage(int subscriberId,Guid messageId);
-        Task<List<MessageViewModel>> SendMessage(List<MessageViewModel> messageViewModel, string message, int messagecount, int SubscriberId);
+        Task<List<MessageViewModel>> GetMessageStatus(List<MessageViewModel> messageViewModel, string message, int messagecount, int SubscriberId);
+        Task<List<MessageViewModel>> SubmitMessage(List<MessageViewModel> messageViewModel, string message, int SubscriberId);
         Task<ICollection<SubcriberContactMessageViewModel>> MessageHistory(JgGridParam jgGridParam, int subcriberId);
         Task<int> TotalMessageHistory(int subscriberId);
         Task<Tuple<long, long>> GetMessageBalance(int subscriberId);
