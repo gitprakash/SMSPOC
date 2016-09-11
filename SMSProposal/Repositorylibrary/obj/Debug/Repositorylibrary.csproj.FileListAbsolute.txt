@@ -27,5 +27,6 @@ E:\Github\SMSPOC\SMSProposal\Repositorylibrary\bin\Debug\EntityFramework.xml
 E:\Github\SMSPOC\SMSProposal\Repositorylibrary\bin\Debug\EntityFramework.SqlServer.xml
 E:\Github\SMSPOC\SMSProposal\Repositorylibrary\bin\Debug\Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling.xml
 E:\Github\SMSPOC\SMSProposal\Repositorylibrary\bin\Debug\Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling.Data.xml
+E:\Github\SMSPOC\SMSProposal\Repositorylibrary\obj\Debug\Repositorylibrary.csprojResolveAssemblyReference.cache
 E:\Github\SMSPOC\SMSProposal\Repositorylibrary\obj\Debug\Repositorylibrary.dll
 E:\Github\SMSPOC\SMSProposal\Repositorylibrary\obj\Debug\Repositorylibrary.pdb

@@ -1,9 +1,11 @@
-﻿@model SMSPOCWeb.Models.SubscriberViewModel
+﻿@Scripts.Render("~/bundles/register")
+
+@model SMSPOCWeb.Models.SubscriberViewModel
 
 @{
     ViewBag.Title = "Register";
 }
-@using (Html.BeginForm("Register", "Account", FormMethod.Post))
+@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
 
@@ -82,6 +84,19 @@
                         @Html.ValidationMessageFor(model => model.AccountTypeId, "", new { @class = "text-danger" })
 
                     </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-10"> 
+                        <span> Please download and fill the file and afterwards upload it </span>
+                        <a href="~/backup/API/Agreement.pdf" target="_blank">Agreement Form</a>
+                    </div>
+                </div>
+                <div>
+                    @Html.LabelFor(model=>model.ImageUpload, "Agreement Form", new { @class = "control-label col-md-2" })
+                    @Html.TextBoxFor(model => model.ImageUpload, new { type = "file" })
+                    @Html.ValidationMessageFor(model => model.ImageUpload, "", new { @class = "text-danger",@id="spanfileupload" })
+
+
                 </div>
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">

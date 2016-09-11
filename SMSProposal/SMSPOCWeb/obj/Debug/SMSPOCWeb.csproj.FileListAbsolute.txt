@@ -68,6 +68,7 @@ E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\SMSPOCWeb.pdb
 E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\Antlr3.Runtime.dll
 E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\DataModelLibrary.dll
 E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\DataServiceLibrary.dll
+E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\EasyNetQ.dll
 E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\EntityFramework.dll
 E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\EntityFramework.SqlServer.dll
 E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\Excel.dll
@@ -86,6 +87,7 @@ E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\Microsoft.Practices.Unity.Registratio
 E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\Microsoft.Web.Infrastructure.dll
 E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\Newtonsoft.Json.dll
 E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\Owin.dll
+E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\RabbitMQ.Client.dll
 E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\Repositorylibrary.dll
 E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\System.Web.Helpers.dll
 E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\System.Web.Mvc.dll
@@ -100,6 +102,7 @@ E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\System.Linq.Dynamic.dll
 E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\DataModelLibrary.pdb
 E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\DataServiceLibrary.pdb
 E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\Repositorylibrary.pdb
+E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\EasyNetQ.xml
 E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\EntityFramework.xml
 E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\EntityFramework.SqlServer.xml
 E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\Excel.pdb
@@ -109,6 +112,7 @@ E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\Microsoft.Practices.Unity.xml
 E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\Microsoft.Practices.Unity.Configuration.xml
 E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\Microsoft.Practices.Unity.Mvc.xml
 E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\Microsoft.Practices.Unity.RegistrationByConvention.xml
+E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\RabbitMQ.Client.xml
 E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\System.Web.Helpers.xml
 E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\System.Web.Mvc.xml
 E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\System.Web.Optimization.xml
@@ -127,7 +131,3 @@ E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\Microsoft.Owin.Security.MicrosoftAcco
 E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\obj\Debug\SMSPOCWeb.csprojResolveAssemblyReference.cache
 E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\obj\Debug\SMSPOCWeb.dll
 E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\obj\Debug\SMSPOCWeb.pdb
-E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\EasyNetQ.dll
-E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\RabbitMQ.Client.dll
-E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\EasyNetQ.xml
-E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\RabbitMQ.Client.xml

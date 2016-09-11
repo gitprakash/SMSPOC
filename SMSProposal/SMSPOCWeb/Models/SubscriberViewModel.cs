@@ -1,9 +1,11 @@
 ﻿namespace SMSPOCWeb.Models
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
+    using System.Web;
 
     public  class SubscriberViewModel
     {
@@ -48,8 +50,36 @@
         public int AccountTypeId { get; set; }
 
         public int GenderTypeId { get; set; }
+        [Required]
+        [DataType(DataType.Upload)]
+        [ValidateFileAttribute]
+        public HttpPostedFileBase ImageUpload { get; set; }
 
+    }
+    public class ValidateFileAttribute : ValidationAttribute
+    {
+        public override bool IsValid(object value)
+        {
+            int MaxContentLength = 1024 * 1024 * 3; //3 MB
+            var AllowedFileExtensions = new List<string> { ".pdf" };
 
+            var file = value as HttpPostedFileBase;
+
+            if (file == null)
+                return false;
+            else if (!AllowedFileExtensions.Contains(file.FileName.Substring(file.FileName.LastIndexOf('.'))))
+            {
+                ErrorMessage = "Please upload Your Photo of type: " + string.Join(", ", AllowedFileExtensions);
+                return false;
+            }
+            else if (file.ContentLength > MaxContentLength)
+            {
+                ErrorMessage = "Your file is too large, maximum allowed size is : " + (MaxContentLength / 1024).ToString() + "MB";
+                return false;
+            }
+            else
+                return true;
+        }
     }
 }
 

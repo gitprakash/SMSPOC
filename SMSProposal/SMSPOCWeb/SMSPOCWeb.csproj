@@ -459,6 +459,7 @@
     <Content Include="backup\API\Error Code.pdf" />
     <Content Include="backup\API\HTTP API Documentation.pdf" />
     <Content Include="backup\Source Code\XML_API text messaging%29 SMS2.pdf" />
+    <Content Include="backup\API\Agreement.pdf" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -478,6 +479,7 @@
     <Content Include="Scripts\moment-with-locales.min.js" />
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
+    <Content Include="Scripts\Register.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\Role.js" />
@@ -543,6 +545,7 @@
     <Content Include="Views\Contact\UploadStudent.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="SubscriberAgreement\" />
     <Folder Include="Views\Standards\" />
   </ItemGroup>
   <ItemGroup>

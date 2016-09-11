@@ -15,6 +15,5 @@ E:\Github\SMSPOC\SMSProposal\DataModelLibrary\bin\Debug\EntityFramework.dll
 E:\Github\SMSPOC\SMSProposal\DataModelLibrary\bin\Debug\EntityFramework.SqlServer.dll
 E:\Github\SMSPOC\SMSProposal\DataModelLibrary\bin\Debug\EntityFramework.xml
 E:\Github\SMSPOC\SMSProposal\DataModelLibrary\bin\Debug\EntityFramework.SqlServer.xml
-E:\Github\SMSPOC\SMSProposal\DataModelLibrary\obj\Debug\DataModelLibrary.csprojResolveAssemblyReference.cache
 E:\Github\SMSPOC\SMSProposal\DataModelLibrary\obj\Debug\DataModelLibrary.dll
 E:\Github\SMSPOC\SMSProposal\DataModelLibrary\obj\Debug\DataModelLibrary.pdb
