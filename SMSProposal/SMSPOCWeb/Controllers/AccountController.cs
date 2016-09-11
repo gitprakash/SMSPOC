@@ -9,6 +9,7 @@ using DataModelLibrary;
 using SMSPOCWeb.Models;
 using System.Web.Security;
 using System.Web.Script.Serialization;
+using EasyNetQ;
 
 namespace SMSPOCWeb.Controllers
 {
@@ -60,6 +61,9 @@ namespace SMSPOCWeb.Controllers
             {
                 Subscriber subscriber = GetSubscriber(subscriberviewmodel);
                 var useradd = await maccountService.Add(subscriber);
+                var submsg = new SubscriberSavedMessage { Id = useradd.Id }; 
+                var ibus = RabbitHutch.CreateBus("host=localhost");
+                ibus.Publish<SubscriberSavedMessage>(submsg);
                 return RedirectToAction("Index", "Home");
             }
             ModelState.Remove("Password");

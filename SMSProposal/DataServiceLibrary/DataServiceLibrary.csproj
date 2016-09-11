@@ -57,6 +57,7 @@
     <Compile Include="IContactService.cs" />
     <Compile Include="IMessageService.cs" />
     <Compile Include="IRoleService.cs" />
+    <Compile Include="ISubscriberService.cs" />
     <Compile Include="ITemplateService.cs" />
     <Compile Include="ISubscriberStandardService.cs" />
     <Compile Include="IUserRoleService.cs" />
@@ -64,6 +65,7 @@
     <Compile Include="RoleService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="servicereftextfile.txt" />
+    <Compile Include="SubscriberService.cs" />
     <Compile Include="SubscriberStandardService.cs" />
     <Compile Include="TemplateService.cs" />
     <Compile Include="UserRoleService.cs" />

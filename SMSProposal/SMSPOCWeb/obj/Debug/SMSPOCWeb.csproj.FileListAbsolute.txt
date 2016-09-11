@@ -59,6 +59,9 @@ C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\SMSPOCWeb\bin\Micros
 C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\SMSPOCWeb\obj\Debug\SMSPOCWeb.csprojResolveAssemblyReference.cache
 C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\SMSPOCWeb\obj\Debug\SMSPOCWeb.dll
 C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\SMSPOCWeb\obj\Debug\SMSPOCWeb.pdb
+C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\SMSPOCWeb\bin\Excel.dll
+C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\SMSPOCWeb\bin\ICSharpCode.SharpZipLib.dll
+C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\SMSPOCWeb\bin\System.Linq.Dynamic.dll
 E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\SMSPOCWeb.dll.config
 E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\SMSPOCWeb.dll
 E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\SMSPOCWeb.pdb
@@ -93,6 +96,7 @@ E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\System.Web.WebPages.dll
 E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\System.Web.WebPages.Razor.dll
 E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\WebActivatorEx.dll
 E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\WebGrease.dll
+E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\System.Linq.Dynamic.dll
 E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\DataModelLibrary.pdb
 E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\DataServiceLibrary.pdb
 E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\Repositorylibrary.pdb
@@ -123,7 +127,7 @@ E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\Microsoft.Owin.Security.MicrosoftAcco
 E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\obj\Debug\SMSPOCWeb.csprojResolveAssemblyReference.cache
 E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\obj\Debug\SMSPOCWeb.dll
 E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\obj\Debug\SMSPOCWeb.pdb
-C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\SMSPOCWeb\bin\Excel.dll
-C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\SMSPOCWeb\bin\ICSharpCode.SharpZipLib.dll
-E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\System.Linq.Dynamic.dll
-C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\SMSPOCWeb\bin\System.Linq.Dynamic.dll
+E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\EasyNetQ.dll
+E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\RabbitMQ.Client.dll
+E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\EasyNetQ.xml
+E:\Github\SMSPOC\SMSProposal\SMSPOCWeb\bin\RabbitMQ.Client.xml

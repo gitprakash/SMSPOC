@@ -79,6 +79,7 @@
     <Compile Include="SubscriberMessageBalanceType.cs" />
     <Compile Include="SubscriberContactMessage.cs" />
     <Compile Include="SubscriberRoleviewModel.cs" />
+    <Compile Include="SubscriberSavedMessage.cs" />
     <Compile Include="SubscriberSection.cs" />
     <Compile Include="SubscriberStandardSectionViewModel.cs" />
     <Compile Include="Standard.cs" />
