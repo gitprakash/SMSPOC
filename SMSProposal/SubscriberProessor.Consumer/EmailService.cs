@@ -62,15 +62,15 @@ namespace SubscriberProessor.Consumer
             msubscriberService = subscriberService;
         }
 
-        private MailMessage getmailmessage()
+        private MailMessage getmailmessage(string subject, string body)
         {
             var mailmsg = new MailMessage();
             mailmsg.To.Add(smsadminemail);
             mailmsg.CC.Add(adminmail);
             mailmsg.From = new MailAddress(smtpUName);
-            mailmsg.Subject = "Need sender Id for addressed subscriber";
+            mailmsg.Subject = subject;
             mailmsg.IsBodyHtml = true;
-            mailmsg.Body = "Please find the attachement, and verify subscriber details";
+           mailmsg.Body =body;
             return mailmsg;
         }
         private void ReadAgreementFile(string filepath)
@@ -78,10 +78,18 @@ namespace SubscriberProessor.Consumer
         }
         public async Task SendAgreementFormMail(SubscriberSavedMessage ssm)
         {
-            var mailmsg = getmailmessage();
-            ReadAgreementFile(ssm.Agreementfilename);
-            mailmsg.Attachments.Add(new Attachment(@"C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\SMSPOCWeb\Content\Upload\krishuser_636092707358679564_Agreement PDF.pdf"));
+            string body = await getSubscriberInfo(ssm.Id);
+            var mailmsg = getmailmessage("Need sender Id for addressed subscriber", body);
+            mailmsg.Attachments.Add(new Attachment(ssm.Agreementfilename));
             await SendMail(mailmsg);
+        }
+        private async Task<string> getSubscriberInfo(int subscriberId)
+        {
+            var subscriber = await msubscriberService.Subscriber(subscriberId);
+            string text =  "Dear Service Provider</br>Please find the attachement, and verify subscriber details</br>";
+              text =string.Format( "<table><tr><td>First Name</td><td>Last Name </td><td>Email </td></td><td>Mobilee</td></tr><tr><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td></tr></table>", subscriber.FirstName,subscriber.LastName,subscriber.Email,subscriber.Mobile);
+            text = text + "</br>Thanks</br>Admin Team";
+            return text;
         }
 
         public async Task SendMail(MailMessage mailmsg)

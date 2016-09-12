@@ -1,17 +1,28 @@
-﻿
+﻿jQuery.browser = {};
+(function () {
+    jQuery.browser.msie = false;
+    jQuery.browser.version = 0;
+    if (navigator.userAgent.match(/MSIE ([0-9]+)\./)) {
+        jQuery.browser.msie = true;
+        jQuery.browser.version = RegExp.$1;
+    }
+})();
+
 //get file size
 function GetFileSize(fileid) {
     try {
         var fileSize = 0;
         //for IE
-        if ($.browser.msie) {
-            //before making an object of ActiveXObject, 
-            //please make sure ActiveX is enabled in your IE browser
-            var objFSO = new ActiveXObject("Scripting.FileSystemObject");
-            var filePath = $("#" + fileid)[0].value;
-            var objFile = objFSO.getFile(filePath);
-            var fileSize = objFile.size; //size in kb
-            fileSize = fileSize / 1048576; //size in mb 
+        if ($.browser) {
+            if ($.browser.msie) {
+                //before making an object of ActiveXObject, 
+                //please make sure ActiveX is enabled in your IE browser
+                var objFSO = new ActiveXObject("Scripting.FileSystemObject");
+                var filePath = $("#" + fileid)[0].value;
+                var objFile = objFSO.getFile(filePath);
+                var fileSize = objFile.size; //size in kb
+                fileSize = fileSize / 1048576; //size in mb 
+            }
         }
             //for FF, Safari, Opeara and Others
         else {

@@ -70,6 +70,7 @@ namespace Repositorylibrary
 
         public async Task<TObject> GetAsync(long id)
         {
+            _context.Database.Log = (data => Debug.WriteLine(data));
             return await _context.Set<TObject>().FindAsync(id);
         }
 
