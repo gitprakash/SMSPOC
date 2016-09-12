@@ -94,13 +94,14 @@
                 <div>
                     @Html.LabelFor(model=>model.ImageUpload, "Agreement Form", new { @class = "control-label col-md-2" })
                     @Html.TextBoxFor(model => model.ImageUpload, new { type = "file" })
-                    @Html.ValidationMessageFor(model => model.ImageUpload, "", new { @class = "text-danger",@id="spanfileupload" })
+                    @Html.ValidationMessageFor(model => model.ImageUpload, "", new { @class = "text-danger"})
+                    <span class="text-danger"  id="spanfileupload" name="spanfileupload"></span>
 
 
                 </div>
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Create" name="submit" class="btn btn-primary" />
+                        <input type="submit" value="Create" name="submit" id="submit" class="btn btn-primary" />
                     </div>
                 </div>
             </div>

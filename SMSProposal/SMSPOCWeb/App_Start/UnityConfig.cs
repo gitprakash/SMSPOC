@@ -40,7 +40,7 @@ namespace SMSPOCWeb.App_Start
             // container.LoadConfiguration();
 
             // TODO: Register your types here
-            container.RegisterType<DbContext, Model1>();
+            container.RegisterType<DbContext, Model1>(new PerRequestLifetimeManager());
             container.RegisterType<IGenericRepository<Role>, Genericrepository<Role>>();
             container.RegisterType<IGenericRepository<Subscriber>, Genericrepository<Subscriber>>();
             container.RegisterType<IGenericRepository<SubscriberRoles>, Genericrepository<SubscriberRoles>>();

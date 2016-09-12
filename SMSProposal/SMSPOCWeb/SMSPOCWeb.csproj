@@ -459,7 +459,7 @@
     <Content Include="backup\API\Error Code.pdf" />
     <Content Include="backup\API\HTTP API Documentation.pdf" />
     <Content Include="backup\Source Code\XML_API text messaging%29 SMS2.pdf" />
-    <Content Include="backup\API\Agreement.pdf" />
+    <Content Include="backup\API\Agreement PDF.pdf" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -545,6 +545,7 @@
     <Content Include="Views\Contact\UploadStudent.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Content\Upload\" />
     <Folder Include="SubscriberAgreement\" />
     <Folder Include="Views\Standards\" />
   </ItemGroup>

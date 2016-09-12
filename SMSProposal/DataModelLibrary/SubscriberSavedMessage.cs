@@ -9,5 +9,6 @@ namespace DataModelLibrary
     public class SubscriberSavedMessage
     {
         public int Id { get; set; }
+        public string Agreementfilename { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using DataServiceLibrary;
+﻿using DataModelLibrary;
+using DataServiceLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -61,7 +62,7 @@ namespace SubscriberProessor.Consumer
             msubscriberService = subscriberService;
         }
 
-        public MailMessage getmailmessage()
+        private MailMessage getmailmessage()
         {
             var mailmsg = new MailMessage();
             mailmsg.To.Add(smsadminemail);
@@ -72,8 +73,18 @@ namespace SubscriberProessor.Consumer
             mailmsg.Body = "Please find the attachement, and verify subscriber details";
             return mailmsg;
         }
+        private void ReadAgreementFile(string filepath)
+        {
+        }
+        public async Task SendAgreementFormMail(SubscriberSavedMessage ssm)
+        {
+            var mailmsg = getmailmessage();
+            ReadAgreementFile(ssm.Agreementfilename);
+            mailmsg.Attachments.Add(new Attachment(@"C:\prakash rajendran\Learning\PrakashGit\SMSPOC\SMSProposal\SMSPOCWeb\Content\Upload\krishuser_636092707358679564_Agreement PDF.pdf"));
+            await SendMail(mailmsg);
+        }
 
-        public async Task  SendMail()
+        public async Task SendMail(MailMessage mailmsg)
         {
             var smtpclient = new SmtpClient(host, port);
             smtpclient.EnableSsl = true;
@@ -81,8 +92,7 @@ namespace SubscriberProessor.Consumer
             //smtpClient.TargetName = "STARTTLS/smtp.office365.com";
             var credentials = new  NetworkCredential(smtpUName, smtpUNamePwd);
             smtpclient.Credentials = credentials;
-            // smtpclient.UseDefaultCredentials = false;
-            var mailmsg = getmailmessage();
+            // smtpclient.UseDefaultCredentials = false; 
             await smtpclient.SendMailAsync(mailmsg);
             Console.WriteLine("Mail Send successfully");
             mailmsg.Dispose();

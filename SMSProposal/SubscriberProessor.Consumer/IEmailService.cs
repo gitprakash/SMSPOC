@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataModelLibrary;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,6 @@ namespace SubscriberProessor.Consumer
 {
     interface IEmailService
     {
-        Task SendMail();
+        Task SendAgreementFormMail(SubscriberSavedMessage ssm);
     }
 }

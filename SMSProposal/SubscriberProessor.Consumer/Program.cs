@@ -29,7 +29,7 @@ namespace SubscriberProessor.Consumer
                 {
                     Console.WriteLine(string.Format("Consumer received the request for the subscriber Id {0} ", ssv.Id));
                     var emailservice = container.GetInstance<IEmailService>();
-                     emailservice.SendMail();
+                    emailservice.SendAgreementFormMail(ssv);
                 }
                 catch (Exception ex)
                 {

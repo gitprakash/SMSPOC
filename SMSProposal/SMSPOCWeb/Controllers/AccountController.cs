@@ -10,6 +10,7 @@ using SMSPOCWeb.Models;
 using System.Web.Security;
 using System.Web.Script.Serialization;
 using EasyNetQ;
+using System.IO;
 
 namespace SMSPOCWeb.Controllers
 {
@@ -59,9 +60,12 @@ namespace SMSPOCWeb.Controllers
         {
             if (ModelState.IsValid)
             {
+                var fileName = Path.GetFileName(subscriberviewmodel.ImageUpload.FileName);
+                var path = Path.Combine(Server.MapPath("~/Content/Upload"), string.Format("{0}_{1}_{2}", subscriberviewmodel.Username, DateTime.Now.Ticks, fileName));
+                subscriberviewmodel.ImageUpload.SaveAs(path);
                 Subscriber subscriber = GetSubscriber(subscriberviewmodel);
                 var useradd = await maccountService.Add(subscriber);
-                var submsg = new SubscriberSavedMessage { Id = useradd.Id }; 
+                var submsg = new SubscriberSavedMessage { Id = useradd.Id, Agreementfilename=path }; 
                 var ibus = RabbitHutch.CreateBus("host=localhost");
                 ibus.Publish<SubscriberSavedMessage>(submsg);
                 return RedirectToAction("Index", "Home");

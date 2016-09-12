@@ -25,23 +25,23 @@ namespace DataServiceLibrary
             msubscriberMessageBalanceHistory = subscriberMessageBalanceHistory;
         }
 
-        
+
 
         public async Task<List<MessageViewModel>> SubmitMessageToServiceAPI(List<MessageViewModel> messageViewModel, string message, int SubscriberId)
         {
             ExternalMessageServiceAPI smsserviceAPI = new ExternalMessageServiceAPI();
-            var msgsubmiturl = ExternalMessageServiceAPI.SubmitMessageApiformaturl(); 
+            var msgsubmiturl = ExternalMessageServiceAPI.SubmitMessageApiformaturl();
             foreach (var smvm in messageViewModel)
             {
-                try 
-                { 
+                try
+                {
                     string tempmsgsubmiturl = string.Format(msgsubmiturl, smvm.Mobile, message);
                     smvm.Submittrequesttime = DateTime.Now;
                     string submitid = await smsserviceAPI.SubmitMessage(tempmsgsubmiturl);
-                    smvm.Submittresponsetime = DateTime.Now; 
+                    smvm.Submittresponsetime = DateTime.Now;
                     var status = smsserviceAPI.IsMessageSubmitted(submitid);
                     smvm.IsMessageSubmitted = (status);
-                    smvm.SubmitId = submitid; 
+                    smvm.SubmitId = submitid;
                 }
                 catch (Exception ex)
                 {
@@ -50,38 +50,38 @@ namespace DataServiceLibrary
                     smvm.MessageError = ex.Message;
                 }
             }
-           return messageViewModel;
+            return messageViewModel;
         }
 
         public async Task<List<MessageViewModel>> GetMessageStatusFromAPI(List<MessageViewModel> messageViewModel)
         {
             ExternalMessageServiceAPI smsserviceAPI = new ExternalMessageServiceAPI();
             var msgStatusurl = ExternalMessageServiceAPI.GetMessageDeliveryReportUrl();
-            foreach (var smvm in messageViewModel.Where(mvm=>mvm.IsMessageSubmitted))
+            foreach (var smvm in messageViewModel.Where(mvm => mvm.IsMessageSubmitted))
             {
-                try 
+                try
                 {
                     string tempmsgStatusurl = string.Format(msgStatusurl, smvm.SubmitId);
                     smvm.DeliveryRequestedtime = DateTime.Now;
                     var deliverystatusid = await smsserviceAPI.GetMessageStatus(tempmsgStatusurl);
-                    smvm.DeliveryResponsetime = DateTime.Now; 
-                    smvm.IsMessageDelivered = deliverystatusid == "DELIVRD" ? true :false;
-                    smvm.DeliveryId = deliverystatusid; 
+                    smvm.DeliveryResponsetime = DateTime.Now;
+                    smvm.IsMessageDelivered = deliverystatusid == "DELIVRD" ? true : false;
+                    smvm.DeliveryId = deliverystatusid;
                 }
                 catch (Exception ex)
                 {
                     smvm.DeliveryResponsetime = DateTime.Now;
                     smvm.IsMessageDelivered = false;
                     smvm.MessageError = ex.Message;
-                } 
+                }
             }
-            return messageViewModel; 
+            return messageViewModel;
         }
 
 
         public async Task<List<MessageViewModel>> LogAllMessageToDB(List<MessageViewModel> messageViewModel, string message,
             int messagecount, int SubscriberId)
-        { 
+        {
             var subcribermessage = CreateMessage(message, messagecount);
             List<SubscriberContactMessage> lstmessages = new List<SubscriberContactMessage>();
             var lstsubsribedmsg = (from mvm in messageViewModel
@@ -108,11 +108,11 @@ namespace DataServiceLibrary
             subcribermessageRepository.AddRangeAsyncWithtransaction(lstsubsribedmsg);
             if (messageViewModel.Any(mvm => mvm.IsMessageSubmitted == true))
             {
-               int dbupdated= await UpdateMessageBalance(messageViewModel, messagecount, SubscriberId);
-               if (dbupdated <= 0)
-                   throw new Exception("Problem in update Message balance");
-            } 
-            await subcribermessageRepository.SaveAsync(); 
+                await UpdateMessageBalance(messageViewModel, messagecount, SubscriberId);
+                //if (dbupdated <= 0)
+                //    throw new Exception("Problem in update Message balance");
+            }
+            await subcribermessageRepository.SaveAsync();
             return messageViewModel;
         }
 
@@ -128,21 +128,21 @@ namespace DataServiceLibrary
             return subcribermessage;
         }
 
-        public async Task<int> UpdateMessageBalance(List<MessageViewModel> messageViewModel, int messagecount, int subscriberId)
+        public async Task  UpdateMessageBalance(List<MessageViewModel> messageViewModel, int messagecount, int subscriberId)
         {
             int sentmsgcount = messageViewModel.Count(mvm => mvm.IsMessageSubmitted == true);
             sentmsgcount = sentmsgcount * messagecount;
-            return await UpdateSubscirberMessageBalance(subscriberId, sentmsgcount);
+              await UpdateSubscirberMessageBalance(subscriberId, sentmsgcount);
         }
 
-        private async Task<int> UpdateSubscirberMessageBalance(int subscriberId, int sentmsgcount)
+        private async Task  UpdateSubscirberMessageBalance(int subscriberId, int sentmsgcount)
         {
             var userMsgBalance = await msubscriberMessageBalance.FindAsync(smb => smb.SubcriberId == subscriberId);
             userMsgBalance.RemainingCount -= sentmsgcount;
             var msgbalhis = await msubscriberMessageBalanceHistory.FindAsync(smb => smb.SubcriberId == subscriberId);
             msgbalhis.RemainingCount -= sentmsgcount;
-            await msubscriberMessageBalance.SaveAsync();
-            return await msubscriberMessageBalanceHistory.SaveAsync();
+           // await msubscriberMessageBalance.SaveAsync();
+           // return await msubscriberMessageBalanceHistory.SaveAsync();
         }
         public async Task<bool> CheckMessageBalance(int mvmcnt, int messagecount, int subscriberId)
         {
@@ -157,14 +157,14 @@ namespace DataServiceLibrary
             string sort = jgGridParam.sord ?? "asc";
             string ordercolumn = jgGridParam.sidx;
             bool desc = sort.ToUpper() == "DESC";
-            Expression<Func<SubscriberContactMessage, SubcriberContactMessageViewModel>> project = GetContactMessagProjection(); 
-            var result= await subcribermessageRepository.GetPagedResult(pageSize * pageIndex, pageSize, ordercolumn, desc, project,
+            Expression<Func<SubscriberContactMessage, SubcriberContactMessageViewModel>> project = GetContactMessagProjection();
+            var result = await subcribermessageRepository.GetPagedResult(pageSize * pageIndex, pageSize, ordercolumn, desc, project,
                   sc => sc.SubscriberContact.SubscriberStandards.SubscriberId == subcriberId);
             await UpdatePendingMessageDeliveryStatusFromSMSAPI(result);
             return result;
         }
 
-        private  async Task UpdatePendingMessageDeliveryStatusFromSMSAPI(ICollection<SubcriberContactMessageViewModel> result)
+        private async Task UpdatePendingMessageDeliveryStatusFromSMSAPI(ICollection<SubcriberContactMessageViewModel> result)
         {
             var pendingstatusfilter = result.Where(scm => scm.Status.ToUpper() == "PENDING").ToList();
             if (pendingstatusfilter.Count() > 0)
@@ -182,18 +182,24 @@ namespace DataServiceLibrary
                 await UpdateMessageDeliveryStatusToDB(pendingstatusfilter);
             }
         }
-        private async Task  UpdateMessageDeliveryStatusToDB(IEnumerable<SubcriberContactMessageViewModel> result)
+        private async Task UpdateMessageDeliveryStatusToDB(IEnumerable<SubcriberContactMessageViewModel> result)
         {
+            bool changesdetected = false;
             foreach (var scmv in result)
             {
-               var dbscm= await subcribermessageRepository.FindAsync(scm => scm.Id == scmv.SubscriberContactId);
-               if (dbscm != null)
-               {
-                   dbscm.DeliveryId = scmv.DeliveryId;
-                   dbscm.MessageStatus = scmv.DeliveryId.Contains("DELIVRD") ? MessageStatusEnum.Delivered : dbscm.MessageStatus;
-               } 
+                var dbscm = await subcribermessageRepository.FindAsync(scm => scm.Id == scmv.SubscriberContactId);
+                if (dbscm != null)
+                {
+                    if (dbscm.DeliveryId != scmv.DeliveryId)
+                    {
+                        changesdetected = true;
+                        dbscm.DeliveryId = scmv.DeliveryId;
+                        dbscm.MessageStatus = scmv.DeliveryId.Contains("DELIVRD") ? MessageStatusEnum.Delivered : dbscm.MessageStatus;
+                    }
+                }
             }
-            await subcribermessageRepository.SaveAsync();
+            if (changesdetected)
+                await subcribermessageRepository.SaveAsync();
         }
 
 
@@ -202,7 +208,7 @@ namespace DataServiceLibrary
         {
             return scm => new SubcriberContactMessageViewModel
             {
-                SubscriberContactId=scm.Id,
+                SubscriberContactId = scm.Id,
                 Id = scm.Guid,
                 Message = scm.Message.Text,
                 Name = scm.SubscriberContact.Contact.Name,
@@ -216,7 +222,7 @@ namespace DataServiceLibrary
                 DeliveryId = scm.DeliveryId,
             };
         }
-        private static  SubcriberContactMessageViewModel GetContactMessageFunProjection(SubscriberContactMessage scm)
+        private static SubcriberContactMessageViewModel GetContactMessageFunProjection(SubscriberContactMessage scm)
         {
             return new SubcriberContactMessageViewModel
             {
@@ -229,8 +235,8 @@ namespace DataServiceLibrary
                 Status = ((MessageStatusEnum)scm.MessageStatus).ToString(),
                 Class = scm.SubscriberContact.SubscriberStandards.Standard.Name,
                 RollNo = scm.SubscriberContact.Contact.RollNo,
-                SubmitId=scm.SubmitId,
-                DeliveryId=scm.DeliveryId,
+                SubmitId = scm.SubmitId,
+                DeliveryId = scm.DeliveryId,
                 MessageError = scm.MessageStatus == MessageStatusEnum.NotSent ? scm.MessageError.Text : ""
             };
         }

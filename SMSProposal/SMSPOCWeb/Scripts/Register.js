@@ -37,36 +37,52 @@ function getNameFromPath(strFilepath) {
         return strName[0];
     }
 }
-
-$(function () {
-    $("#ImageUpload").change(function () {
-        var file = getNameFromPath($(this).val());
-        $("#spanfileupload").hide();
-
-        if (file != null) {
-            var extension = file.substr((file.lastIndexOf('.') + 1));
-            switch (extension) {
-                case 'pdf':
-                    flag = true;
-                    break;
-                default:
-                    flag = false;
-            }
+function IsValidFile() {
+    var file = getNameFromPath($("#ImageUpload").val());
+    $("#spanfileupload").hide();
+   // $("#submit").hide();
+    var flag;
+    if (file != null) {
+        var extension = file.substr((file.lastIndexOf('.') + 1));
+        switch (extension) {
+            case 'pdf':
+                flag = true;
+                break;
+            default:
+                flag = false;
         }
-        if (flag == false) {
+    }
+    if (flag == false) {
+        $("#spanfileupload").show();
+        $("#spanfileupload").html("You can upload only pdf extension file");
+        return false;
+    }
+    else {
+        var size = GetFileSize('ImageUpload');
+        if (size > 5) {
             $("#spanfileupload").show();
-            $("#spanfileupload").html("You can upload only pdf extension file");
+            $("#spanfileupload").html("You can upload file up to 5 MB");
             return false;
         }
         else {
-            var size = GetFileSize('ImageUpload');
-            if (size > 3) {
-                $("#spanfileupload").show(); 
-                $("#spanfileupload").html("You can upload file up to 3 MB");
-            }
-            else {
-                $("#spanfileupload > span").html("");
-            }
+            $("#spanfileupload > span").html("");
+            return true;
+        }
+    }
+}
+$(function () {
+    $('#submit').click(function () {
+        if ($("#ImageUpload").val().trim() !== "") {
+            var isvalid = IsValidFile();
+            if (isvalid)
+                return true;
+            else
+                return false;
         }
     });
+
+    $("#ImageUpload").change(function () { 
+        return IsValidFile();
+    });
+    
 });
