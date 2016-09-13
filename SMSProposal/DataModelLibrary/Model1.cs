@@ -10,7 +10,7 @@ namespace DataModelLibrary
     public partial class Model1 : DbContext
     {
         public Model1()
-            : base("name=POCDBconnection")
+            : base("name=POCDBconnection") 
         {
             Database.SetInitializer(new DBInitializer());
            // this.Configuration.LazyLoadingEnabled = false; 
